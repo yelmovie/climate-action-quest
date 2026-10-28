@@ -1,0 +1,111 @@
+[
+  {
+    "name": "home",
+    "source": "references/backgrounds/chatgpt_generated_13.png",
+    "output": "assets/home.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 311144,
+    "sourceSha256": "efc8ea34f48577e2b846188b6d61ec1c8ec142ec5f378b0aaa2697d8a43071a3",
+    "crop": null,
+    "processing": "WebP conversion; no background removal or redraw"
+  },
+  {
+    "name": "city",
+    "source": "references/backgrounds/chatgpt_generated_14.png",
+    "output": "assets/city.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 420874,
+    "sourceSha256": "b8ff01122666451f83a6902b778567ee80516be951ed30f55fb7a2721dc9c139",
+    "crop": null,
+    "processing": "WebP conversion; no background removal or redraw"
+  },
+  {
+    "name": "coast",
+    "source": "references/backgrounds/chatgpt_generated_15.png",
+    "output": "assets/coast.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 351134,
+    "sourceSha256": "b2b87a2b4c3e24b8672531693256e5b425b7a93e099948fff96183e696fa6575",
+    "crop": null,
+    "processing": "WebP conversion; no background removal or redraw"
+  },
+  {
+    "name": "bedroom",
+    "source": "references/backgrounds/chatgpt_generated_17.png",
+    "output": "assets/bedroom.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 263016,
+    "sourceSha256": "cdf41e5ecb5ebde16ffcd37b00577fa74e1505b4beda686e6b48e4c0262d8415",
+    "crop": null,
+    "processing": "WebP conversion; no background removal or redraw"
+  },
+  {
+    "name": "design",
+    "source": "references/backgrounds/chatgpt_generated_19.png",
+    "output": "assets/design.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 387326,
+    "sourceSha256": "819d278832a1b6d96d650b85e0aba42f01627c8fdc6564fd56baa501edadb0c6",
+    "crop": null,
+    "processing": "WebP conversion; no background removal or redraw"
+  },
+  {
+    "name": "storm",
+    "source": "references/backgrounds/chatgpt_generated_20.png",
+    "output": "assets/storm.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 368670,
+    "sourceSha256": "b83497567632c40ce62f67406f5121c3a2a8f6b18a30a36e14870ad56222e6bd",
+    "crop": null,
+    "processing": "WebP conversion; no background removal or redraw"
+  },
+  {
+    "name": "logo",
+    "source": "references/branding/chatgpt_generated_23.png",
+    "output": "assets/logo.webp",
+    "width": 1672,
+    "height": 941,
+    "bytes": 131336,
+    "sourceSha256": "7116f14d28d1597cfff4d9440291eb929624961ed9049001e7899f00adb98d90",
+    "crop": null,
+    "processing": "WebP conversion; no background removal or redraw"
+  },
+  {
+    "name": "squirrel",
+    "source": "references/characters/chatgpt_generated_22.png",
+    "output": "assets/squirrel.webp",
+    "width": 220,
+    "height": 259,
+    "bytes": 8932,
+    "sourceSha256": "20f0ee7cd1d38afbd344a9d3ef5ff02556c5afb6bda4ece3505365eb51813420",
+    "crop": [
+      0,
+      320,
+      220,
+      579
+    ],
+    "processing": "WebP conversion; no background removal or redraw"
+  },
+  {
+    "name": "otter",
+    "source": "references/characters/chatgpt_generated_22.png",
+    "output": "assets/otter.webp",
+    "width": 148,
+    "height": 133,
+    "bytes": 2454,
+    "sourceSha256": "20f0ee7cd1d38afbd344a9d3ef5ff02556c5afb6bda4ece3505365eb51813420",
+    "crop": [
+      838,
+      805,
+      986,
+      938
+    ],
+    "processing": "WebP conversion; no background removal or redraw"
+  }
+]

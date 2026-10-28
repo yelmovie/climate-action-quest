@@ -1,0 +1,18 @@
+{
+  "name": "climate-future-operations",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/dev.mjs --dist",
+    "test": "node --test tests/*.test.mjs",
+    "concepts:render": "node tools/concept-clips/render.mjs",
+    "check:layout": "node scripts/check-experience.mjs",
+    "check:interactions": "node scripts/check-interactions.mjs",
+    "check:delivery": "node scripts/check-delivery.mjs",
+    "check:art": "node scripts/check-concept-art.mjs",
+    "check:flow": "node scripts/check-flow-resume.mjs"
+  }
+}

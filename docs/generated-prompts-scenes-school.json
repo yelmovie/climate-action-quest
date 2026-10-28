@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-28",
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "id": "scene-commute",
+      "prompt": "Use case: scientific-educational. ONE complete 16:9 landscape illustration for a premium Korean elementary climate science exploration game. A richly hand-painted illustrated coastal-town world, warm natural daylight, emerald greens, teal accents and cream architecture. Confident coherent perspective and readable major objects, premium storybook game finish, clearly illustrated rather than photorealistic, never flat SVG symbols or preschool toys. This is one continuous scene, not a collage or divided comparison panel. No letters, text, numbers, labels, charts, arrows, UI, borders, logos or watermarks. All educational questions and data will be separate DOM overlays. Primary scene: a safe school commute on a broad sidewalk. An elementary child wearing a backpack walks with a responsible adult, separated from the adjacent road by a curb and planted strip. A public bus and a single family car travel on the road, with a school visible farther away. Nobody walks in the roadway, nobody runs across traffic. Clear medium-wide composition showing walking, shared transport and car travel in one coherent safe everyday place. Unlettered bus and school, no signs with text.",
+      "tool": "built-in image_gen",
+      "transparent_background": false,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-09f3-7990-9ffd-30a4c1531a9b\\exec-e0f67f9a-886b-426a-86a0-b3492ab8c70e.png",
+      "output": "assets/concept-art/scene-commute.webp",
+      "generatedOutput": "assets/concept-art/scene-commute.png",
+      "original": "references/generated/concept-art/scene-commute.png"
+    },
+    {
+      "id": "scene-cooling",
+      "prompt": "Use case: scientific-educational. ONE complete 16:9 landscape illustration for a premium Korean elementary climate science exploration game. A richly hand-painted illustrated coastal-town world, warm natural daylight, emerald greens, teal accents and cream architecture. Confident coherent perspective and readable major objects, premium storybook game finish, clearly illustrated rather than photorealistic, never flat SVG symbols or preschool toys. This is one continuous scene, not a collage or divided comparison panel. No letters, text, numbers, labels, charts, arrows, UI, borders, logos or watermarks. All educational questions and data will be separate DOM overlays. Primary scene: a bright ordinary family living room with no people present. A wall-mounted air conditioner is visibly on while a nearby casement window is visibly open and a light curtain moves in the breeze. The full open window and air conditioner are both prominent and easy to identify. Comfortable sofa and a houseplant, clean safe room, warm sunlight outside. No ice, snow, magical cold rays, digital display readings or labels. Show the factual energy-use situation, no judgment symbol.",
+      "tool": "built-in image_gen",
+      "transparent_background": false,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-09f3-7990-9ffd-30a4c1531a9b\\exec-65340a0a-3364-4d04-afed-5839ebe32462.png",
+      "output": "assets/concept-art/scene-cooling.webp",
+      "generatedOutput": "assets/concept-art/scene-cooling.png",
+      "original": "references/generated/concept-art/scene-cooling.png"
+    },
+    {
+      "id": "scene-workshop",
+      "prompt": "Use case: scientific-educational. ONE complete 16:9 landscape illustration for a premium Korean elementary climate science exploration game. A richly hand-painted illustrated coastal-town world, warm natural daylight, emerald greens, teal accents and cream architecture. Confident coherent perspective and readable major objects, premium storybook game finish, clearly illustrated rather than photorealistic, never flat SVG symbols or preschool toys. This is one continuous scene, not a collage or divided comparison panel. No letters, text, numbers, labels, charts, arrows, UI, borders, logos or watermarks. All educational questions and data will be separate DOM overlays. Primary scene: a small safe furniture-making workshop. Wood boards and usable material pieces are stored tidily, a sturdy newly made wooden chair sits beside a workbench, and a responsible adult craftsperson works safely farther back. Clearly show that producing objects requires materials and tools. Organized warm wooden interior with a window, no child operating machinery, no exposed danger, sparks, smoke or labels. The wood, workbench and new chair are the central educational subject.",
+      "tool": "built-in image_gen",
+      "transparent_background": false,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-09f3-7990-9ffd-30a4c1531a9b\\exec-cf66b5be-6524-4c84-885d-6418e0fefdb7.png",
+      "output": "assets/concept-art/scene-workshop.webp",
+      "generatedOutput": "assets/concept-art/scene-workshop.png",
+      "original": "references/generated/concept-art/scene-workshop.png"
+    },
+    {
+      "id": "scene-forest",
+      "prompt": "Use case: scientific-educational. ONE complete 16:9 landscape illustration for a premium Korean elementary climate science exploration game. A richly hand-painted illustrated coastal-town world, warm natural daylight, emerald greens, teal accents and cream architecture. Confident coherent perspective and readable major objects, premium storybook game finish, clearly illustrated rather than photorealistic, never flat SVG symbols or preschool toys. This is one continuous scene, not a collage or divided comparison panel. No letters, text, numbers, labels, charts, arrows, UI, borders, logos or watermarks. All educational questions and data will be separate DOM overlays. Primary scene: one continuous forest-edge landscape. The foreground contains a small recently cleared patch of earth with several unmistakable old tree stumps and a few cut logs. Directly behind and beside this patch, mature living deciduous trees and a lush green forest remain. The view clearly compares the cleared land with the remaining forest within a single real landscape, without a split screen. Warm bright day, no fire, disaster, distress, frightened animals or people. Main subject is loss of trees and the forest that remains.",
+      "tool": "built-in image_gen",
+      "transparent_background": false,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-09f3-7990-9ffd-30a4c1531a9b\\exec-9071562a-7fd2-4971-8587-d5748976b535.png",
+      "output": "assets/concept-art/scene-forest.webp",
+      "generatedOutput": "assets/concept-art/scene-forest.png",
+      "original": "references/generated/concept-art/scene-forest.png"
+    },
+    {
+      "id": "scene-meal",
+      "prompt": "Use case: scientific-educational. ONE complete 16:9 landscape illustration for a premium Korean elementary climate science exploration game. A richly hand-painted illustrated coastal-town world, warm natural daylight, emerald greens, teal accents and cream architecture. Confident coherent perspective and readable major objects, premium storybook game finish, clearly illustrated rather than photorealistic, never flat SVG symbols or preschool toys. This is one continuous scene, not a collage or divided comparison panel. No letters, text, numbers, labels, charts, arrows, UI, borders, logos or watermarks. All educational questions and data will be separate DOM overlays. Primary scene: a welcoming elementary school cafeteria at lunchtime, with a close tabletop view of ordinary stainless Korean school lunch trays. In the foreground, one tray after a meal has clearly visible substantial leftover rice and vegetables, a used spoon and chopsticks. Beside it on the same table is a different tray with a reasonable balanced serving of fresh rice, vegetables and a small main dish ready to eat. Show nutritious everyday food respectfully, not excessive heaps or disgusting waste. Soft background tables and clean school kitchen, no hungry or distressed children. The portions and leftover food are clear central subjects. No food labels or packaging brands.",
+      "tool": "built-in image_gen",
+      "transparent_background": false,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-09f3-7990-9ffd-30a4c1531a9b\\exec-2688ce90-c79f-475e-9370-312f29b4324c.png",
+      "output": "assets/concept-art/scene-meal.webp",
+      "generatedOutput": "assets/concept-art/scene-meal.png",
+      "original": "references/generated/concept-art/scene-meal.png"
+    },
+    {
+      "id": "scene-reuse",
+      "prompt": "Use case: scientific-educational. ONE complete 16:9 landscape illustration for a premium Korean elementary climate science exploration game. A richly hand-painted illustrated coastal-town world, warm natural daylight, emerald greens, teal accents and cream architecture. Confident coherent perspective and readable major objects, premium storybook game finish, clearly illustrated rather than photorealistic, never flat SVG symbols or preschool toys. This is one continuous scene, not a collage or divided comparison panel. No letters, text, numbers, labels, charts, arrows, UI, borders, logos or watermarks. All educational questions and data will be separate DOM overlays. Primary scene: a sunlit elementary art desk with crayons and ordinary pencils. Several sheets show small simple unlettered doodles on one side, and one turned-over sheet prominently presents its clean reverse side, which a child's hand is using for a new small pencil drawing. The paper looks still usable, not dirty or torn. A few carefully organized craft materials sit nearby. One coherent close scene showing safe paper reuse at school. No scissors in use, no slogans, no recycling symbols, no legible writing or decorative letters anywhere.",
+      "tool": "built-in image_gen",
+      "transparent_background": false,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-09f3-7990-9ffd-30a4c1531a9b\\exec-ab7dcc34-1790-4e89-adce-b9de5d08729a.png",
+      "output": "assets/concept-art/scene-reuse.webp",
+      "generatedOutput": "assets/concept-art/scene-reuse.png",
+      "original": "references/generated/concept-art/scene-reuse.png"
+    }
+  ]
+}

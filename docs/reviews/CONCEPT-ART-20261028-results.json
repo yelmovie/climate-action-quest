@@ -1,0 +1,216 @@
+{
+  "date": "2026-10-28",
+  "layout": {
+    "screens": 312,
+    "viewports": [
+      "906x755",
+      "1024x768",
+      "1366x768",
+      "1920x1080",
+      "873x580",
+      "1280x720"
+    ],
+    "sources": [
+      "layout.json: five unchanged viewport profiles",
+      "layout-1280x720.json: rerun after a 641-740px height-only spacing correction"
+    ],
+    "errors": [],
+    "failures": []
+  },
+  "unitTests": 15,
+  "art": {
+    "checks": [
+      "25 optimized assets match the manifest; objects retain alpha and source PNGs are not shipped",
+      "home requests no new activity art; first facility requests only its own concept image",
+      "observation and evidence judgment display the weather observation context",
+      "all 10 daily situations display the matching scene instead of the shared bedroom",
+      "all 10 human activity observations display their relevant context",
+      "drought impact uses the drought scene rather than the deforestation scene",
+      "all six coastal prediction places have visible decoded illustrations",
+      "five facility tools and placed facilities use real art; replacements and erasing update the image",
+      "stress test reuses the actual facility illustration in every district",
+      "all 25 shipped images decode successfully with no missing art requests or page errors"
+    ],
+    "decoded": [
+      {
+        "id": "trees",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "shade",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "pond",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "refuge",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "ground",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "beach",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "road",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "wetland",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "homes",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "park",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "school",
+        "width": 640,
+        "height": 480
+      },
+      {
+        "id": "scene-observe",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-classroom",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-commute",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-cooling",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-workshop",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-forest",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-drought",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-meal",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-reuse",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-repair",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-bottle",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-heat",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-power",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "scene-home",
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "errors": [],
+    "failedAssets": []
+  },
+  "interactions": {
+    "checks": [
+      "activity 0: completion + 9s video + caption + cleanup + continue",
+      "automatic observation capture, duplicate input, next site and refresh",
+      "activity 1: completion + 9s video + caption + cleanup + continue",
+      "instant judgment, wrong answer, keyboard/touch and direct next chapter",
+      "activity 2: completion + 9s video + caption + cleanup + continue",
+      "resource investigation follows remaining sites with immediate feedback",
+      "activity 3: completion + 9s video + caption + cleanup + continue",
+      "activity 4: completion + 9s video + caption + cleanup + continue",
+      "six preset experiments preserve predictions and result reading across refresh",
+      "activity 5: completion + 9s video + caption + cleanup + continue",
+      "touch cancellation, wrong order and instant completion after reorder",
+      "activity 6: completion + 9s video + caption + cleanup + continue",
+      "unsafe choices blocked and shuffled choices retain semantic records",
+      "activity 7: completion + 9s video + caption + cleanup + continue",
+      "comparison displays actual metrics before selection and checks immediately",
+      "activity 8: completion + 9s video + caption + cleanup + continue",
+      "continuous placement/erase, drag exits erase, duplicate placement and budget",
+      "activity 9: completion + 9s video + caption + cleanup + continue",
+      "combined test actions preserve both hazards, failed design retry and saved retest",
+      "earned records connect without five extra clicks and issue certificate",
+      "activity 1: completion + 9s video + caption + cleanup + continue",
+      "preview completion returns to facility and never earns a certificate",
+      "media failure poster + all captions + continue",
+      "reduced motion waits for deliberate playback"
+    ],
+    "errors": []
+  },
+  "flow": {
+    "checks": [
+      "legacy compared evidence restores automatically and keyboard focus follows observation",
+      "legacy completed order resumes at the next round",
+      "legacy rain trial starts with the correct label and keeps both initial results",
+      "all eight relationship rounds save the selected semantic links and complete",
+      "all eight impact chains complete and retain their source, kind and order",
+      "all ten daily scenes preserve safe choice identities despite shuffled display",
+      "all four comparisons reuse actual daily records and finish with a saved practice"
+    ],
+    "errors": []
+  },
+  "delivery": {
+    "checks": [
+      "server MP4 byte ranges + MIME",
+      "offline reload + WebM concept",
+      "offline cached MP4 byte ranges",
+      "offline H.264 fallback + seeking",
+      "offline CC0 sound + separate SFX mute",
+      "music volume does not change effect volume"
+    ],
+    "errors": []
+  }
+}

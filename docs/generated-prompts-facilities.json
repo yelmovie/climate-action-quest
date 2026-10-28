@@ -1,0 +1,46 @@
+{
+  "created": "2026-10-28",
+  "purpose": "Climate game facility illustrations",
+  "assets": [
+    {
+      "id": "trees",
+      "prompt": "Use case: scientific-educational. Asset type: one isolated facility illustration for a premium Korean elementary climate-science game. One image equals one complete single asset, never a sheet. Genuinely transparent background, preserve native alpha. Square composition, whole silhouette centered with 10% clear padding on every side, three-quarter isometric view about 30 degrees above. Richly hand-painted educational game art with readable construction and confident silhouettes, emerald and sage planting, teal accents, cream stone, warm sunlight. Realistic function but clearly illustrated, not photorealism, not flat SVG icons, not childish plastic toys. No text, lettering, numbers, labels, arrows, graphs, interface, signs with words, people, collage, grid, border, watermark, logos. Subject: a compact urban grove on one coherent small rounded patch of permeable earth. Four broad-canopy deciduous shade trees of different heights create a clearly visible cool shaded area over two wooden benches and a short unpaved walking path. Lush planted soil and low grass between trees; urban green infrastructure rather than a dense wild forest. Roots and soil stay within the small land patch. Show the actual branches, leaves and shaded resting space; no buildings or extra facilities.",
+      "tool": "built-in image_gen",
+      "transparent_background": true,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-0ad2-7d62-b6ba-7b618d1c9169\\exec-e6e54169-f245-43bd-a9e5-8890d21ddc15.png",
+      "output": "assets/concept-art/trees.webp",
+      "generatedOutput": "assets/concept-art/trees.png",
+      "original": "references/generated/concept-art/trees.png"
+    },
+    {
+      "id": "shade",
+      "prompt": "Use case: scientific-educational. Asset type: one isolated facility illustration for a premium Korean elementary climate-science game. One image equals one complete single asset, never a sheet. Genuinely transparent background, preserve native alpha. Square composition, whole silhouette centered with 10% clear padding on every side, three-quarter isometric view about 30 degrees above. Richly hand-painted educational game art with readable construction and confident silhouettes, emerald and sage planting, teal accents, cream stone, warm sunlight. Realistic function but clearly illustrated, not photorealism, not flat SVG icons, not childish plastic toys. No text, lettering, numbers, labels, arrows, graphs, interface, signs with words, people, collage, grid, border, watermark, logos. Subject: a dedicated outdoor shade shelter, one sturdy timber pergola with a continuous pale cream roof canopy supported by four simple columns, visibly casting cool shade onto a wooden bench and accessible paved resting area beneath. A very small low planting border on its ground patch is allowed, but no trees and no additional buildings. The complete shelter and its roof and bench must read clearly at small size; roof is seen in three-quarter view without hiding the bench. One coherent small land diorama.",
+      "tool": "built-in image_gen",
+      "transparent_background": true,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-0ad2-7d62-b6ba-7b618d1c9169\\exec-7fcbd49e-3f78-4342-81ea-a7a09eee1b62.png",
+      "output": "assets/concept-art/shade.webp",
+      "generatedOutput": "assets/concept-art/shade.png",
+      "original": "references/generated/concept-art/shade.png"
+    },
+    {
+      "id": "refuge",
+      "prompt": "Use case: scientific-educational. Asset type: one isolated facility illustration for a premium Korean elementary climate-science game. One image equals one complete single asset, never a sheet. Genuinely transparent background, preserve native alpha. Square composition, whole silhouette centered with 10% clear padding on every side, three-quarter isometric view about 30 degrees above. Richly hand-painted educational game art with readable construction and confident silhouettes, emerald and sage planting, teal accents, cream stone, warm sunlight. Realistic function but clearly illustrated, not photorealism, not flat SVG icons, not childish plastic toys. No text, lettering, numbers, labels, arrows, graphs, interface, signs with words, people, collage, grid, border, watermark, logos. Subject: a small sturdy public community emergency shelter building, a low cream masonry structure with a teal pitched roof, wide sheltered entrance, several welcoming windows and a clearly visible gentle accessible ramp with handrails. Small paved forecourt, a bench under the entry porch and a neat low planting edge. The building conveys a safe place to stay during extreme heat or heavy rain, NOT a tent, shield symbol or hospital. No red cross or other insignia. One coherent building and its small ground base, nothing cropped.",
+      "tool": "built-in image_gen",
+      "transparent_background": true,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-0ad2-7d62-b6ba-7b618d1c9169\\exec-756b6ae1-acb6-4cd5-bc2b-5bf2489b09e3.png",
+      "output": "assets/concept-art/refuge.webp",
+      "generatedOutput": "assets/concept-art/refuge.png",
+      "original": "references/generated/concept-art/refuge.png"
+    },
+    {
+      "id": "ground",
+      "prompt": "Use case: scientific-educational. Asset type: one isolated facility illustration for a premium Korean elementary climate-science game. One image equals one complete single asset, never a sheet. Genuinely transparent background, preserve native alpha. Square composition, whole silhouette centered with 10% clear padding on every side, three-quarter isometric view about 30 degrees above. Richly hand-painted educational game art with readable construction and confident silhouettes, emerald and sage planting, teal accents, cream stone, warm sunlight. Realistic function but clearly illustrated, not photorealism, not flat SVG icons, not childish plastic toys. No text, lettering, numbers, labels, arrows, graphs, interface, signs with words, people, collage, grid, border, watermark, logos. Subject: a short section of permeable pedestrian paving on a single compact rectangular ground diorama. The top has neat porous cream-gray pavers with visible narrow gravel-filled joints. One front edge is an educational cutaway that clearly shows three real material layers: pavers above a gravel aggregate layer above natural brown soil. A few small blue water droplets at the surface and blue damp traces between paver joints and into the gravel show infiltration, without arrows or labels. Grass borders one side only. No standing pool, basin, fountain, pipes, trees or buildings. Materials and the cross-section must remain visually distinct at small size.",
+      "tool": "built-in image_gen",
+      "transparent_background": true,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-0ad2-7d62-b6ba-7b618d1c9169\\exec-ab8474b6-ae48-4dc8-8b9c-d1c4b28d00ba.png",
+      "output": "assets/concept-art/ground.webp",
+      "generatedOutput": "assets/concept-art/ground.png",
+      "original": "references/generated/concept-art/ground.png"
+    }
+  ]
+}

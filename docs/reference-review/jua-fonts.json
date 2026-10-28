@@ -1,0 +1,38 @@
+[
+  {
+    "file": "assets/fonts/jua-korean-400.woff2",
+    "source": "D:\\iscreammedia_sc34\\1udangtangtang\\public\\assets\\fonts\\jua-korean-400.woff2",
+    "bytes": 368172,
+    "sha256": "b5c280f7c75d6634c3011682ab7787b73b8cfc4acaee4b70fa7aad228adf7d70",
+    "embeddedNames": {
+      "0": "Copyright 2018 The BM JUA Project Authors",
+      "1": "Jua",
+      "2": "Regular",
+      "5": "Version 1.001",
+      "6": "Jua-Regular",
+      "14": "http://scripts.sil.org/OFL"
+    },
+    "license": "SIL Open Font License 1.1",
+    "licenseSource": "https://raw.githubusercontent.com/google/fonts/main/ofl/jua/OFL.txt",
+    "metadataSource": "https://raw.githubusercontent.com/google/fonts/main/ofl/jua/METADATA.pb",
+    "checked": "2026-10-21"
+  },
+  {
+    "file": "assets/fonts/jua-latin-400.woff2",
+    "source": "D:\\iscreammedia_sc34\\1udangtangtang\\public\\assets\\fonts\\jua-latin-400.woff2",
+    "bytes": 16620,
+    "sha256": "a317499f46a11810207ace4e5fdf04c9949250abeb914a1e713c391e4606c4f2",
+    "embeddedNames": {
+      "0": "Copyright 2018 The BM JUA Project Authors",
+      "1": "Jua",
+      "2": "Regular",
+      "5": "Version 1.001",
+      "6": "Jua-Regular",
+      "14": "http://scripts.sil.org/OFL"
+    },
+    "license": "SIL Open Font License 1.1",
+    "licenseSource": "https://raw.githubusercontent.com/google/fonts/main/ofl/jua/OFL.txt",
+    "metadataSource": "https://raw.githubusercontent.com/google/fonts/main/ofl/jua/METADATA.pb",
+    "checked": "2026-10-21"
+  }
+]

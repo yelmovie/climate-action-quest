@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-28",
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "id": "pond",
+      "transparent_background": true,
+      "source": "C:/Users/user/.codex/generated_images/01a18112-0e44-72a1-9969-0d9005b65663/exec-fec000a5-7915-4533-8eb6-3e811eca21f0.png",
+      "prompt": "Use case: scientific-educational. Create ONE isolated urban rainwater detention basin asset for a premium Korean elementary climate-science game. Transparent background. A small realistic-in-function but painterly illustrated rainwater retention/detention basin: shallow landscaped depression with gently sloped grassy banks, a calm blue water pool clearly below the ground rim, a visible stormwater inlet from a nearby short paved gutter and a small controlled outlet pipe, some reeds confined to the edge. One coherent small land diorama, not separate components. Three-quarter isometric view from about 30 degrees above, centered, whole object visible, 10% clear margin. Clean warm hand-painted educational game art, confident readable silhouettes, teal water, leafy green grass, soft cream stone, subtle warm sunlight; richly illustrated rather than flat symbols, not photorealistic, not preschool toy-like. The basin is visibly a place that temporarily holds rainwater, NOT a drinking fountain, swimming pool or water droplet icon. No people, labels, text, letters, numerals, arrows, charts, UI, borders, collage, grid, watermark or logos. One image = one asset.",
+      "original": "references/generated/concept-art/pond.png",
+      "output": "assets/concept-art/pond.webp"
+    },
+    {
+      "id": "scene-observe",
+      "transparent_background": false,
+      "source": "C:/Users/user/.codex/generated_images/01a18112-0e44-72a1-9969-0d9005b65663/exec-de5bb210-bd01-43bd-b4f2-425ece77b825.png",
+      "prompt": "Use case: scientific-educational. ONE complete 16:9 landscape scene illustration for a premium Korean elementary climate science exploration game. Rich, clean hand-painted game art, coherent perspective, warm daylight, emerald greens, teal accents and cream architecture, detailed but readable major objects, matching a lush illustrated coastal-town learning adventure. Not flat icons, not vector primitives, not photorealistic, not babyish. Educational everyday Korean setting. No letters, writing, numerals, logos, labels, graphs, arrows, UI, borders, collage, split panels or watermarks. One image = one continuous scene. The illustration only depicts the situation; all questions, answers, data and interface will be overlaid separately. Primary scene: An attractive small outdoor weather observation station in a school garden, clearly showing a rain gauge, louvered thermometer screen, anemometer and wind vane, and a mature flowering tree in the same site. Calm varied clouds and warm sun, a coastal town far away. Close enough to identify the instruments, uncluttered center. No instrument readings or scales with numbers.",
+      "original": "references/generated/concept-art/scene-observe.png",
+      "output": "assets/concept-art/scene-observe.webp"
+    },
+    {
+      "id": "scene-classroom",
+      "transparent_background": false,
+      "source": "C:/Users/user/.codex/generated_images/01a18112-0e44-72a1-9969-0d9005b65663/exec-722a2d90-f946-484b-af06-84e0b4add5e6.png",
+      "prompt": "Use case: scientific-educational. ONE complete 16:9 landscape scene illustration for a premium Korean elementary climate science exploration game. Rich, clean hand-painted game art, coherent perspective, warm daylight, emerald greens, teal accents and cream architecture, detailed but readable major objects, matching a lush illustrated coastal-town learning adventure. Not flat icons, not vector primitives, not photorealistic, not babyish. Educational everyday Korean setting. No letters, writing, numerals, logos, labels, graphs, arrows, UI, borders, collage, split panels or watermarks. One image = one continuous scene. The illustration only depicts the situation; all questions, answers, data and interface will be overlaid separately. Primary scene: A modern empty elementary classroom at midday. Rows of orderly desks, broad windows with abundant natural sunlight, electric ceiling lights visibly still switched on even though no one is present. Chairs neatly tucked, a few books and plants. No text on walls or blackboard. This is a factual observation scene, not showing an answer checkmark or moral judgment.",
+      "original": "references/generated/concept-art/scene-classroom.png",
+      "output": "assets/concept-art/scene-classroom.webp"
+    }
+  ]
+}

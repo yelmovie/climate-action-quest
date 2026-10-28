@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-28",
+  "tool": "built-in image_gen",
+  "transparentBackground": true,
+  "assets": [
+    {
+      "name": "beach",
+      "prompt": "Use case: scientific-educational. ONE isolated landscape-district diorama asset for a premium Korean elementary climate-science game. True transparent background. Richly hand-painted educational game illustration with crisp, readable natural materials and a warm sunlit teal/emerald/cream palette, not a flat symbol, not photorealistic, not preschool toy-like. Three-quarter isometric view from about 30 degrees above. One coherent compact ground patch centered with the entire object visible and 10% clear margin. No text, letters, numerals, measurements, elevation markers, labels, arrows, UI, border, grid, collage, asset sheet, watermark or logos. This is a single place illustration; exact height and flooding status will be controlled by the application, do not invent scientific scales. Subject: a small sandy coastal beach district. A gently curving strip of cream sand meets clear turquoise sea along one edge, with tiny gentle shore waves, a few shells and smooth coastal stones, sparse beach grass farther inland. No houses, no road, no people. Water occupies only the seaward edge of the coherent ground diorama, not a surrounding island ocean. The main readable feature is a broad low sandy shoreline.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-4d04-77c3-9543-5594e985326d\\exec-b533aec3-90c5-4ae1-9449-dfd27454d8f3.png",
+      "output": "assets/concept-art/beach.webp",
+      "id": "beach",
+      "generatedOutput": "assets/concept-art/beach.png",
+      "original": "references/generated/concept-art/beach.png"
+    },
+    {
+      "name": "road",
+      "prompt": "Use case: scientific-educational. ONE isolated landscape-district diorama asset for a premium Korean elementary climate-science game. True transparent background. Richly hand-painted educational game illustration with crisp, readable natural materials and a warm sunlit teal/emerald/cream palette, not a flat symbol, not photorealistic, not preschool toy-like. Three-quarter isometric view from about 30 degrees above. One coherent compact ground patch centered with the entire object visible and 10% clear margin. No text, letters, numerals, measurements, elevation markers, labels, arrows, UI, border, grid, collage, asset sheet, watermark or logos. This is a single place illustration; exact height and flooding status will be controlled by the application, do not invent scientific scales. Subject: a short coastal road district. A short gently curving gray asphalt road with pale edge markings runs beside a low stone seawall and a simple guardrail; narrow grass verge with a few coastal plants, and a thin turquoise sea edge beyond the wall. No cars, no people, no houses, no flooding. The main readable feature is the coastal transportation route, clearly distinct from beach or wetland.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-4d04-77c3-9543-5594e985326d\\exec-b703cf7b-19f1-499c-a99b-9a8c65250397.png",
+      "output": "assets/concept-art/road.webp",
+      "id": "road",
+      "generatedOutput": "assets/concept-art/road.png",
+      "original": "references/generated/concept-art/road.png"
+    },
+    {
+      "name": "wetland",
+      "prompt": "Use case: scientific-educational. ONE isolated landscape-district diorama asset for a premium Korean elementary climate-science game. True transparent background. Richly hand-painted educational game illustration with crisp, readable natural materials and a warm sunlit teal/emerald/cream palette, not a flat symbol, not photorealistic, not preschool toy-like. Three-quarter isometric view from about 30 degrees above. One coherent compact ground patch centered with the entire object visible and 10% clear margin. No text, letters, numerals, measurements, elevation markers, labels, arrows, UI, border, grid, collage, asset sheet, watermark or logos. This is a single place illustration; exact height and flooding status will be controlled by the application, do not invent scientific scales. Subject: one estuary wetland district. A shallow meandering tidal creek between lush reed beds and marsh grasses, exposed muddy banks with natural small stones, one small white egret standing at the water edge. An ecologically believable quiet coastal wetland, with a little clear shallow water visible between reeds. No buildings, no roads, no people, no garden pond construction, no flooding disaster. Main readable feature is reeds and a living shallow tidal habitat.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-4d04-77c3-9543-5594e985326d\\exec-57f31b69-80ec-4e73-8675-ab095fcbe235.png",
+      "output": "assets/concept-art/wetland.webp",
+      "id": "wetland",
+      "generatedOutput": "assets/concept-art/wetland.png",
+      "original": "references/generated/concept-art/wetland.png"
+    },
+    {
+      "name": "homes",
+      "prompt": "Use case: scientific-educational. ONE isolated landscape-district diorama asset for a premium Korean elementary climate-science game. True transparent background. Richly hand-painted educational game illustration with crisp, readable natural materials and a warm sunlit teal/emerald/cream palette, not a flat symbol, not photorealistic, not preschool toy-like. Three-quarter isometric view from about 30 degrees above. One coherent compact ground patch centered with the entire object visible and 10% clear margin. No text, letters, numerals, measurements, elevation markers, labels, arrows, UI, border, grid, collage, asset sheet, watermark or logos. This is a single place illustration; exact height and flooding status will be controlled by the application, do not invent scientific scales. Subject: one small low coastal residential district. Exactly two modest cream-colored homes with warm coral tiled roofs, doors and windows, a shared small green garden and short path, flower pots and low fence, a subtle thin sea edge at the far side of the ground patch. The homes are intact, dry and at ordinary low ground level, not raised on cliffs or stilts. No people, no cars, no floodwater, no disaster. One coherent neighborhood diorama with houses fully contained and clear silhouettes.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-4d04-77c3-9543-5594e985326d\\exec-ae6c13fe-567f-49d9-a340-3cf4a0af416e.png",
+      "output": "assets/concept-art/homes.webp",
+      "id": "homes",
+      "generatedOutput": "assets/concept-art/homes.png",
+      "original": "references/generated/concept-art/homes.png"
+    },
+    {
+      "name": "park",
+      "prompt": "Use case: scientific-educational. ONE isolated landscape-district diorama asset for a premium Korean elementary climate-science game. True transparent background. Richly hand-painted educational game illustration with crisp, readable natural materials and a warm sunlit teal/emerald/cream palette, not a flat symbol, not photorealistic, not preschool toy-like. Three-quarter isometric view from about 30 degrees above. One coherent compact ground patch centered with the entire object visible and 10% clear margin. No text, letters, numerals, measurements, elevation markers, labels, arrows, UI, border, grid, collage, asset sheet, watermark or logos. This is a single place illustration; exact height and flooding status will be controlled by the application, do not invent scientific scales. Subject: one elevated neighborhood park district on a gentle grassy hill. A mature broad-canopied green tree shades a wooden park bench, with a short winding pale path and low flowering shrubs around it. A modest grassy slope is visible on the ground diorama, no sheer cliff or extreme mountain. No people, no houses, no water pool, no road. Main readable feature is a quiet green public park with a tree, bench and path.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-4d04-77c3-9543-5594e985326d\\exec-2ce59de4-0095-4188-a497-f0be04edaf5a.png",
+      "output": "assets/concept-art/park.webp",
+      "id": "park",
+      "generatedOutput": "assets/concept-art/park.png",
+      "original": "references/generated/concept-art/park.png"
+    },
+    {
+      "name": "school",
+      "prompt": "Use case: scientific-educational. ONE isolated landscape-district diorama asset for a premium Korean elementary climate-science game. True transparent background. Richly hand-painted educational game illustration with crisp, readable natural materials and a warm sunlit teal/emerald/cream palette, not a flat symbol, not photorealistic, not preschool toy-like. Three-quarter isometric view from about 30 degrees above. One coherent compact ground patch centered with the entire object visible and 10% clear margin. No text, letters, numerals, measurements, elevation markers, labels, arrows, UI, border, grid, collage, asset sheet, watermark or logos. This is a single place illustration; exact height and flooding status will be controlled by the application, do not invent scientific scales. Subject: one school district on gently raised dry ground. A modest friendly cream-and-teal elementary school building with clear classroom windows, welcoming entrance and low steps plus accessibility ramp, a small safe playground with a simple swing and a flagpole with a plain teal flag, green lawn and low trees. No words, emblems, clock numbers, signs, people, vehicles or floodwater. Whole school and play area contained in one compact coherent land diorama. Main readable feature is a school on higher ground, not a castle or emergency shelter.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18134-4d04-77c3-9543-5594e985326d\\exec-6f8c458f-8a30-4147-b5e6-cf8b79b6541a.png",
+      "output": "assets/concept-art/school.webp",
+      "id": "school",
+      "generatedOutput": "assets/concept-art/school.png",
+      "original": "references/generated/concept-art/school.png"
+    }
+  ]
+}

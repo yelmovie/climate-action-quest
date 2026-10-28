@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-28",
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "id": "scene-drought",
+      "prompt": "Use case: scientific-educational. ONE complete 16:9 landscape illustration for a premium Korean elementary climate-science exploration game. A familiar quiet forest experiencing a period of low rainfall: intact mature trees still standing, sparse slightly drooping leaves on some small plants, dry dusty soil with a few shallow cracks and a nearly dry small woodland stream bed. Crucially NO felled trees, NO stumps from cutting, NO logging, NO fire, NO frightening disaster. This shows lack of soil moisture, not deforestation. Some shaded greenery remains; restrained believable signs of dryness, no suffering people or animals. Rich clean hand-painted educational game illustration, warm sunlight, emerald/olive foliage, muted cream earth, blue sky, readable major forms, not photorealistic or preschool art. One coherent continuous scene, not split panels. No words, numbers, labels, arrows, graphs, symbols, UI, logos or watermarks. Match a lush illustrated coastal-town science adventure while showing dry conditions clearly.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a18112-0e44-72a1-9969-0d9005b65663\\exec-c140078c-b1b0-4a40-a45a-831f64e1cb89.png",
+      "original": "references/generated/concept-art/scene-drought.png",
+      "output": "assets/concept-art/scene-drought.webp"
+    }
+  ]
+}

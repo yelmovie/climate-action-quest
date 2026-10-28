@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-28",
+  "tool": "built-in image_gen",
+  "transparentBackground": false,
+  "assets": [
+    {
+      "id": "scene-bottle",
+      "prompt": "Use case: scientific-educational. Create ONE complete 16:9 landscape scene illustration for a premium Korean elementary climate-science game. Richly detailed clean hand-painted game art with readable major objects, consistent gentle perspective, warm sunlight, emerald green, teal and cream accents. Friendly elementary-school age children with natural proportions, not babyish. Clearly an illustration, not photorealism and not flat SVG symbols. One image is one continuous scene, never split or collaged. Absolutely no text, letters, numbers, labels, arrows, charts, interface, borders, logos or watermarks. Scientific and practical accuracy takes priority. Primary scene: an adult carefully washes a reusable water bottle and its separate cap at a clean kitchen sink. Show clean running water, a simple bottle brush, and a clean drying rack in this same coherent scene. Clear close composition with the person's hands, bottle and hygiene action plainly visible. The water bottle has no branding or lettering. Bright hygienic home atmosphere, no second inset or separate viewpoint.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-5b36-7980-99aa-db8eeedb4f0d\\exec-7eca0e6c-d9ea-4677-9297-11ff7a871505.png",
+      "output": "assets/concept-art/scene-bottle.webp",
+      "generatedOutput": "assets/concept-art/scene-bottle.png",
+      "original": "references/generated/concept-art/scene-bottle.png"
+    },
+    {
+      "id": "scene-heat",
+      "prompt": "Use case: scientific-educational. Create ONE complete 16:9 landscape scene illustration for a premium Korean elementary climate-science game. Richly detailed clean hand-painted game art with readable major objects, consistent gentle perspective, warm sunlight, emerald green, teal and cream accents. Friendly elementary-school age children with natural proportions, not babyish. Clearly an illustration, not photorealism and not flat SVG symbols. One image is one continuous scene, never split or collaged. Absolutely no text, letters, numbers, labels, arrows, charts, interface, borders, logos or watermarks. Scientific and practical accuracy takes priority. Primary scene: on a hot sunny day in a public park near school, two elementary children rest with a responsible adult in the deep shade of a broad roofed shelter, drinking clean water from reusable bottles. Outside the shade the pavement is brightly sunlit, with healthy green trees and a clear sky. Show the shade boundary and safe resting behavior clearly. No injury, no collapsing people, no disaster, no heat numbers or warning symbols.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-5b36-7980-99aa-db8eeedb4f0d\\exec-70c8a732-586f-416c-90fe-0068c18e42f3.png",
+      "output": "assets/concept-art/scene-heat.webp",
+      "generatedOutput": "assets/concept-art/scene-heat.png",
+      "original": "references/generated/concept-art/scene-heat.png"
+    },
+    {
+      "id": "scene-home",
+      "prompt": "Use case: scientific-educational. Create ONE complete 16:9 landscape scene illustration for a premium Korean elementary climate-science game. Richly detailed clean hand-painted game art with readable major objects, consistent gentle perspective, warm sunlight, emerald green, teal and cream accents. Friendly elementary-school age children with natural proportions, not babyish. Clearly an illustration, not photorealism and not flat SVG symbols. One image is one continuous scene, never split or collaged. Absolutely no text, letters, numbers, labels, arrows, charts, interface, borders, logos or watermarks. Scientific and practical accuracy takes priority. Primary scene: a healthy elementary child reads a book with no legible lettering comfortably at a desk beside a large sunlit window. Natural daylight clearly illuminates the open book. A normal adjustable desk lamp is present but turned off and NOT glowing. Good posture, comfortable chair, plant and a few books. Calm ordinary home study corner, no squinting or darkness, no floating lightbulb symbols. One coherent scene.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-5b36-7980-99aa-db8eeedb4f0d\\exec-bfa24619-2b7b-4d55-91ec-c3cbd96ab14e.png",
+      "output": "assets/concept-art/scene-home.webp",
+      "generatedOutput": "assets/concept-art/scene-home.png",
+      "original": "references/generated/concept-art/scene-home.png"
+    },
+    {
+      "id": "scene-power",
+      "prompt": "Use case: scientific-educational. Create ONE complete 16:9 landscape scene illustration for a premium Korean elementary climate-science game. Richly detailed clean hand-painted game art with readable major objects, consistent gentle perspective, warm sunlight, emerald green, teal and cream accents. Friendly elementary-school age children with natural proportions, not babyish. Clearly an illustration, not photorealism and not flat SVG symbols. One image is one continuous scene, never split or collaged. Absolutely no text, letters, numbers, labels, arrows, charts, interface, borders, logos or watermarks. Scientific and practical accuracy takes priority. Primary scene: at a dry, tidy home desk, an adult helps an elementary child safely switch off a power strip connected to devices they have finished using. The adult's dry finger operates the large rocker switch. The child watches safely. All cables are intact and organized, no bare wires, no repair, no unplugging by pulling cables, no wet hands. Devices are inactive with no glowing text or displays. Warm friendly household scene.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-5b36-7980-99aa-db8eeedb4f0d\\exec-06609273-ac2d-4726-bf8a-19253549e176.png",
+      "output": "assets/concept-art/scene-power.webp",
+      "generatedOutput": "assets/concept-art/scene-power.png",
+      "original": "references/generated/concept-art/scene-power.png"
+    },
+    {
+      "id": "scene-repair",
+      "prompt": "Use case: scientific-educational. Create ONE complete 16:9 landscape scene illustration for a premium Korean elementary climate-science game. Richly detailed clean hand-painted game art with readable major objects, consistent gentle perspective, warm sunlight, emerald green, teal and cream accents. Friendly elementary-school age children with natural proportions, not babyish. Clearly an illustration, not photorealism and not flat SVG symbols. One image is one continuous scene, never split or collaged. Absolutely no text, letters, numbers, labels, arrows, charts, interface, borders, logos or watermarks. Scientific and practical accuracy takes priority. Primary scene: a child and a responsible adult together repairing a slightly loosened strap on a familiar green school backpack at a tidy home worktable. The adult handles the small sewing tool while the child holds the bag safely. Make the repair action and old backpack clear. No injury, no exposed hazardous equipment, no sharp tool close to a face. Cozy corner with a sturdy chair and organized material box. Show care, repair and continued use, not a new replacement bag.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1814d-5b36-7980-99aa-db8eeedb4f0d\\exec-623cfbb5-39da-4deb-8264-f6b033eb5a61.png",
+      "output": "assets/concept-art/scene-repair.webp",
+      "generatedOutput": "assets/concept-art/scene-repair.png",
+      "original": "references/generated/concept-art/scene-repair.png"
+    }
+  ]
+}
