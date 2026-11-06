@@ -31,6 +31,10 @@ const paths = {
   chevron: '<path d="m8 4 8 8-8 8"/>',
   footsteps: '<ellipse cx="7" cy="8" rx="3" ry="5" transform="rotate(-20 7 8)"/><ellipse cx="17" cy="15" rx="3" ry="5" transform="rotate(20 17 15)"/><path d="m8 16 1 3m7-14 1 3"/>',
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
+  hand: '<path d="M18 11V6a2 2 0 0 0-4 0v5m0-1V4a2 2 0 0 0-4 0v6m0 .5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.3l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15"/>',
+  map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14"/>',
+  locate: '<circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/>',
+  skip: '<path d="m4 5 9 7-9 7zm9 0 7 7-7 7M21 5v14"/>',
 };
 
 export function icon(name) {

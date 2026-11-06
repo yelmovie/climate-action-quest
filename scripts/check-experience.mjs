@@ -26,7 +26,8 @@ async function inspect(name,w,h){
  const checks=await page.evaluate(()=>{
   const visible=e=>{const scroll=e.closest('.settings-scroll'),r=e.getBoundingClientRect(),s=scroll?.getBoundingClientRect();return !!(e.offsetWidth||e.offsetHeight||e.getClientRects().length)&&getComputedStyle(e).visibility!=='hidden'&&(!e.closest('details')||e.closest('details').open||e.tagName==='SUMMARY')&&(!s||(r.top<s.bottom&&r.bottom>s.top));};
   const root=document.querySelector('dialog[open]')||document.querySelector('.screen');
-  const clipped=[...root.querySelectorAll('button,input[type=range],[role=button]')].filter(visible).filter(e=>{const r=e.getBoundingClientRect();return r.left<-.5||r.right>innerWidth+.5||r.top<-.5||r.bottom>innerHeight+.5;}).map(e=>(e.getAttribute('aria-label')||e.textContent).trim().slice(0,50));
+  // Map labels live on the pannable world layer; off-screen ones are reached by walking or dragging.
+  const clipped=[...root.querySelectorAll('button,input[type=range],[role=button]')].filter(visible).filter(e=>!e.closest('.map-world')).filter(e=>{const r=e.getBoundingClientRect();return r.left<-.5||r.right>innerWidth+.5||r.top<-.5||r.bottom>innerHeight+.5;}).map(e=>(e.getAttribute('aria-label')||e.textContent).trim().slice(0,50));
   const small=[...root.querySelectorAll('button,input[type=range],[role=button]')].filter(visible).filter(e=>{const r=e.getBoundingClientRect();return r.width<43||r.height<43;}).map(e=>(e.getAttribute('aria-label')||e.textContent).trim().slice(0,40));
   const workspace=document.querySelector('.activity-workspace');
   const overlaps=[];

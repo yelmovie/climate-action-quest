@@ -25,8 +25,27 @@ function go(route){
  document.querySelectorAll('dialog[open]').forEach(d=>d.close());cleanup();cleanup=()=>{};activeRoute=route;state.route=route;if(route.startsWith('activity/'))resumeActivity=Number(route.split('/')[1]);save();
  if(location.hash.slice(1)!==route)history.pushState(null,'','#'+route);
  if(route==='home')home();else if(route==='map')map();else if(route.startsWith('facility/'))facility(Number(route.split('/')[1]));else if(route.startsWith('activity/'))activity(Number(route.split('/')[1]));else ending();
- wireHud();app.querySelector('h1')?.setAttribute('tabindex','-1');app.querySelector('h1')?.focus({preventScroll:true});
+ teacherDock();wireHud();app.querySelector('h1')?.setAttribute('tabindex','-1');app.querySelector('h1')?.focus({preventScroll:true});
 }
+// Teacher preview: while every stage is unlocked, step through the ten activities without solving them.
+function teacherStep(dir){
+ const [kind,n]=activeRoute.split('/'),id=Number(n);
+ if(kind==='activity'){const i=id+dir;return i<0||i>9?'map':'activity/'+i;}
+ if(kind==='facility')return dir>0?'activity/'+id*2:id===0?'map':'activity/'+(id*2-1);
+ if(dir<0)return null;const resume=resumeRoute();return resume.startsWith('activity/')?resume:'activity/0';
+}
+function teacherName(route){if(!route?.startsWith('activity/'))return '연구기지 지도';const i=Number(route.split('/')[1]);return `${i+1}/10 · ${stages[Math.floor(i/2)].activities[i%2]}`;}
+function teacherDock(){
+ if(!state.adminUnlocked||!/^(map|facility|activity)/.test(activeRoute))return;
+ const prev=teacherStep(-1),next=teacherStep(1),screen=app.querySelector('.screen');
+ const pad=`<div class="teacher-pad" role="group" aria-label="교사용 단계 이동"><span class="teacher-badge">교사 미리보기</span><button class="teacher-arrow" data-teacher="-1" aria-label="이전 단계: ${teacherName(prev)}" ${prev?'':'disabled'}>${icon('back')}</button><span class="teacher-where">${activeRoute.startsWith('activity/')?teacherName(activeRoute):activeRoute==='map'?'연구기지 지도':stages[Number(activeRoute.split('/')[1])].name}</span><button class="teacher-arrow" data-teacher="1" aria-label="다음 단계: ${teacherName(next)}">${icon('arrow')}</button><kbd class="teacher-keys">Shift + ← →</kbd></div>`;
+ const skip=`<button class="teacher-skip" data-teacher="1"><span><small>조작 없이 바로 이동</small>${next==='map'?'지도로 돌아가기':'다음 단계: '+esc(teacherName(next).split(' · ')[1])}</span>${icon('skip')}</button>`;
+ if(activeRoute==='map'){app.querySelector('.map-stack-left').insertAdjacentHTML('afterbegin',pad);app.querySelector('.map-stack-right').insertAdjacentHTML('afterbegin',skip);}
+ else{screen.classList.add('teacher-on');screen.insertAdjacentHTML('beforeend',`<nav class="teacher-dock" aria-label="교사용 빠른 이동">${pad}${skip}</nav>`);}
+ app.querySelectorAll('[data-teacher]').forEach(b=>b.onclick=()=>teacherMove(Number(b.dataset.teacher)));
+}
+function teacherMove(dir){const route=teacherStep(dir);if(!route)return;go(route);announce(`교사 미리보기 · ${teacherName(route)}로 이동했어요.`);}
+document.addEventListener('keydown',e=>{if(!state.adminUnlocked||document.querySelector('dialog[open]')||e.target.closest?.('input,textarea,select,[contenteditable="true"]')||!/^(map|facility|activity)/.test(activeRoute))return;const dir=e.key==='PageDown'||(e.shiftKey&&e.key==='ArrowRight')?1:e.key==='PageUp'||(e.shiftKey&&e.key==='ArrowLeft')?-1:0;if(!dir)return;e.preventDefault();teacherMove(dir);});
 function resumeRoute(){
  const current=state.records[resumeActivity];
  if(Number.isInteger(resumeActivity)&&activityOpen(state,resumeActivity)&&current&&!current.example&&current.workComplete!==true&&(!current.done||current.workComplete===false))return 'activity/'+resumeActivity;
@@ -36,7 +55,8 @@ function resumeRoute(){
 }
 function home(){
  const begun=Object.keys(state.records).length>0;
- app.innerHTML=`<section class="screen home-screen"><img class="home-art" src="${asset('home')}" alt="강과 초록 도시를 바라보는 따뜻한 기후 연구실"><div class="home-copy"><span class="eyebrow">작은 발견이 모여, 더 나은 내일로</span><h1 class="hero-title">기후 미래<br><em>작전실</em></h1><p class="hero-subtitle">관측하고, 실험하고, 도시를 설계하는 모험</p><div class="hero-actions"><button class="button primary" id="start">${begun?'탐구 이어하기':'연구 시작하기'} ${icon('arrow')}</button><button class="button secondary" id="mission-story">어떤 모험인가요?</button></div></div><div class="hero-seal">${icon('seed')}<span>자료를 모으는 탐정에서<br>도시를 지키는 설계자로</span></div>${hud(true)}</section>`;
+ const restored=stages.filter(s=>chapterDone(state,s.id)).length;
+ app.innerHTML=`<section class="screen home-screen"><img class="home-art" src="${asset('home')}" alt="강과 초록 도시를 바라보는 따뜻한 기후 연구실"><div class="home-copy"><span class="home-tag">${icon('leaf')} 작은 발견이 모여, 더 나은 내일로</span><h1 class="home-title"><img class="home-logo" src="${asset('logo-title')}" alt="기후 미래 작전실"></h1><p class="hero-subtitle">관측하고, 실험하고, 도시를 설계해요.<br><strong>잎새·물방울과 함께 더 안전한 미래 도시를 만들어 봐!</strong></p><div class="hero-actions"><button class="button gold" id="start">${begun?'탐구 이어하기':'연구 시작하기'} ${icon('arrow')}</button><button class="button ghost" id="mission-story">${icon('book')} 어떤 모험인가요?</button></div>${begun?`<div class="home-progress" aria-label="완료한 연구 ${state.completed.length}개, 복구한 시설 ${restored}곳"><span class="home-progress-bar"><i style="width:${state.completed.length*10}%"></i></span><span>연구 ${state.completed.length} / 10 · 시설 복구 ${restored} / 5</span></div>`:''}</div><div class="home-cast" aria-hidden="true"><p class="home-bubble">${begun?'다음 연구 기록도 같이 모아 보자!':'같이 기후 단서를 찾아보자!'}</p><img class="home-squirrel" src="${asset('home-squirrel')}" alt=""><img class="home-otter" src="${asset('home-otter')}" alt=""></div>${hud(true)}</section>`;
  app.querySelector('#start').onclick=()=>{if(!state.introSeen)story(()=>{state.introSeen=true;save();go('map');});else go(resumeRoute());};
  app.querySelector('#mission-story').onclick=()=>story();
 }
