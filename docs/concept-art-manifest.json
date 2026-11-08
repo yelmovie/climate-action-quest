@@ -325,6 +325,21 @@
       "sourceWidth": 1536,
       "sourceHeight": 1024,
       "sourceSha256": "1faf53c4bbdce9a5686ec3accf8a0490a9ca2a25a7cbf4c1a934395398aa9240"
+    },
+    {
+      "id": "scene-observe-v2",
+      "kind": "scene",
+      "src": "assets/concept-art/scene-observe-v2.webp",
+      "original": "output/overnight-20261108/observe-v2.png",
+      "width": 960,
+      "height": 540,
+      "bytes": 130386,
+      "hasAlpha": false,
+      "sourceSha256": "d18e5ffd27e04432a3f61a8cdb9bf337d49182987c9fa51078e24b430f9fd9de",
+      "tool": "built-in image_gen",
+      "model": "not disclosed",
+      "generated": "2026-11-08",
+      "usage": "Observation notebook and chapter illustration; depicts instruments, not climate evidence or measured data"
     }
   ]
 }

@@ -6,3 +6,6 @@ dist/
 .env.*
 !.env.example
 *.log
+
+# macOS resource forks on the shared SSD
+._*

@@ -27,3 +27,16 @@ export function activityOpen(state,id){return state.adminUnlocked||(stageOpen(st
 export function certificateEligible(state){return state.completed.length===10&&Array.from({length:10},(_,i)=>i).every(i=>state.completed.includes(i)&&state.records[i]?.done&&!state.records[i]?.example);}
 export function loadState(storage){try{return {state:normalizeState(JSON.parse(storage.getItem(SAVE_KEY))),error:false};}catch{return {state:freshState(),error:true};}}
 export function storeState(storage,state){try{storage.setItem(SAVE_KEY,JSON.stringify(state));return true;}catch{return false;}}
+
+/** One tab owns its observed save revision; damaged or foreign saves are read-only. */
+export function createSaveSession(storage){
+ let baseline=null,blocked=null,state=freshState();
+ try{
+  baseline=storage.getItem(SAVE_KEY);
+  if(baseline!==null){const raw=JSON.parse(baseline);if(!raw||Array.isArray(raw)||raw.version!==1)blocked='invalid';else state=normalizeState(raw);}
+ }catch{blocked='unavailable';}
+ state.adminUnlocked=false;
+ const check=()=>{if(blocked)return {ok:false,reason:blocked};try{if(storage.getItem(SAVE_KEY)!==baseline)return {ok:false,reason:'conflict'};}catch{return {ok:false,reason:'unavailable'};}return {ok:true};};
+ const save=next=>{if(next.adminUnlocked)return {ok:true,reason:'preview'};const status=check();if(!status.ok)return status;try{const value=JSON.stringify(next);storage.setItem(SAVE_KEY,value);baseline=value;return {ok:true};}catch{return {ok:false,reason:'unavailable'};}};
+ return {state,error:Boolean(blocked),save,reset(){const status=check();if(!status.ok)return status;try{if(baseline!==null)storage.setItem(SAVE_KEY+':before-reset',baseline);}catch{return {ok:false,reason:'backup'};}return save(freshState());}};
+}

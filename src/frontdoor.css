@@ -120,3 +120,5 @@
 @media (prefers-reduced-motion: reduce) {
   .home-art, .home-copy, .home-cast img, .home-bubble, .map-here { animation: none; }
 }
+/* Keep the optional welcome caption readable in front of decorative characters. */
+.home-copy:has(.npc-welcome-voice) { z-index: 3; }

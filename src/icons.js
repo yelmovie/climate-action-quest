@@ -23,6 +23,7 @@ const paths = {
   city: '<path d="M3 21V9h6v12m0-18h7v18m0-9h5v9M2 21h20M6 12v2m0 3v1m6-12v2m0 3v2m0 3v2m7-3v2"/>',
   star: '<path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>',
   play: '<path d="m9 5 11 7-11 7z"/>',
+  pause: '<path d="M8 5v14M16 5v14"/>',
   book: '<path d="M12 5C9 2 4 3 2 4v16c3-2 7-2 10 0m0-15c3-3 8-2 10-1v16c-3-2-7-2-10 0V5Z"/>',
   reset: '<path d="M3 10a9 9 0 1 1 1 8M3 3v7h7"/>',
   trophy: '<path d="M8 3h8v6a4 4 0 0 1-8 0zM8 5H3v3a4 4 0 0 0 5 4m8-7h5v3a4 4 0 0 1-5 4M12 13v5m-4 3v-3h8v3M6 21h12"/>',

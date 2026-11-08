@@ -30,7 +30,7 @@ const scenes={
 };
 export const conceptArt=Object.freeze(Object.fromEntries([
   ...Object.entries(objects).map(([id,alt])=>[id,Object.freeze({src:`/assets/concept-art/${id}.webp`,alt,kind:'object'})]),
-  ...Object.entries(scenes).map(([id,alt])=>['scene-'+id,Object.freeze({src:`/assets/concept-art/scene-${id}.webp`,alt,kind:'scene'})]),
+  ...Object.entries(scenes).map(([id,alt])=>['scene-'+id,Object.freeze({src:`/assets/concept-art/scene-${id}${id==='observe'?'-v2':''}.webp`,alt,kind:'scene'})]),
 ]));
 export const dailyArt=['scene-home','scene-commute','scene-classroom','scene-meal','scene-heat','scene-reuse','scene-repair','scene-cooling','scene-bottle','scene-power'];
 export const humanArt=['scene-classroom','scene-commute','scene-cooling','scene-workshop','scene-forest','scene-meal','scene-commute','scene-repair','park','scene-power'];

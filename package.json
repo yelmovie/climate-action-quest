@@ -13,6 +13,9 @@
     "check:interactions": "node scripts/check-interactions.mjs",
     "check:delivery": "node scripts/check-delivery.mjs",
     "check:art": "node scripts/check-concept-art.mjs",
-    "check:flow": "node scripts/check-flow-resume.mjs"
+    "check:flow": "node scripts/check-flow-resume.mjs",
+    "check:journey": "node scripts/check-full-journey.mjs",
+    "check:screen": "node scripts/check-responsive.mjs --single-screen --activities=0,1,2,3,4,5,6,7,8,9",
+    "check:playback": "node scripts/check-activity-playback.mjs"
   }
 }

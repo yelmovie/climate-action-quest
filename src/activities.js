@@ -1,7 +1,11 @@
 import {activityTitles,evidenceSites,humanSites,resourceNames,relationCases,coastDistricts,experimentLevels,effectChains,dailyCases,compareCaseIndices,facilities,cityDistricts,CITY_BUDGET} from './activity-data.js';
 import {activityGuide} from './activity-guide.js';
 import {bindManipulation} from './manipulation.js';
-import {artImage,dailyArt,humanArt,effectArt} from './concept-art.js';
+import {conceptArt,artImage,dailyArt,humanArt,effectArt} from './concept-art.js';
+import {enhanceObservation as enhanceObservationVisuals} from './observation-visuals.js';
+import {enhanceImpact} from './impact-visuals.js';
+import {enhanceCityVisuals} from './city-visuals.js';
+import {createActivityPlayback} from './activity-playback.js';
 
 const escapeText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const arr=value=>Array.isArray(value)?value:[];
@@ -44,7 +48,8 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
   if(!Number.isInteger(index)||index<0||index>9)throw new RangeError('Unknown activity');
   state.records??={};
   if(!state.records[index]||typeof state.records[index]!=='object')state.records[index]={};
-  let rec=state.records[index],controller,disposed=false,finishing=false,hintOpen=false;
+  let rec=state.records[index],controller,playback,disposed=false,finishing=false;
+  const lifetime=new AbortController();
   const needsPrevious=[1,3,5,7,9].includes(index);
   const previous=index-1;
   const example=needsPrevious&&!arr(state.completed).includes(previous);
@@ -56,30 +61,59 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
   const b=(text,extra='',disabled=false)=>`<button type="button" class="button ${extra}" ${disabled?'disabled':''}>${text}</button>`;
   function on(selector,event,fn){host.querySelectorAll(selector).forEach(el=>el.addEventListener(event,fn,{signal:controller.signal}));}
   function say(text,good=false){rec.feedback=text;const el=host.querySelector('.activity-feedback');if(el){el.textContent=text;el.classList.toggle('positive',good);}effect(good?'success':'retry');announce(text);commit();}
-  function finish(summary){if(finishing)return;finishing=true;rec.workComplete=true;commit();complete(summary);draw();}
+  function finish(summary){if(finishing)return;finishing=true;playback?.stop();rec.workComplete=true;commit();complete(summary);draw();}
   function recordRound(total,summary){commit();if(rec.round>=total)finish(summary);else draw();}
+  function instruction(){
+    if(rec.workComplete&&rec.done)return '기록을 마쳤어요. 다음 탐구로 이어 가요.';
+    const notes=[
+      rec.collected?.length===8?'관측을 마무리해요.':rec.collected?.includes(evidenceSites[rec.open]?.id)?'다음 지점을 살펴봐요.':'시간 손잡이를 밀거나 자동재생을 눌러요.',
+      rec.checked?'근거를 읽고 다음으로 가요.':'기록의 기간을 보고 판단을 골라요.',
+      rec.collected?.includes(rec.open)?'다음 조사 지점으로 가요.':'장면과 관련된 자원을 골라요.',
+      rec.checked?'완성한 연결을 읽고 다음으로 가요.':'이유 카드를 가운데 칸에 연결해요.',
+      rec.ran?(rec.prediction?.length?'예상과 결과를 비교해요.':'물에 닿은 구역을 관찰해요.'):rec.prediction?.length?'실험을 시작해요.':'구역을 골라 예상하거나 자동재생을 눌러요.',
+      rec.checked?'연결을 읽고 다음으로 가요.':'먼저 일어난 일부터 카드를 놓아요.',
+      rec.picked===undefined?'생활을 지키는 선택을 골라요.':'다른 선택도 비교한 뒤 기록해요.',
+      rec.round>=4?'실천할 행동 하나를 골라요.':rec.checked?'선택의 차이를 확인하고 다음으로 가요.':'두 선택의 지표를 비교해 골라요.',
+      rec.tool==='erase'?'비울 구역을 눌러요.':rec.tool?'선택한 시설을 놓을 구역을 눌러요.':'시설을 고른 뒤 놓을 구역을 눌러요.',
+      rec.phase===2?'시설을 검토한 뒤 재시험해요.':rec.phase===4?'두 시험 결과를 확인해요.':'시험 시작 또는 자동재생을 눌러요.'
+    ];
+    return notes[index];
+  }
+  function playbackAvailable(){return !rec.workComplete&&((index===0&&rec.collected?.length!==8)||(index===4&&!(rec.ran&&rec.round===5))||(index===9&&![2,4].includes(rec.phase)));}
+  function playbackTools(){if(!playbackAvailable())return '';const speed=playback?.snapshot.speed||1;return `<div class="playback-tools" role="group" aria-label="실험 자동재생"><button type="button" class="button playback-toggle" data-playback aria-pressed="false">${icon('play')}<span>자동재생</span></button><label class="playback-speed"><span>속도</span><select aria-label="재생 속도">${[.5,1,2].map(n=>`<option value="${n}" ${n===speed?'selected':''}>${n}배</option>`).join('')}</select></label></div>`;}
   function frame(title,brief,body,progress,action='',note='가상 교육용 자료예요. 실제 측정값이나 특정 지역의 미래 예측이 아니에요.'){
     const guide=activityGuide(index,rec);
-    host.innerHTML=`<section class="activity-page activity-${index}"><header class="activity-heading"><span class="eyebrow">${escapeText(activityTitles[index])} <span class="round-progress">${escapeText(progress)}</span></span><h1>${escapeText(title)}</h1><p>${escapeText(brief)}</p></header><div class="activity-workspace">${example?'<p class="notice example-notice">교사용 예시 · 실제 완료 기록에는 반영되지 않아요.</p>':''}${body}</div><footer class="activity-footer-wrap"><div class="activity-footer"><button class="guide-avatar" aria-label="${guide.name}의 힌트" aria-expanded="${hintOpen}"><img src="${asset(guide.character)}" alt=""><span>힌트</span></button><div class="guide-message"><span class="guide-name">${guide.name}의 탐구 도움</span><p class="activity-feedback" role="status">${escapeText(rec.feedback||guide.basic)}</p><p class="guide-deeper" ${hintOpen?'':'hidden'}>${escapeText(guide.deeper)}</p></div>${action?`<div class="activity-next">${action}</div>`:''}</div><details class="model-note"><summary>자료 안내</summary><p>${escapeText(note)}</p></details></footer></section>`;
+    const teacherTools=host.closest('.screen')?.querySelector('.teacher-dock');
+    if(teacherTools&&host.contains(teacherTools))host.parentElement.append(teacherTools);
+    host.innerHTML=`<section class="activity-page activity-${index}" aria-label="${escapeText(activityTitles[index])}"><header class="activity-heading"><h1>${escapeText(title)}</h1><span class="round-progress">${escapeText(progress)}${example?' · 교사용 예시':''}</span></header><div class="activity-workspace">${body}</div><footer class="activity-footer-wrap"><div class="activity-footer"><button class="guide-avatar" aria-label="${guide.name}의 힌트" aria-haspopup="dialog"><img src="${asset(guide.character)}" alt=""><span>도움</span></button><div class="guide-message"><p class="activity-feedback" role="status">${escapeText(rec.feedback||instruction())}</p></div>${playbackTools()}${action?`<div class="activity-next">${action}</div>`:''}</div></footer><dialog class="activity-help" aria-label="탐구 도움말"><button class="help-close icon-button" aria-label="도움말 닫기">${icon('close')}</button><h2>${guide.name}의 탐구 도움</h2><p>${escapeText(brief)}</p><p class="guide-deeper">${escapeText(guide.deeper)}</p><h3>자료 안내</h3><p>${escapeText(note)}</p>${example?'<p>교사용 예시이며 실제 완료 기록에는 반영되지 않아요.</p>':''}</dialog></section>`;
   }
   function draw(){
     if(disposed)return;
     const active=host.contains(document.activeElement)?document.activeElement:null;
     const key=active&&Object.keys(active.dataset).find(k=>['site','answer','resource','link','predict','reflect','part','remove','choice','practice','compare','tool','district'].includes(k));
     const action=active&&['check','next','run','submit','retest','redesign','finish','replay','next-site'].find(c=>active.classList.contains(c));
-    const focusSelector=key?`[data-${key}="${active.dataset[key]}"]`:action?`.${action}`:null;
+    const focusSelector=active?.matches('[data-playback]')?'[data-playback]':active?.matches('.playback-speed select')?'.playback-speed select':key?`[data-${key}="${active.dataset[key]}"]`:action?`.${action}`:null;
     controller?.abort();controller=new AbortController();
     [scanEvidence,judgeEvidence,scanHuman,linkRelations,waterExperiment,orderEffects,dailyChoice,compareChoices,designCity,stressTest][index]();
     enhance();
+    presentActivity();
+    playback?.refresh();
     host.querySelectorAll('.choice-card,.flood-district,.scan-hotspot,.facility-button,[data-district]').forEach(el=>el.setAttribute('aria-pressed',String(el.classList.contains('selected')||el.classList.contains('correct'))));
     if(focusSelector){const target=host.querySelector(focusSelector);if(target&&!target.disabled)target.focus({preventScroll:true});else host.querySelector('.activity-next .button:not(:disabled)')?.focus({preventScroll:true});}
   }
   function reset(){finishing=false;rec=freshActivityRecord(rec,example);state.records[index]=rec;commit();draw();}
   function enhance(){
     const signal=controller.signal;
-    if(rec.workComplete&&rec.done){const next=host.querySelector('.activity-next');if(next){next.innerHTML=b(escapeText(continueLabel()),'primary continue-activity');on('.continue-activity','click',continueActivity);host.querySelector('.activity-feedback').textContent=rec.example?'예시 탐구를 살펴봤어. 오른쪽 버튼으로 시설에 돌아갈 수 있어!':'발견을 기록했어! 오른쪽 버튼으로 다음 탐구를 이어 가자!';}}
-    on('.guide-avatar','click',e=>{hintOpen=!hintOpen;host.querySelector('.guide-deeper').hidden=!hintOpen;e.currentTarget.setAttribute('aria-expanded',String(hintOpen));effect('hint');});
-    if(rec.done&&!rec.example){const watch=document.createElement('button');watch.className='concept-revisit';watch.textContent='개념 영상 다시 보기';watch.onclick=watchConcept;host.querySelector('.guide-deeper').append(watch);}
+    if(rec.workComplete&&rec.done){const next=host.querySelector('.activity-next');if(next){next.innerHTML=b(escapeText(continueLabel()),'primary continue-activity');on('.continue-activity','click',continueActivity);host.querySelector('.activity-feedback').textContent='기록을 마쳤어요. 다음 탐구로 이어 가요.';}}
+    on('.guide-avatar','click',()=>{
+      playback?.pause();const help=host.querySelector('.activity-help'),tools=host.closest('.screen')?.querySelector('.teacher-dock');
+      if(tools&&!help.contains(tools)){const title=document.createElement('h3');title.textContent='교사 단계 이동';help.append(title,tools);}
+      help.showModal();effect('hint');
+    });
+    on('.help-close','click',()=>host.querySelector('.activity-help').close());
+    on('[data-playback]','click',()=>playback.toggle());
+    on('.playback-speed select','change',e=>playback.setSpeed(Number(e.target.value)));
+    if(rec.done&&!rec.example){const watch=document.createElement('button');watch.className='concept-revisit';watch.textContent='개념 영상 다시 보기';watch.onclick=()=>{host.querySelector('.activity-help').close();watchConcept();};host.querySelector('.guide-deeper').append(watch);}
     const drag=(el,value)=>{if(el){el.dataset.drag=value;el.classList.add('can-drag');}};
     if(index===1){drag(host.querySelector('.evidence-card'),'evidence');host.querySelectorAll('[data-answer]').forEach(el=>el.dataset.drop='judgment');}
     if(index===2&&!rec.collected?.includes(rec.open)){drag(host.querySelector('.evidence-card'),'resource');host.querySelectorAll('[data-resource]').forEach(el=>el.dataset.drop='resource');}
@@ -96,8 +130,6 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
       else return;
       if(kind==='part'&&rec.order.length<3)effect('connect');
     }});
-    if(index===0)enhanceObservation();
-    if(index===1){const site=evidenceSites[Math.min(rec.round,7)],data=host.querySelector('.comparison-data');if(data){data.innerHTML=pairedChart(site.past,site.now);data.classList.add('paired-data');}}
     if(index===4){
       const board=host.querySelector('.experiment-board');if(board)board.classList.toggle('experiment-ran',!!rec.ran);
     }
@@ -112,19 +144,85 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
       const extras=[...workspace.querySelectorAll(':scope > .evidence-card,:scope > .comparison-grid,:scope > .notice:not(.example-notice),:scope > .redesign')];
       if(board&&extras.length){const wrap=document.createElement('div'),aside=document.createElement('div');wrap.className='stress-result-layout';aside.className='stress-results';board.before(wrap);wrap.append(board,aside);extras.forEach(el=>aside.append(el));}
     }
+    enhanceObservationVisuals({host,index,rec,icon});
+    enhanceImpact({host,index,rec,icon});
+    enhanceCityVisuals({host,index,rec,icon});
     host.querySelectorAll('.activity-next .button:disabled').forEach(el=>el.setAttribute('aria-description',activityGuide(index,rec).basic));
     // One local feedback per action; no delayed state updates or duplicated rewards.
     host.addEventListener('click',e=>{const button=e.target.closest('button');if(!button||button.disabled||button.matches('.guide-avatar,.concept-revisit,[data-answer],[data-resource],[data-link],[data-compare],[data-district],[data-part],[data-remove]'))return;effect(button.matches('.run,.retest')?'experiment':'tap');},{signal,capture:true});
   }
-  function pairedChart(past,now){
-    return `<div class="chart-legend"><span>이전 기록</span><span>나중 기록</span></div><div class="paired-chart" role="img" aria-label="이전 ${past.join(', ')} / 나중 ${now.join(', ')}. 같은 기준, 상대 단계">${past.map((v,i)=>`<div class="bar-pair"><i style="height:${12+v*8}px"></i><b style="height:${12+now[i]*8}px"></b><span>${i+1}묶음</span></div>`).join('')}</div>`;
+  function playbackStep(){
+    const key=`${index}:${rec.open??0}:${rec.round??0}:${rec.phase??0}`;
+    if(disposed||rec.workComplete||finishing)return {key,kind:'stop'};
+    if(host.querySelector('dialog[open]')||host.ownerDocument.querySelector('.concept-dialog[open]'))return {key:key+':help',kind:'wait'};
+    if(index===0){
+      if(rec.collected?.length===8)return {key,kind:'stop'};
+      if(rec.collected?.includes(evidenceSites[rec.open]?.id))return {key:key+':next',kind:'advance',target:'.next-site',delay:1400};
+      return {key:key+':compare',kind:'compare',progress:(rec.reveal||0)/100,duration:2400};
+    }
+    if(index===4){
+      if(!rec.ran)return {key:key+':run',kind:'run',target:'.run',observe:!rec.prediction?.length,delay:900};
+      return rec.round===5?{key,kind:'stop'}:{key:key+':result',kind:'advance',target:'.next',delay:2600};
+    }
+    if(index===9){
+      if(rec.phase===2||rec.phase===4)return {key,kind:'stop'};
+      const result=rec.phase===0?rec.before?.heat:rec.phase===1?rec.before?.rain:rec.after?.heat;
+      return {key:key+(result?':result':':run'),kind:result?'advance':'run',target:'.run',delay:result?2600:900};
+    }
+    return {key,kind:'stop'};
   }
-  function enhanceObservation(){
-    const chart=host.querySelector('.mini-chart'),site=evidenceSites[rec.open];if(!chart)return;
-    chart.classList.add('scrub-chart');
-    const render=()=>{const fraction=bounded(rec.reveal,100)/100;chart.innerHTML=site.past.map((v,i)=>`<div class="scrub-pair"><i style="height:${12+v*7}px"></i><b style="height:${12+(v+(site.now[i]-v)*fraction)*7}px"></b><span>${i+1}</span></div>`).join('');host.querySelector('.period-label').textContent=rec.reveal>=90?'나중 기록':rec.reveal>0?'두 시기 비교 중':'이전 기록';};
-    render();on('.compare-slider','input',render);
-    host.querySelector('.evidence-data')?.insertAdjacentHTML('beforeend','<div class="chart-legend"><span>이전</span><span>비교 시점</span></div>');
+  function playbackChange(snapshot){
+    const button=host.querySelector('[data-playback]');
+    if(button){button.setAttribute('aria-pressed',String(snapshot.active));button.innerHTML=icon(snapshot.active?'pause':'play')+`<span>${snapshot.waiting?'예상 대기':snapshot.active?'일시정지':'자동재생'}</span>`;}
+    host.querySelector('.activity-page')?.classList.toggle('is-playing',snapshot.playing);
+  }
+  function presentActivity(){
+    if(index===4){
+      const card=host.querySelector('.experiment-layout > .evidence-card');
+      card?.querySelector(':scope > .eyebrow')?.remove();
+      card?.querySelectorAll(':scope > p:not(.notice)').forEach(e=>e.remove());
+      const run=card?.querySelector('.run');if(run){const next=document.createElement('div');next.className='activity-next';next.append(run);host.querySelector('.activity-footer').append(next);}
+      host.querySelectorAll('[data-predict]').forEach(button=>{
+        const district=coastDistricts.find(d=>d.id===button.dataset.predict),copy=button.querySelector('.flood-copy');
+        copy.querySelector(':scope > span').textContent='높이 '+district.height;
+        const result=copy.querySelector('small');result.textContent=rec.ran?'예상 '+(rec.prediction?.includes(district.id)?'✓':'—')+' · 물 '+(district.height<=experimentLevels[rec.round]?'✓':'—'):button.classList.contains('selected')?'✓':'';
+        result.title='예상 표시 / 실제 물이 닿았는지';
+      });
+    }
+
+    if(index===0||index===2){host.querySelector('.scene-brief h2')?.remove();host.querySelector('.scene-brief .eyebrow')?.remove();}
+    host.querySelector('.observation-status')?.remove();
+    if(index===2){const question=host.querySelector('.ov-resource-question');if(question)question.remove();host.querySelector('.evidence-card > .notice')?.remove();}
+    if(index===3&&rec.checked)host.querySelector('.chain-options')?.remove();
+    if(index===6){
+      host.querySelector('.choice-preview')?.remove();
+      const explanation=host.querySelector('.daily-layout > div:last-child > .notice');
+      if(explanation){host.querySelector('.activity-feedback').textContent=explanation.textContent;explanation.remove();}
+      const direction=host.querySelector('.metric-directions');if(direction){host.querySelector('.activity-help .guide-deeper').append(' '+direction.textContent);direction.remove();}
+    }
+    if(index===7){const question=host.querySelector('.comparison-question');if(question){host.querySelector('h1').textContent=question.textContent;question.remove();}}
+    if(index===8||(index===9&&rec.phase===2)){
+      host.querySelectorAll('.district-tile:has(.empty-plot) > strong').forEach(e=>e.remove());
+      host.querySelector('.city-design-layout > .evidence-card > .eyebrow')?.remove();
+      host.querySelectorAll('.facility-button[data-tool="erase"] > span').forEach(e=>e.remove());
+    }
+    if(index===9){
+      host.querySelectorAll('.test-city .district-tile > span:not(.eyebrow):not(.risk-track)').forEach(e=>{if(e.textContent==='아직 시험하지 않았어요')e.remove();});
+      if(rec.phase===2){host.querySelector('.test-summary')?.remove();const target=host.querySelector('.city-risk-legend');if(target)target.textContent='목표: 더위·빗물 각각 10 이하';}
+      host.querySelector('.activity-help .guide-deeper').append(' 두 위험의 남은 영향이 각각 10 이하이며, 두 영향의 합계가 첫 설계보다 커지지 않아야 해요.');
+      if(rec.phase===4){host.querySelector('.stress-results > .evidence-card')?.remove();const note=host.querySelector('.stress-results > .notice');if(note)note.textContent=canCompleteStress(rec.before,rec.after)?'두 위험 모두 기준을 지켰어요.':'남은 위험을 줄여 다시 시험해요.';}
+      const repeated=host.querySelector('.stress-results > .notice');if(repeated&&rec.feedback)repeated.remove();
+    }
+    if(index===5)host.querySelectorAll('[data-remove] > p').forEach(p=>{if(p.textContent==='카드를 골라 놓아요'){p.textContent='＋';p.className='empty-cause';p.setAttribute('aria-hidden','true');}});
+    if([1,3,5,7].includes(index))host.querySelectorAll('.activity-next .button:disabled').forEach(button=>button.textContent='다음 →');
+    if(index===4&&!rec.ran){const run=host.querySelector('.run');if(run)run.textContent='실험 시작';}
+    const next=host.querySelector('.activity-next .button:not(:disabled)');
+    if(next)next.classList.add('next-action');
+    else {
+      const selector=index===0?'.compare-slider':index===1?'[data-answer]':index===2?'[data-resource]:not(:disabled)':index===3?'[data-link]':index===4?(rec.prediction?.length?'.run':'[data-predict]'):index===5?'[data-part]:not(:disabled)':index===6?'[data-choice]':index===7?(rec.round>=4?'[data-practice]':'.comparison-card'):!rec.tool?'[data-tool]':'[data-district]';
+      host.querySelectorAll(selector).forEach(e=>e.classList.add('action-ready'));
+    }
+    playbackChange(playback?.snapshot||{active:false,playing:false});
   }
   function enhanceComparison(){
     const answers=[...host.querySelectorAll('[data-compare]')];
@@ -143,11 +241,11 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
     const collected=[...new Set([...rec.collected,...rec.compared])];if(collected.length!==rec.collected.length){rec.collected=collected;commit();}
     const done=rec.collected.length===8,nextSite=evidenceSites.findIndex(s=>!rec.collected.includes(s.id));
     const values=rec.reveal>=90?site.now:site.past;
-    frame('두 시기의 기록을 살펴보세요','시간 손잡이를 끝까지 밀면 두 기록이 자동으로 수첩에 담겨요.',`<div class="scan-layout"><div class="scan-scene" style="background-image:url('${asset('city')}')" aria-label="관측 지점이 있는 가상 도시">${evidenceSites.map((s,i)=>`<button class="scan-hotspot ${rec.open===i?'selected':''} ${rec.collected.includes(s.id)?'correct':''}" style="left:${s.x}%;top:${s.y}%" data-site="${i}" aria-label="${escapeText(s.name)} ${rec.collected.includes(s.id)?'기록 완료':'살펴보기'}">${icon('search')}<span>${escapeText(s.name)}${rec.collected.includes(s.id)?' ✓':''}</span></button>`).join('')}</div><article class="evidence-card"><div class="scene-brief observation-heading">${artImage('scene-observe','observation-art',true)}<div><span class="eyebrow">관측 수첩</span><h2>${escapeText(site.name)}</h2><p>${escapeText(site.clue)}</p></div></div><div class="evidence-data"><strong class="period-label">${rec.reveal>=90?'나중 기록':'이전 기록'}</strong><div class="mini-chart" aria-label="${escapeText(site.unit)}">${values.map((v,i)=>`<div style="height:${28+v*9}px"><span>${i+1}묶음</span></div>`).join('')}</div><p>${escapeText(site.unit)}</p></div><label class="water-control">이전 기록 ← 비교 → 나중 기록<input class="compare-slider" type="range" min="0" max="100" value="${bounded(rec.reveal,100)}" aria-label="관측 시기 비교" /></label><p class="observation-status ${rec.collected.includes(site.id)?'recorded':''}">${rec.collected.includes(site.id)?'✓ 수첩에 자동 기록했어요':'두 시기를 끝까지 비교해 보세요'}</p></article></div>`,`관측 수첩 ${rec.collected.length} / 8`,done?b('관측 마무리','primary submit'):b('다음 관측 지점 →','primary next-site',!rec.collected.includes(site.id)));
+    frame('두 시기의 기록을 살펴보세요','시간 손잡이를 끝까지 밀면 두 기록이 자동으로 수첩에 담겨요.',`<div class="scan-layout"><div class="scan-scene" style="background-image:url('${conceptArt['scene-observe'].src}')" aria-label="관측소 그림과 여덟 관측 기록 선택">${evidenceSites.map((s,i)=>`<button class="scan-hotspot ${rec.open===i?'selected':''} ${rec.collected.includes(s.id)?'correct':''}" style="left:${s.x}%;top:${s.y}%" data-site="${i}" aria-label="${escapeText(s.name)} ${rec.collected.includes(s.id)?'기록 완료':'살펴보기'}">${icon('search')}<span>${escapeText(s.name)}${rec.collected.includes(s.id)?' ✓':''}</span></button>`).join('')}</div><article class="evidence-card"><div class="scene-brief observation-heading">${artImage('scene-observe','observation-art',true)}<div><span class="eyebrow">관측 수첩</span><h2>${escapeText(site.name)}</h2><p>${escapeText(site.clue)}</p></div></div><div class="evidence-data"><strong class="period-label">${rec.reveal>=90?'나중 기록':'이전 기록'}</strong><div class="mini-chart" aria-label="${escapeText(site.unit)}">${values.map((v,i)=>`<div style="height:${28+v*9}px"><span>${i+1}묶음</span></div>`).join('')}</div><p>${escapeText(site.unit)}</p></div><label class="water-control">이전 기록 ← 비교 → 나중 기록<input class="compare-slider" type="range" min="0" max="100" value="${bounded(rec.reveal,100)}" aria-label="관측 시기 비교" /></label><p class="observation-status ${rec.collected.includes(site.id)?'recorded':''}">${rec.collected.includes(site.id)?'✓ 수첩에 자동 기록했어요':'두 시기를 끝까지 비교해 보세요'}</p></article></div>`,`관측 수첩 ${rec.collected.length} / 8`,done?b('관측 마무리','primary submit'):b('다음 관측 지점 →','primary next-site',!rec.collected.includes(site.id)));
     on('[data-site]','click',e=>{rec.open=+e.currentTarget.dataset.site;rec.reveal=0;rec.feedback='';commit();draw();});
     on('.compare-slider','input',e=>{rec.reveal=+e.target.value;if(rec.reveal>=90&&!rec.compared.includes(site.id))rec.compared.push(site.id);commit();});
-    on('.compare-slider','change',()=>{if(!rec.compared.includes(site.id)||rec.collected.includes(site.id))return;rec.collected.push(site.id);rec.feedback=`${site.name}의 두 기록을 수첩에 담았어요! ${rec.collected.length===8?'모든 관측을 마쳤어요.':'다음 지점의 변화도 찾아봐요.'}`;commit();effect('collect');draw();host.querySelector('.activity-next .button:not(:disabled)')?.focus({preventScroll:true});announce(rec.feedback);});
-    on('.next-site','click',()=>{if(nextSite<0||!rec.collected.includes(site.id))return;rec.open=nextSite;rec.reveal=0;rec.feedback='';commit();draw();host.querySelector('.compare-slider')?.focus({preventScroll:true});});
+    on('.compare-slider','change',()=>{if(!rec.compared.includes(site.id)||rec.collected.includes(site.id))return;rec.collected.push(site.id);rec.feedback=`${site.name}의 두 기록을 수첩에 담았어요! ${rec.collected.length===8?'모든 관측을 마쳤어요.':'다음 지점의 변화도 찾아봐요.'}`;commit();effect('collect');draw();if(!playback.snapshot.active)host.querySelector('.activity-next .button:not(:disabled)')?.focus({preventScroll:true});announce(rec.feedback);});
+    on('.next-site','click',()=>{if(nextSite<0||!rec.collected.includes(site.id))return;rec.open=nextSite;rec.reveal=0;rec.feedback='';commit();draw();if(!playback.snapshot.active)host.querySelector('.compare-slider')?.focus({preventScroll:true});});
     on('.submit','click',()=>{if(rec.collected.length===8)finish('여덟 관측 지점의 이전·나중 기록을 비교했어요. 다음에는 긴 변화의 근거를 찾아요.');});
   }
   function judgeEvidence(){
@@ -173,19 +271,24 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
     on('.check','click',()=>{if(!rec.checked)return;rec.links.push({site:item.site,middle:item.middle,end:item.end});rec.round++;delete rec.selected;rec.checked=false;rec.feedback='';recordRound(8,'도시 활동에서 에너지·자원 사용을 거쳐 기후변화 대응으로 이어지는 여덟 관계를 연결했어요.');});
   }
 
+  function runWater(observe=false){
+    if(rec.ran||rec.round>=experimentLevels.length||(!observe&&!rec.prediction?.length))return;
+    rec.ran=true;rec.level=experimentLevels[rec.round];rec.feedback=rec.prediction?.length?'예상과 실제로 물이 닿은 곳을 비교해요.':'땅 높이와 물의 높이를 비교하며 관찰해요.';
+    commit();draw();
+  }
   function waterExperiment(){
-    rec.round=bounded(rec.round,6);rec.trials=arr(rec.trials);if(rec.round>=6){replay('여섯 조건에서 먼저 예상하고, 물의 높이에 따라 낮은 곳부터 영향을 받는지 확인했어요.');return;}
+    rec.round=bounded(rec.round,6);rec.trials=arr(rec.trials);if(rec.round>=6){replay('여섯 수위 조건에서 낮은 곳부터 물이 닿는지 관찰하고, 내가 표시한 예상이 있다면 결과와 비교했어요.');return;}
     const level=experimentLevels[rec.round],pred=arr(rec.prediction),affected=waterAffected(level),ran=!!rec.ran;
     rec.level=ran?level:0;
     const last=rec.trials.at(-1),change=last?level-last.level:null;
     const condition=change===null?'첫 번째 실험 조건이에요':change>0?'지난 실험보다 수위를 '+change+'단계 높여요':change<0?'지난 실험보다 수위를 '+(-change)+'단계 낮춰요':'지난 실험과 같은 수위예요';
     const missed=affected.filter(id=>!pred.includes(id)),extra=pred.filter(id=>!affected.includes(id));
-    frame(ran?'내 예상과 무엇이 달랐나요?':'물이 닿을 곳을 먼저 예상해요',ran?'표시한 예상과 실제로 물이 닿은 구역을 나란히 살펴봐요.':condition+' · 구역을 여러 개 골라 예상해요.',
-      '<div class="experiment-layout"><div class="experiment-board" style="background-image:url(\''+asset('coast')+'\')"><div class="flood-grid">'+coastDistricts.map(d=>'<button class="button flood-district '+(pred.includes(d.id)?'selected ':'')+(ran&&affected.includes(d.id)?'flooded':'')+'" data-predict="'+d.id+'" '+(ran?'disabled':'')+'>'+artImage(d.id,'coast-art',true)+'<span class="flood-copy"><strong>'+escapeText(d.name)+'</strong><span>땅 높이 '+d.height+'단계</span><small>'+(ran?(pred.includes(d.id)?'예상 ✓':'예상 —')+' · '+(affected.includes(d.id)?'물 닿음':'물 안 닿음'):(pred.includes(d.id)?'예상 표시됨':'눌러서 예상'))+'</small></span></button>').join('')+'</div></div><article class="evidence-card"><span class="eyebrow">실험 조건 '+(rec.round+1)+'</span><h2>실험 수위 '+level+'단계</h2><p>'+condition+'</p><div class="water-target" aria-label="설정 수위 '+level+'단계">'+[1,2,3,4].map(n=>'<span class="'+(n<=level?'on':'')+'">'+n+'</span>').join('')+'</div>'+(ran?'<p class="notice">예상한 곳 '+pred.length+'곳 · 물이 닿은 곳 '+affected.length+'곳<br>'+(missed.length||extra.length?'새로 발견한 곳 '+missed.length+'곳 · 예상과 달리 닿지 않은 곳 '+extra.length+'곳':'예상과 결과가 일치했어요!')+'</p><p>수위보다 낮거나 같은 높이의 구역에 물이 닿았어요. 높은 곳과 비교해 보세요.</p>':b('수위 '+level+'단계로 실험','primary run',!pred.length))+'</article></div>',
+    frame(ran?(pred.length?'내 예상과 무엇이 달랐나요?':'수위에 따라 어디까지 물이 닿나요?'):'물이 닿을 곳을 먼저 예상해요',ran?'표시한 예상과 실제로 물이 닿은 구역을 나란히 살펴봐요.':condition+' · 구역을 여러 개 골라 예상해요.',
+      '<div class="experiment-layout"><div class="experiment-board" style="background-image:url(\''+asset('coast')+'\')"><div class="flood-grid">'+coastDistricts.map(d=>'<button class="button flood-district '+(pred.includes(d.id)?'selected ':'')+(ran&&affected.includes(d.id)?'flooded':'')+'" data-predict="'+d.id+'" '+(ran?'disabled':'')+'>'+artImage(d.id,'coast-art',true)+'<span class="flood-copy"><strong>'+escapeText(d.name)+'</strong><span>땅 높이 '+d.height+'단계</span><small>'+(ran?(pred.includes(d.id)?'예상 ✓':'예상 —')+' · '+(affected.includes(d.id)?'물 닿음':'물 안 닿음'):(pred.includes(d.id)?'예상 표시됨':'눌러서 예상'))+'</small></span></button>').join('')+'</div></div><article class="evidence-card"><span class="eyebrow">실험 조건 '+(rec.round+1)+'</span><h2>실험 수위 '+level+'단계</h2><p>'+condition+'</p><div class="water-target" aria-label="설정 수위 '+level+'단계">'+[1,2,3,4].map(n=>'<span class="'+(n<=level?'on':'')+'">'+n+'</span>').join('')+'</div>'+(ran?(pred.length?'<p class="notice">예상한 곳 '+pred.length+'곳 · 물이 닿은 곳 '+affected.length+'곳<br>'+(missed.length||extra.length?'새로 발견한 곳 '+missed.length+'곳 · 예상과 달리 닿지 않은 곳 '+extra.length+'곳':'예상과 결과가 일치했어요!')+'</p>':'<p class="notice">물이 닿은 곳 '+affected.length+'곳 · 땅 높이와 수위를 비교해요.</p>'):b('수위 '+level+'단계로 실험','primary run',!pred.length))+'</article></div>',
       '예상 · 실험 '+(rec.round+1)+' / 6',ran?b(rec.round===5?'실험 마무리':'관찰 기록 · 다음 →','primary next'):'','높이와 물의 단계는 가상 모형의 상대값이에요. 실제 바닷물 높이나 어느 해의 미래를 예측한 값이 아니에요.');
     on('[data-predict]','click',e=>{if(rec.ran)return;const id=e.currentTarget.dataset.predict;rec.prediction=pred.includes(id)?pred.filter(n=>n!==id):[...pred,id];commit();draw();});
-    on('.run','click',()=>{if(rec.ran||!pred.length)return;rec.ran=true;rec.level=level;rec.feedback='예상은 점수가 아니에요. 결과와 다른 곳에서 새로운 것을 발견해요.';commit();draw();});
-    on('.next','click',()=>{if(!rec.ran)return;rec.trials.push({level,prediction:[...pred],affected:[...affected]});rec.round++;rec.level=0;rec.prediction=[];rec.ran=false;delete rec.reflection;rec.feedback='';recordRound(6,'여섯 조건에서 먼저 예상하고, 물의 높이에 따라 낮은 곳부터 영향을 받는지 확인했어요.');});
+    on('.run','click',()=>runWater());
+    on('.next','click',()=>{if(!rec.ran)return;rec.trials.push({level,prediction:[...pred],affected:[...affected]});rec.round++;rec.level=0;rec.prediction=[];rec.ran=false;delete rec.reflection;rec.feedback='';recordRound(6,'여섯 수위 조건에서 낮은 곳부터 물이 닿는지 관찰하고, 내가 표시한 예상이 있다면 결과와 비교했어요.');});
   }
   function orderEffects(){
     rec.round=bounded(rec.round,8);rec.chains=arr(rec.chains);rec.order=arr(rec.order).filter(n=>[0,1,2].includes(n));if(rec.round>=8){replay('생활 영향 네 가지와 환경 영향 네 가지를 원인부터 결과까지 연결했어요.');return;}
@@ -272,6 +375,16 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
   function stressBoard(plan,result,hazard,label){
     return `<div class="city-board test-city" style="background-image:url('${asset('storm')}')">${cityDistricts.map((d,i)=>{const f=facilities.find(n=>n.id===plan[i]);const risk=result?.districts[i]?.risk;return `<article class="district-tile ${result&&risk>2?'at-risk':''}">${f?artImage(f.id,'district-art',true):''}<span class="eyebrow">${escapeText(d.name)}</span><strong>${escapeText(f?.name||'미배치')}</strong><span>${result?`남은 영향 ${bounded(risk,4)}단계`:'아직 시험하지 않았어요'}</span></article>`;}).join('')}</div>${result?`<article class="evidence-card compact"><h2>${escapeText(label)} · ${hazard==='heat'?'더위':'빗물'} 영향 합계 ${result.total}</h2><p>가장 영향이 큰 곳: ${escapeText(result.districts.filter(d=>d.risk===Math.max(...result.districts.map(n=>n.risk))).map(d=>d.name).join(', '))}</p></article>`:''}`;
   }
+  playback=createActivityPlayback({getStep:playbackStep,onChange:playbackChange,execute:step=>{
+    if(step.kind==='compare'){
+      const slider=host.querySelector('.compare-slider');if(!slider)return;
+      slider.value=String(Math.round(step.progress*100));slider.dispatchEvent(new Event('input',{bubbles:true}));
+      if(step.progress===1)slider.dispatchEvent(new Event('change',{bubbles:true}));
+    }else if(index===4&&step.observe){runWater(true);}else{const target=host.querySelector(step.target);if(target&&!target.disabled)target.click();}
+  }});
+  host.ownerDocument.addEventListener('visibilitychange',()=>playback.setVisible(!host.ownerDocument.hidden),{signal:lifetime.signal});
+  host.addEventListener('pointerdown',e=>{if(e.isTrusted&&((index===0&&e.target.closest('[data-site],.compare-slider,.activity-next'))||(index===4&&e.target.closest('[data-predict],.run,.next'))||(index===9&&e.target.closest('[data-district],[data-tool],.run,.retest'))))playback.pause();},{signal:lifetime.signal,capture:true});
+  host.addEventListener('keydown',e=>{if(e.isTrusted&&((index===0&&e.target.closest('[data-site],.compare-slider,.activity-next'))||(index===4&&e.target.closest('[data-predict],.run,.next'))||(index===9&&e.target.closest('[data-district],[data-tool],.run,.retest')))&&['ArrowLeft','ArrowRight','Home','End','Enter',' '].includes(e.key))playback.pause();},{signal:lifetime.signal,capture:true});
   commit();draw();
-  return ()=>{disposed=true;controller?.abort();};
+  return ()=>{disposed=true;playback.dispose();lifetime.abort();controller?.abort();};
 }

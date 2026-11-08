@@ -1,0 +1,72 @@
+/* The explanations share the activity data's relative scale; no decorative score. */
+.activity-4 .experiment-layout,.activity-6 .daily-layout { min-width:0; }
+.activity-4 .experiment-board { width:100%; min-width:0; }
+.activity-4 .flood-grid { min-width:0; }
+.activity-4 .flood-district { min-width:0; min-height:100px; text-align:left; }
+.activity-4 .flood-copy { min-width:0; overflow-wrap:anywhere; word-break:keep-all; }
+.activity-4 .coast-profile { min-width:0; margin:12px 0; padding:10px 8px 8px; border:1px solid #b8d0cf; border-radius:16px; background:#f1f8f5; }
+.activity-4 .coast-profile figcaption { display:flex; align-items:center; gap:7px; margin-bottom:10px; color:#245b69; font-size:clamp(16px,1.2vw,22px); }
+.activity-4 .coast-profile figcaption .icon { flex:0 0 22px; width:22px; height:22px; }
+.activity-4 .coast-profile-land { height:110px; position:relative; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px; border-bottom:2px solid #637f69; isolation:isolate; background:repeating-linear-gradient(to top,transparent 0 calc(20% - 1px),#b9cec566 calc(20% - 1px) 20%); }
+.activity-4 .coast-profile-water { position:absolute; inset:auto 0 0; z-index:2; height:var(--water-height); border-top:2px dashed #316f86; pointer-events:none; }
+.activity-4 .is-tested .coast-profile-water { border-top-style:solid; background:#64b8d342; }
+.activity-4 .coast-profile-column { min-width:0; display:flex; flex-direction:column; justify-content:flex-end; }
+.activity-4 .coast-profile-ground { height:var(--land-height); min-height:20%; border:1px solid #75936f; border-bottom:0; border-top-width:3px; border-radius:5px 5px 0 0; background:linear-gradient(#c3d2a7 0 8px,#e1d6bc 8px); text-align:center; }
+.activity-4 .coast-profile-ground b { position:relative; z-index:3; display:inline-block; min-width:1.1em; border-radius:4px; color:#274d3c; background:#faf6e7e8; line-height:1.1; font-size:clamp(16px,1.1vw,21px); }
+.activity-4 .coast-profile-names { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px; margin-top:5px; }
+.activity-4 .coast-profile-names span { min-width:0; text-align:center; font-size:clamp(14px,1vw,18px); line-height:1.25; word-break:keep-all; overflow-wrap:anywhere; }
+.activity-5 .effect-step { min-width:0; max-width:none; align-content:center; gap:8px; }
+.activity-5 .effect-step > .eyebrow { display:flex; align-items:center; justify-content:center; gap:7px; flex-wrap:wrap; white-space:normal; font-size:clamp(16px,1.1vw,21px); }
+.activity-5 .effect-step-number { display:grid; place-items:center; flex:0 0 26px; width:26px; height:26px; border-radius:50%; color:#fff; background:var(--forest,#2a6451); }
+.activity-5 .effect-step-symbol { width:38px; height:38px; display:grid; place-items:center; border-radius:12px; background:#e3edcf; color:#35654f; margin:auto; }
+.activity-5 .effect-step-symbol .icon { width:26px; height:26px; }
+.activity-5 .effect-step > p { min-width:0; word-break:keep-all; overflow-wrap:anywhere; line-height:1.4; }
+.activity-5 .effect-step + .effect-step::before { content:none; }
+.activity-5 .link-chain > .chain-arrow { display:grid; place-items:center; align-self:center; flex:0 0 32px; width:32px; height:32px; border-radius:50%; background:var(--cream,#fffbed); color:var(--forest,#2a6451); }
+.activity-5 .link-chain > .chain-arrow .icon { width:24px; height:24px; }
+.activity-6 .daily-scene { display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:16px; }
+.activity-6 .choice-preview { position:static; flex:0 0 auto; padding:10px 12px; }
+.activity-6 .daily-scene > .evidence-card { margin-top:auto; }
+.activity-6 .choice-preview .icon { flex:0 0 28px; width:28px; height:28px; }
+:is(.activity-6,.activity-7) .relative-metric { min-width:0; padding:10px 8px; }
+:is(.activity-6,.activity-7) .relative-metric > span:first-child { display:block; font-size:clamp(16px,1.15vw,22px); word-break:keep-all; line-height:1.25; }
+:is(.activity-6,.activity-7) .relative-meter { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; margin:7px 0 5px; }
+:is(.activity-6,.activity-7) .relative-meter i { height:10px; border:1px solid #a8b7a4; border-radius:3px; background:#e3e9dd; }
+:is(.activity-6,.activity-7) .relative-meter i.is-on { background:#b18846; border-color:#8c6b34; }
+:is(.activity-6,.activity-7) [data-metric="comfort"] .relative-meter i.is-on { background:#5c8a67; border-color:#42684b; }
+.activity-6 .metric-directions { margin:4px 0 8px; color:#405c4d; font-size:clamp(14px,.95vw,18px); line-height:1.3; word-break:keep-all; overflow-wrap:anywhere; }
+.activity-7 .comparison-card[role="button"] { position:relative; padding-top:16px; }
+.activity-7 .comparison-choice-mark { display:inline-grid; place-items:center; width:32px; height:32px; border:2px solid #759981; border-radius:50%; background:#e4eed9; color:var(--forest,#2a6451); font-size:20px; font-weight:800; margin-bottom:8px; }
+.activity-7 .comparison-card.selected .comparison-choice-mark { color:#fff; background:var(--forest,#2a6451); }
+.activity-7 .comparison-card > h2 { font-size:clamp(22px,1.7vw,32px); }
+.activity-7 .practice-choice { min-width:0; }
+.activity-7 .practice-choice > span { min-width:0; overflow-wrap:anywhere; word-break:keep-all; }
+@media (max-width:1100px) and (min-width:761px) {
+  .activity-4 .flood-district { grid-template-columns:48px minmax(0,1fr); gap:6px; }
+  .activity-4 .flood-district .coast-art { width:48px; }
+  .activity-4 .flood-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:760px) {
+  .activity-4 .experiment-board { padding:12px; min-height:0; }
+  .activity-4 .flood-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .activity-4 .flood-district { grid-template-columns:48px minmax(0,1fr); min-height:110px; padding:8px; }
+  .activity-4 .flood-district .coast-art { width:48px; height:64px; }
+  .activity-5 .link-chain { display:grid; grid-template-columns:1fr; gap:12px; }
+  .activity-5 .effect-step { min-width:0; min-height:110px; padding:14px; }
+  .activity-5 .link-chain > .chain-arrow { display:none; }
+  :is(.activity-6,.activity-7) .metric-row { gap:6px; }
+  :is(.activity-6,.activity-7) .relative-metric { padding:10px 5px; }
+  .activity-7 .comparison-grid { grid-template-columns:1fr; }
+}
+@media (min-width:1600px) {
+  .activity-5 .link-chain > .chain-arrow { flex-basis:44px; width:44px; height:44px; }
+  .activity-5 .link-chain > .chain-arrow .icon { width:28px; height:28px; }
+}
+@media (max-height:640px) and (min-width:761px) {
+  .activity-4 .coast-profile-land { height:85px; }
+  .activity-4 .coast-profile { margin:8px 0; padding:8px; }
+  .activity-5 .effect-step-symbol { display:none; }
+  .activity-5 .effect-step { min-height:120px; padding:12px; }
+  .activity-6 .daily-scene { min-height:250px; }
+  .activity-7 .comparison-choice-mark { width:26px; height:26px; font-size:18px; margin-bottom:4px; }
+}

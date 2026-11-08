@@ -3,9 +3,9 @@ import {resolve,join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 const root=resolve('.'),dist=join(root,'dist');
-for(const file of await readdir(join(root,'src')))if(file.endsWith('.js'))execFileSync(process.execPath,['--check',join(root,'src',file)],{stdio:'pipe'});
+for(const file of await readdir(join(root,'src')))if(!file.startsWith('._')&&file.endsWith('.js'))execFileSync(process.execPath,['--check',join(root,'src',file)],{stdio:'pipe'});
 await mkdir(dist,{recursive:true});
-for(const p of ['index.html','manifest.webmanifest','src','assets'])await cp(join(root,p),join(dist,p),{recursive:true});
+for(const p of ['index.html','manifest.webmanifest','src','assets'])await cp(join(root,p),join(dist,p),{recursive:true,filter:path=>!path.split(/[\\/]/).pop().startsWith('._')});
 const files=[];
 // exFAT drives add macOS "._*" metadata files while copying; they must never enter the offline cache list.
 async function walk(dir,prefix=''){for(const f of await readdir(dir,{withFileTypes:true})){if(f.name.startsWith('._'))continue;const rel=prefix+'/'+f.name;if(f.isDirectory())await walk(join(dir,f.name),rel);else if(!f.name.endsWith('.md')&&f.name!=='sw.js')files.push(rel);}}

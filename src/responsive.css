@@ -1,0 +1,118 @@
+/* Layout ownership: HUD, learning content and teacher controls each get space. */
+.activity-page { height: 100%; min-height: 0; overflow: hidden; }
+.activity-heading { min-width: 0; }
+.activity-heading .eyebrow { line-height: 1.4; }
+.activity-workspace { scrollbar-gutter: stable; }
+.activity-workspace > *, .scan-layout > *, .experiment-layout > *,
+.daily-layout > *, .city-design-layout > *, .comparison-grid > * { min-width: 0; }
+.activity-footer-wrap { min-width: 0; }
+.activity-footer { display: grid; grid-template-columns: auto minmax(0,1fr) auto; }
+.guide-avatar { width: 64px; }
+.activity-next { min-width: 0; max-width: min(32vw,400px); }
+.activity-next .button { overflow-wrap: anywhere; }
+.model-note, .teacher-on .model-note { position: static; margin: 4px 0 0 auto; }
+.model-note[open], .teacher-on .model-note[open] { width: min(680px,100%); }
+.model-note summary { padding: 8px 12px; }
+.can-drag::after { top: 4px; right: 4px; font-size: 18px; }
+.choice-card.can-drag { padding-right: 28px; }
+.activity-page .facility-button.can-drag { padding-right: 24px; }
+.activity-page .metric-direction,
+.activity-page .coast-profile-names span,
+.activity-page .coast-profile .coast-profile-key { font-size: clamp(16px,1vw,18px); }
+.activity-page .facility-button > .city-tool-stats,
+.activity-page .city-tool-stats > span { font-size: clamp(16px,1.05vw,19px); }
+.choice-card > .choice-indicator { flex-shrink: 0; }
+.activity-screen.teacher-on { display: grid; grid-template-rows: minmax(0,1fr) auto; }
+.activity-screen .teacher-dock { position: relative; inset: auto; margin: 0 3vw 8px; gap: 8px; }
+.activity-screen .teacher-pad { min-width: 0; }
+.teacher-arrow { flex: 0 0 48px; width: 48px; height: 48px; }
+.teacher-where { min-width: 0; }
+.teacher-skip { max-width: 42%; }
+.teacher-skip > span { min-width: 0; overflow-wrap: anywhere; }
+
+/* Give investigation targets stable lanes as the map becomes narrower. */
+@media (min-width:1101px) and (max-width:1400px) {
+  #app .scan-layout .scan-scene { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); grid-auto-rows: minmax(52px,auto); align-content: center; gap: 16px; padding: 16px; min-height: 320px; height: auto; }
+  #app .scan-layout .scan-hotspot { position: relative; inset: auto !important; transform: none; width: 100%; min-width: 0; max-width: none; padding: 8px; }
+}
+@media (max-width:1100px) {
+  #app .scan-layout .scan-scene { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); grid-auto-rows: minmax(48px,auto); align-content: center; gap: 12px; padding: 16px; min-height: 320px; height: auto; }
+  #app .scan-layout .scan-hotspot { position: relative; inset: auto !important; transform: none; width: 100%; min-width: 0; max-width: none; min-height: 48px; padding: 8px; font-size: 18px; }
+  #app .scan-hotspot .icon { display: block; width: 20px; height: 20px; }
+  .activity-heading { max-width: calc(100% - 280px); }
+  .activity-heading h1 { font-size: clamp(24px,3vw,32px); }
+  .activity-next { max-width: 28vw; }
+  .activity-screen .teacher-pad { flex: 1; }
+  .teacher-where { flex: 1; max-width: none; }
+  .teacher-keys { display: none; }
+}
+
+/* Facility cards share the same flow on phones and in shallow windows. */
+@media (max-width:760px), (max-height:500px) {
+  .facility-screen { display: flex; flex-direction: column; gap: 16px; overflow-y: auto; padding: 80px 16px 16px; }
+  #app .facility-copy { position: relative; inset: auto; transform: none; width: 100%; max-width: none; padding: 0; flex-shrink: 0; }
+  #app .facility-copy h1 { font-size: 32px; margin: 8px 0; }
+  .facility-copy > p { font-size: 18px; line-height: 1.5; }
+  .facility-reward { margin-top: 12px; font-size: 18px; }
+  #app .facility-activities, #app .teacher-on .facility-activities { position: relative; inset: auto; transform: none; width: 100%; max-height: none; margin: 0; padding: 4px 4px 8px; overflow: visible; flex-shrink: 0; }
+  .activity-card { grid-template-columns: 88px minmax(0,1fr); padding: 16px; gap: 8px 12px; min-height: 156px; }
+  .activity-card > .activity-card-visual { width: 88px; }
+  .activity-card .chapter-art { width: 88px; }
+  .activity-card > h2 { font-size: 24px; }
+  .activity-card > .eyebrow { font-size: 16px; }
+  .facility-screen .guide-character { display: none; }
+  .facility-screen .teacher-dock { position: relative; inset: auto; flex-shrink: 0; }
+  .teacher-badge, .teacher-keys { display: none; }
+  .teacher-pad { min-width: 0; flex: 1; }
+  .teacher-where { flex: 1; max-width: none; }
+  .teacher-skip { flex: 0 0 52px; width: 52px; min-height: 52px; padding: 4px; justify-content: center; }
+  .teacher-skip > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
+@media (max-width:760px) {
+  .activity-page { padding: 80px 12px 8px; gap: 12px; }
+  .activity-heading { width: 100%; max-width: 100%; padding: 8px 12px; }
+  .activity-heading h1 { font-size: 26px; line-height: 1.25; }
+  .activity-heading .eyebrow { font-size: 16px; gap: 4px 8px; }
+  .activity-workspace { display: flex; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; }
+  .activity-0 .activity-workspace > .scan-layout, .activity-2 .activity-workspace > .scan-layout { flex: 0 0 auto; min-height: 0; }
+  .scan-layout, .experiment-layout, .daily-layout, .city-design-layout, .stress-result-layout { grid-template-columns: minmax(0,1fr); }
+  .activity-footer { grid-template-columns: 48px minmax(0,1fr); gap: 8px; padding: 8px; }
+  .guide-avatar { width: 48px; min-height: 56px; }
+  .guide-avatar img { width: 44px; height: 40px; }
+  .guide-message { min-width: 0; }
+  .activity-feedback, .guide-deeper { font-size: 18px; line-height: 1.4; }
+  .activity-next { grid-column: 1 / -1; width: 100%; max-width: none; }
+  .activity-next .button { min-height: 48px; padding: 8px 12px; font-size: 18px; }
+  .guide-name { display: none; }
+  .model-note { font-size: 16px; }
+  .activity-screen .teacher-dock { margin: 0 12px 8px; }
+  .link-chain { display: grid; grid-template-columns: minmax(0,1fr); }
+  .chain-slot { min-width: 0; }
+  .chain-arrow { display: none; }
+  .comparison-grid { grid-template-columns: minmax(0,1fr); }
+  .choice-grid { max-width: 100%; }
+}
+
+/* A phone in landscape needs a scrollable lesson, with every action reachable. */
+@media (max-height:500px) {
+  :root { --hud-size: 48px; --hud-gap: 8px; }
+  .screen-hud { --edge: 8px; }
+  .icon-button { padding: 8px; }
+  .activity-page { display: flex; flex-direction: column; padding: 64px 16px 12px; gap: 16px; overflow-y: auto; }
+  .activity-heading { flex-shrink: 0; width: 100%; max-width: 100%; }
+  .activity-heading h1 { font-size: 26px; }
+  .activity-workspace { flex: 0 0 auto; overflow: visible !important; padding: 4px; }
+  .activity-footer-wrap { flex-shrink: 0; }
+  .activity-0 .activity-workspace > .scan-layout, .activity-2 .activity-workspace > .scan-layout { flex: 0 0 auto; max-height: none; }
+  .activity-footer { grid-template-columns: 48px minmax(0,1fr) auto; }
+  .guide-avatar { width: 48px; }
+  .activity-next { grid-column: auto; max-width: 30vw; }
+  .facility-screen { padding-top: 64px; }
+}
+@media (min-width:1600px) {
+  .activity-page { --learning-text: 30px; }
+  .activity-page :is(.eyebrow,.notice,.model-note,.chart-legend,.can-drag::after) { font-size: 20px; }
+  .teacher-badge,.teacher-skip small,.teacher-where { font-size: 18px; }
+  .teacher-keys { font-size: 18px; }
+  :is(.activity-8,.activity-9) .city-design-layout .city-risk-legend { font-size: 18px; }
+}

@@ -1,0 +1,128 @@
+/* Observation tools share one scale and keep every label in normal flow. */
+.activity-0 .evidence-data.ov-data,
+.activity-1 .comparison-data.ov-data {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--mint-light);
+}
+.activity-0 .evidence-data.ov-data > *,
+.activity-1 .comparison-data.ov-data > * { grid-column: auto; grid-row: auto; min-width: 0; }
+.activity-0 .evidence-data.ov-data > .ov-chart-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.activity-0 .ov-chart,
+.activity-1 .ov-chart {
+  --ov-unit: 10px;
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  align-items: end;
+  gap: clamp(6px,1vw,16px);
+  padding: 22px 6px 0;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+.activity-0 .ov-pair,
+.activity-1 .ov-pair { display: flex; flex-direction: column; gap: 5px; min-width: 0; text-align: center; }
+.activity-0 .ov-bars,
+.activity-1 .ov-bars {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  align-items: end;
+  gap: 4px;
+  height: calc(var(--ov-unit) * var(--ov-maximum));
+  border-bottom: 2px solid var(--ink-soft);
+  background: repeating-linear-gradient(to top,transparent 0,transparent calc(var(--ov-unit) - 1px),#bbcec06e calc(var(--ov-unit) - 1px),#bbcec06e var(--ov-unit));
+}
+.activity-0 .ov-column,
+.activity-1 .ov-column { position: relative; display: flex; align-items: end; height: 100%; min-width: 0; }
+.activity-0 .ov-column > i,
+.activity-1 .ov-column > i {
+  display: block;
+  width: 100%;
+  height: calc(var(--ov-value) * var(--ov-unit));
+  background: var(--forest);
+  border-radius: 4px 4px 0 0;
+}
+.activity-0 .ov-past > i,
+.activity-1 .ov-past > i { background: #89a76e; }
+.activity-0 .ov-column > span,
+.activity-1 .ov-column > span {
+  position: absolute;
+  bottom: calc(var(--ov-value) * var(--ov-unit) + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  font-style: normal;
+  font-weight: 700;
+}
+.activity-0 .ov-now { opacity: var(--ov-reveal,0); }
+.activity-0 .ov-group-label,
+.activity-1 .ov-group-label { font-size: 16px; color: var(--ink); line-height: 1.25; white-space: nowrap; }
+.activity-0 .ov-legend,
+.activity-1 .ov-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-size: 16px; line-height: 1.25; }
+.activity-0 .ov-legend > span,
+.activity-1 .ov-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+.activity-0 .ov-legend > span::before,
+.activity-1 .ov-legend > span::before { content: ''; width: 10px; height: 14px; border-radius: 3px 3px 0 0; background: #89a76e; }
+.activity-0 .ov-legend > span:nth-child(2)::before,
+.activity-1 .ov-legend > span:nth-child(2)::before { background: var(--forest); }
+.activity-0 .ov-legend > small,
+.activity-1 .ov-legend > small { color: var(--ink-soft); font-size: inherit; line-height: inherit; }
+.activity-1 .ov-evidence-clue { padding: 8px 12px; border-left: 3px solid var(--forest); background: var(--mint-light); border-radius: 0 10px 10px 0; }
+.activity-1 .comparison-grid > *,
+.activity-2 .scene-brief > *,
+.activity-3 .ov-chain-step > * { min-width: 0; }
+.activity-2 .ov-resource-choice { display: flex; gap: 10px; justify-content: flex-start; align-items: center; min-height: 52px; }
+.activity-2 .ov-resource-choice::before { display: none; }
+.activity-2 .ov-resource-choice > span { min-width: 0; flex: 1; }
+.activity-2 .ov-resource-icon { flex: 0 0 28px; width: 28px; height: 28px; }
+.activity-2 .ov-resource-choice.correct { opacity: 1; border-width: 3px; }
+.activity-2 .ov-resource-choice.correct::after { content: '✓'; font-size: 22px; color: var(--forest); }
+.activity-2 .ov-resource-question { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; padding: 9px 12px; border-radius: 12px; background: var(--mint-light); }
+.activity-2 .ov-resource-question > .icon { flex: 0 0 24px; width: 24px; height: 24px; }
+.activity-2 .ov-resource-question > span { min-width: 0; }
+.activity-3 .ov-cause-chain { display: grid; grid-template-columns: minmax(0,1fr) 32px minmax(0,1fr) 32px minmax(0,1fr); width: 100%; align-items: stretch; }
+.activity-3 .ov-chain-step { width: 100%; min-width: 0; max-width: none; align-content: start; grid-template-rows: auto 1fr; border-radius: 18px; }
+.activity-3 .ov-chain-step > .eyebrow { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 7px; margin-bottom: 8px; font-size: 16px; }
+.activity-3 .ov-step-number { display: inline-grid; place-items: center; flex: 0 0 28px; width: 28px; height: 28px; color: var(--paper); background: var(--forest); border-radius: 50%; font-size: 18px; line-height: 1; }
+.activity-3 .ov-cause-chain > .chain-arrow { display: grid; place-items: center; align-self: center; justify-self: center; width: 32px; height: 32px; margin: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--forest); background: var(--cream); }
+.activity-3 .ov-cause-chain > .chain-arrow > .icon { width: 24px; height: 24px; }
+.activity-3 .ov-chain-step > p { align-self: center; }
+.activity-3 .ov-chain-step:not(.filled) { background: var(--paper); }
+.activity-3 .ov-chain-step:not(.filled) .ov-step-number { color: var(--forest); background: var(--mint); }
+
+@media (min-width:1600px) and (min-height:800px) {
+  .activity-3 .ov-cause-chain { grid-template-columns: minmax(0,1fr) 44px minmax(0,1fr) 44px minmax(0,1fr); }
+  .activity-3 .ov-cause-chain > .chain-arrow { width: 44px; height: 44px; }
+  .activity-3 .ov-cause-chain > .chain-arrow > .icon { width: 28px; height: 28px; }
+  .activity-0 .ov-chart,.activity-1 .ov-chart { --ov-unit: 14px; }
+  .activity-0 .ov-column > span,.activity-1 .ov-column > span,
+  .activity-0 .ov-group-label,.activity-1 .ov-group-label,
+  .activity-0 .ov-legend,.activity-1 .ov-legend { font-size: 18px; }
+}
+@media (max-height:640px) and (min-width:761px) {
+  .activity-0 .ov-chart,.activity-1 .ov-chart { --ov-unit: 7px; padding-top: 20px; }
+  .activity-0 .evidence-data.ov-data,.activity-1 .comparison-data.ov-data { gap: 4px; }
+  .activity-0 .evidence-data.ov-data > .ov-chart-wrap { gap: 4px; }
+  .activity-2 .ov-resource-question { padding: 7px 9px; }
+  .activity-3 .ov-chain-step > .eyebrow { margin-bottom: 4px; }
+}
+@media (max-width:600px) {
+  .activity-0 .ov-chart,.activity-1 .ov-chart { --ov-unit: 9px; gap: 8px; }
+  .activity-2 .ov-resource-choice { padding: 10px; gap: 8px; }
+  .activity-2 .ov-resource-choice > .icon { flex-basis: 24px; width: 24px; height: 24px; }
+  .activity-3 .ov-cause-chain { grid-template-columns: minmax(0,1fr); gap: 8px; }
+  .activity-3 .ov-cause-chain > .chain-arrow { transform: rotate(90deg); min-height: 24px; }
+  .activity-3 .ov-chain-step { min-height: 110px; padding: 14px; }
+  .activity-3 .chain-options { grid-template-columns: minmax(0,1fr); }
+}
