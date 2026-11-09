@@ -58,7 +58,7 @@
 .map-node.locked .map-num { background: #7a867e; }
 .map-node.restored .map-num { background: #3f7b46; }
 .map-pin { width: 4px; height: 16px; border-radius: 2px; background: #fffbed; box-shadow: 0 2px 4px #0003; }
-.map-here { margin-bottom: 5px; padding: 2px 11px; border-radius: 999px; background: #ffd574; color: #45290a; font-size: 14px; box-shadow: 0 3px 0 #8c5c17; animation: cast-bob 1.8s ease-in-out infinite; }
+.map-here { margin-bottom: 5px; padding: 2px 11px; border-radius: 999px; background: #ffd574; color: #45290a; font-size: clamp(14px, 1vw, 19px); box-shadow: 0 3px 0 #8c5c17; animation: cast-bob 1.8s ease-in-out infinite; }
 .map-bottom { position: absolute; z-index: 12; left: var(--edge); right: var(--edge); bottom: var(--edge); display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; pointer-events: none; }
 .map-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 0; }
 .map-stack-right { align-items: flex-end; }
@@ -67,14 +67,14 @@
 .map-navigation .dpad { position: static; }
 .map-navigation-copy { display: flex; flex-direction: column; gap: 2px; }
 .map-navigation-copy strong { color: var(--ink); font-size: clamp(18px, 1.4vw, 22px); font-weight: 400; }
-.map-navigation-copy > span { color: var(--ink-soft); font-size: 16px; }
+.map-navigation-copy > span { color: var(--ink-soft); font-size: clamp(16px, 1vw, 19px); }
 .map-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 .map-tool { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 12px; border: 2px solid #c3d4b8; border-radius: 12px; background: #fff; color: var(--forest); font: inherit; font-size: 16px; cursor: pointer; }
 .map-tool .icon { width: 21px; height: 21px; }
 .map-tool:hover { border-color: #6f9a58; }
 .map-tool[aria-pressed="true"] { background: #e3f0cf; border-color: #6f9a58; box-shadow: inset 0 0 0 1px #6f9a58; }
 .map-next-card { display: grid; gap: 4px; width: min(400px, 38vw); padding: 16px 18px; border: 2px solid #c3d4b8; border-radius: 22px; background: #fffbedf5; box-shadow: var(--shadow); }
-.map-eyebrow { color: #8c5c17; font-size: 15px; letter-spacing: .04em; }
+.map-eyebrow { color: #8c5c17; font-size: clamp(15px, 1vw, 19px); letter-spacing: .04em; }
 .map-next-card h2 { margin: 0; color: var(--ink); font-size: clamp(24px, 2vw, 32px); font-weight: 400; line-height: 1.2; }
 .map-next-card p { margin: 0 0 8px; color: var(--ink-soft); font-size: 18px; line-height: 1.4; }
 .map-next-card .map-action { position: static; width: 100%; max-width: none; }
