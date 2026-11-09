@@ -8,9 +8,11 @@ export const stages=[
  {id:3,name:'생활 연구소',subtitle:'안전하고 지속할 수 있는 실천을 골라요',reward:'나의 생활 대응 실천안',badge:'생활 실천가',icon:'leaf',background:'bedroom',activities:['오늘의 기후 선택','선택 비교와 실천'],counts:['10가지 상황','4번 비교']},
  {id:4,name:'도시 설계소',subtitle:'내가 만든 도시를 같은 조건에서 시험해요',reward:'검증된 기후 대응 도시 설계도',badge:'미래 설계자',icon:'city',background:'design',activities:['미래도시 설계','기후 스트레스 테스트'],counts:['6구역 설계','4번 검증']}
 ];
-export function freshState(){return {version:1,records:{},completed:[],adminUnlocked:false,introSeen:false,finalized:false,route:'home',position:{x:500,y:603},summaries:{}};}
+export function freshState(){return {version:1,mapRepairs:[],mapRepairLayouts:{},records:{},completed:[],adminUnlocked:false,introSeen:false,finalized:false,route:'home',position:{x:500,y:603},summaries:{}};}
 export function normalizeState(raw){
  const base=freshState();if(!raw||typeof raw!=='object'||raw.version!==1)return base;
+ base.mapRepairs=Array.isArray(raw.mapRepairs)?[...new Set(raw.mapRepairs.filter(n=>Number.isInteger(n)&&n>=0&&n<5))]:[];
+ base.mapRepairLayouts=Object.fromEntries(Object.entries(raw.mapRepairLayouts||{}).filter(([id,v])=>/^[0-4]$/.test(id)&&v&&typeof v==='object').map(([id,v])=>[id,Object.fromEntries(Object.entries(v).filter(([slot,item])=>/^[0-2]$/.test(slot)&&Number.isInteger(item)&&item>=0&&item<3))]));
  const records=raw.records&&typeof raw.records==='object'&&!Array.isArray(raw.records)?raw.records:{};
  base.records=Object.fromEntries(Object.entries(records).filter(([k,v])=>/^\d$/.test(k)&&v&&typeof v==='object'&&!Array.isArray(v)));
  base.completed=Array.isArray(raw.completed)?[...new Set(raw.completed.filter(i=>Number.isInteger(i)&&i>=0&&i<10&&base.records[i]&&!base.records[i].example&&base.records[i].done===true))]:[];
