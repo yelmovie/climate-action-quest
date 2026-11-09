@@ -72,3 +72,11 @@ test('question orders stay stable on resume but use all six permutations across 
  const changed=activityChoiceOrder(0);changed.reverse();
  assert.notDeepEqual(changed,activityChoiceOrder(0));
 });
+
+test('each activity carries a real standard code and objective; content stays flagged for teacher review', async () => {
+  const {activityStandards, activityTitles, contentReview} = await import('../src/activity-data.js');
+  assert.equal(activityStandards.length, activityTitles.length);
+  for (const s of activityStandards) { assert.match(s.code, /^4과16-0[123]$/); assert.ok(s.objective.trim().length > 10); }
+  assert.equal(contentReview.needsReview, true);
+  assert.ok(contentReview.source.includes('4과16'));
+});

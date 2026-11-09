@@ -89,3 +89,18 @@ export const cityDistricts=[
   {id:'park',name:'언덕 공원',heat:2,rain:2,clue:'휴식 공간과 빗물 관리가 모두 필요해요.'},
 ];
 export const CITY_BUDGET=18;
+
+// Learning design as data (PRD 표와 같은 매핑). Content review stays open until a teacher signs off.
+export const activityStandards=[
+ {code:'4과16-01',objective:'여러 해의 같은 기준 기록을 비교해 기후변화 현상의 경향을 찾는다.'},
+ {code:'4과16-01',objective:'하루의 날씨와 긴 기간의 기후 자료를 구별하고 판단의 근거를 말한다.'},
+ {code:'4과16-01',objective:'생활 속 활동에 쓰이는 에너지·연료·자원·숲을 연결한다.'},
+ {code:'4과16-01',objective:'활동과 기후변화 사이의 중간 연결 고리를 설명한다.'},
+ {code:'4과16-02',objective:'땅의 높이와 수위로 물이 닿는 곳을 예상하고 모형 결과와 비교한다.'},
+ {code:'4과16-02',objective:'환경 변화가 사람과 생물의 생활에 주는 영향을 차례로 연결한다.'},
+ {code:'4과16-03',objective:'건강과 안전을 지키며 필요 없는 에너지·자원 사용을 줄이는 선택을 한다.'},
+ {code:'4과16-03',objective:'한 가지 조건만 바꾸어 두 생활 선택의 결과를 비교한다.'},
+ {code:'4과16-03',objective:'구역의 위험에 맞는 대응 시설을 한정된 자원 안에서 배치한다.'},
+ {code:'4과16-03',objective:'같은 조건으로 다시 시험해 도시 설계의 개선을 확인한다.'},
+];
+export const contentReview={needsReview:true,source:'2022 개정 과학과 교육과정 [4과16-01~03], 경기도교육청 초등 깊이있는 수업 프레임워크 부록(2026-11-08 확인)',reviewer:null,note:'수치는 게임 속 가상 교육 자료이며 실제 관측·예측이 아니다.'};
