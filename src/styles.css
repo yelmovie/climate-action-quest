@@ -594,3 +594,7 @@ img { max-width: 100%; }
 /* Persistent, in-flow warning never masks the game controls. */
 #save-protection{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:12px 20px;background:#fff3ce;color:#493607;border-bottom:2px solid #ad7b16;font:600 15px/1.5 sans-serif;position:relative;z-index:2;}
 #save-protection span{max-width:65ch;}#save-protection button{min-height:44px;}
+
+/* Notched phones in landscape (viewport-fit=cover): keep edge controls clear of the cut-out and home bar. 0 on tablets. */
+.screen-hud { left: max(var(--edge), env(safe-area-inset-left, 0px)); right: max(var(--edge), env(safe-area-inset-right, 0px)); }
+#toast { bottom: max(20px, env(safe-area-inset-bottom, 0px)); }

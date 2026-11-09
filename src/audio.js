@@ -1,6 +1,5 @@
 import { createThemeEffects } from './theme-effects.js';
 import {SOUND_KEY} from './state.js';
-const files={tap:'click_003',collect:'pluck_001',place:'drop_002',connect:'confirmation_002',success:'confirmation_004',hint:'open_001',experiment:'switch_004',retry:'pluck_002'};
 export function createAudio(storage){
  let settings={bgm:true,sfx:true,volume:25},ctx,timer,step=0,quiet=false,unlocked=false,current,last=0;
  const active=new Set();
