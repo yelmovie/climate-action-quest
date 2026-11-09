@@ -57,7 +57,8 @@ async function inspect(){return page.evaluate(single=>{
   for(const e of root.querySelectorAll('.district-tile,.illustrated-tool,.flood-district,.activity-card')){
     const image=e.querySelector('img'),text=e.querySelector('strong,h2');if(image&&text&&visible(image)&&visible(text)&&overlap(box(image),box(text)))issues.push({type:'image-label',name:name(text)});
   }
-  return {issues,overflowX:document.documentElement.scrollWidth>innerWidth+2,workspaceScroll:workspace?Math.max(0,workspace.scrollHeight-workspace.clientHeight):0};
+  const fonts=[...root.querySelectorAll('p,li,button,h1,h2,h3,span,strong,label,small')].filter(e=>visible(e)&&[...e.childNodes].some(n=>n.nodeType===3&&n.textContent.trim())).map(e=>[parseFloat(getComputedStyle(e).fontSize),e.textContent.trim().slice(0,30)]).sort((a,b)=>a[0]-b[0]);
+  return {minFont:fonts[0],issues,overflowX:document.documentElement.scrollWidth>innerWidth+2,workspaceScroll:workspace?Math.max(0,workspace.scrollHeight-workspace.clientHeight):0};
 },single);}
 try{
  for(const [w,h] of profiles){
@@ -77,7 +78,8 @@ try{
     await page.locator('.help-close').click();results.push({w,h,route,suffix:'help-closed',...await inspect()});
    }
   }
-  console.log(`${label} ${w}x${h}: ${results.filter(r=>r.w===w&&r.issues.length).length} screens with issues`);
+  const smallest=results.filter(r=>r.w===w&&r.minFont).sort((a,b)=>a.minFont[0]-b.minFont[0])[0];
+  console.log(`${label} ${w}x${h}: ${results.filter(r=>r.w===w&&r.issues.length).length} screens with issues · smallest text ${smallest?.minFont?.[0]}px "${smallest?.minFont?.[1]}" (${smallest?.route})`);
  }
  await writeFile(out+label+'.json',JSON.stringify({results,errors},null,2));
  console.log(JSON.stringify({screens:results.length,errors,failures:results.filter(r=>r.issues.length||r.overflowX)},null,2));

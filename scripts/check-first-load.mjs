@@ -43,8 +43,8 @@ const inspect=()=>{
   if(!scroller&&r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth){const top=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);if(top&&!e.contains(top)&&!top.contains(e))issues.push({type:'covered',name:name(e),by:name(top)});}
   if(e.scrollWidth>e.clientWidth+2)issues.push({type:'text-overflow',name:name(e)});
  }
- const small=[...root.querySelectorAll('p,li,button,h1,h2,h3,span,strong,label')].filter(e=>visible(e)&&e.childNodes.length&&[...e.childNodes].some(n=>n.nodeType===3&&n.textContent.trim())).map(e=>parseFloat(getComputedStyle(e).fontSize));
- return {issues,overflowX:document.documentElement.scrollWidth>innerWidth+2,minFont:Math.min(...small)};
+ const texts=[...root.querySelectorAll('p,li,button,h1,h2,h3,span,strong,label')].filter(e=>visible(e)&&[...e.childNodes].some(n=>n.nodeType===3&&n.textContent.trim())).map(e=>({size:parseFloat(getComputedStyle(e).fontSize),text:e.textContent.trim().slice(0,24)})).sort((a,b)=>a.size-b.size);
+ return {issues,overflowX:document.documentElement.scrollWidth>innerWidth+2,minFont:texts[0]?.size,minFontText:texts[0]?.text};
 };
 for(const [w,h] of sizes){
  const context=await browser.newContext({viewport:{width:w,height:h},reducedMotion:'reduce',serviceWorkers:'block'}),page=await context.newPage();
@@ -58,10 +58,12 @@ for(const [w,h] of sizes){
  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('climate-future:v1')||'{}');s.version=1;s.introSeen=true;s.route='map';localStorage.setItem('climate-future:v1',JSON.stringify(s));});
  await page.goto(base+'/#map');await page.locator('#map-viewport').waitFor();await page.waitForTimeout(300);
  result.layout.push({w,h,screen:'map',...await page.evaluate(inspect)});await page.screenshot({path:`${out}/map-${w}x${h}.png`});
+ if(w===1280){await page.evaluate(()=>{location.hash='#facility/0';});await page.locator('[data-activity="0"]').waitFor();await page.goBack();await page.locator('#map-viewport').waitFor();result.back={hash:new URL(page.url()).hash,map:await page.locator('#map-viewport').isVisible()};}
  await context.close();
 }
 await browser.close();
 await writeFile(out+'/result.json',JSON.stringify(result,null,1));
 for(const l of result.load)console.log(`${l.label}: start button ${l.startVisibleMs}ms, art ${l.artReadyMs}ms, idle ${l.networkIdleMs}ms, ${(l.bytesAtStart/1048576).toFixed(2)}MiB at start, ${(l.bytesAtIdle/1048576).toFixed(2)}MiB at idle, later-stage assets ${l.laterStageAssetsFetched.length}, external ${l.external.length}`);
-for(const r of result.layout)console.log(`${r.w}x${r.h} ${r.screen}: ${r.issues.length} issues${r.overflowX?' +overflowX':''}, min font ${r.minFont}px ${r.issues.length?JSON.stringify(r.issues.slice(0,4)):''}`);
+for(const r of result.layout)console.log(`${r.w}x${r.h} ${r.screen}: ${r.issues.length} issues${r.overflowX?' +overflowX':''}, min font ${r.minFont}px (${r.minFontText}) ${r.issues.length?JSON.stringify(r.issues.slice(0,4)):''}`);
+console.log('browser back from facility:',JSON.stringify(result.back));
 console.log(result.errors.length?'ERRORS '+JSON.stringify(result.errors):'no page errors');
