@@ -1,9 +1,11 @@
-import {mkdir,cp,readFile,writeFile,readdir} from 'node:fs/promises';
+import {mkdir,cp,readFile,writeFile,readdir,rm} from 'node:fs/promises';
 import {resolve,join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 const root=resolve('.'),dist=join(root,'dist');
 for(const file of await readdir(join(root,'src')))if(!file.startsWith('._')&&file.endsWith('.js'))execFileSync(process.execPath,['--check',join(root,'src',file)],{stdio:'pipe'});
+// Start from an empty dist so moved or deleted assets never linger in the deploy or the offline cache list.
+await rm(dist,{recursive:true,force:true});
 await mkdir(dist,{recursive:true});
 for(const p of ['index.html','manifest.webmanifest','src','assets'])await cp(join(root,p),join(dist,p),{recursive:true,filter:path=>!path.split(/[\\/]/).pop().startsWith('._')});
 const files=[];
