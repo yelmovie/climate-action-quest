@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>도시 이상 신호 스캔 개념 영상</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+/* 「잎새·물방울의 탐구 노트」 공통 모습 (films/SPEC.md). build.mjs가 각 편 index.html에 넣는다. */
+@font-face{font-family:'Jua';src:url('assets/fonts/jua-korean-400.woff2') format('woff2');font-weight:400}
+@font-face{font-family:'Jua';src:url('assets/fonts/jua-latin-400.woff2') format('woff2');font-weight:400;unicode-range:U+0000-00FF}
+:root{--paper:#FBF8F3;--grid:#D9E8DF;--ink:#173F42;--green:#1E665B;--mint:#BAD7B2;--amber:#C9821C;--amber-soft:#FFF3D6;--water:#61ADCA;--rust:#C2703F;--shadow:0 10px 18px rgba(23,63,66,.16)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--paper)}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden;font-family:'Jua',sans-serif;color:var(--ink);letter-spacing:0;background:var(--paper)}
+.paper{position:absolute;inset:0;background:var(--paper)}
+.paper::before{content:'';position:absolute;inset:0;opacity:.55;background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:60px 60px}
+.paper::after{content:'';position:absolute;top:0;bottom:0;left:72px;width:3px;background:#E9C9B5;opacity:.8}
+.head{position:absolute;left:110px;top:54px;font-size:40px;line-height:1.2;white-space:nowrap;color:var(--green)}
+.head small{font-size:32px;color:var(--ink);opacity:.75}
+.stage{position:absolute;left:110px;top:300px;width:1300px;height:690px}
+.zoom{position:absolute;inset:0}
+.cast{position:absolute;left:1470px;top:640px;width:370px;height:342px}
+.cast img{position:absolute;left:0;bottom:0;width:100%;height:auto;opacity:0}
+.cast img.on{opacity:1}
+.bubble{position:absolute;right:110px;top:150px;max-width:1240px;background:#fff;border:5px solid var(--ink);border-radius:30px;padding:22px 40px 18px;font-size:56px;line-height:1.25;white-space:nowrap;box-shadow:var(--shadow)}
+.bubble::after{content:'';position:absolute;width:40px;height:40px;background:#fff;border-right:5px solid var(--ink);border-bottom:5px solid var(--ink);right:150px;bottom:-25px;transform:rotate(45deg)}
+.w{display:inline-block;opacity:0}
+.big{position:absolute;left:110px;top:150px;font-size:72px;line-height:1.2;white-space:nowrap;color:var(--ink)}
+.big .w{color:#9DB3AA}
+.big .key{font-style:normal;color:#C9D6D0}
+.pic{position:absolute;border-radius:24px;overflow:hidden;border:5px solid #fff;box-shadow:var(--shadow);background:#e8efe6}
+.pic img{display:block;width:100%;height:100%;object-fit:cover}
+.obj{position:absolute}
+.obj img{display:block;width:100%;height:auto}
+.tag{position:absolute;width:0;height:0;opacity:0}
+.tag .dot{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;background:var(--ink);border:4px solid #fff}
+.tag .lead{position:absolute;left:-2px;width:5px;background:var(--ink);border-radius:3px}
+.tag.up .lead{bottom:0}
+.tag.down .lead{top:0}
+.tag .card{position:absolute;left:0;background:#fff;border:5px solid var(--ink);border-radius:20px;padding:10px 26px 8px;font-size:42px;line-height:1.15;white-space:nowrap;box-shadow:var(--shadow)}
+.tag .card small{display:block;font-size:30px;opacity:.8}
+.tag.hot .card{border-color:var(--amber);background:var(--amber-soft)}
+.tag.hot .lead,.tag.hot .dot{background:var(--amber)}
+.note{position:absolute;font-size:30px;color:var(--ink);opacity:.72;white-space:nowrap}
+.panel{position:absolute;background:#fff;border:4px solid #C9DCCF;border-radius:28px;box-shadow:var(--shadow)}
+.axis{position:absolute;height:5px;background:#8AA697;border-radius:3px}
+.bar{position:absolute;bottom:0;border-radius:10px 10px 4px 4px}
+.bar.old{background:var(--mint)}
+.bar.new{background:var(--green)}
+.bar.rust{background:var(--rust)}
+.bar.blue{background:var(--water)}
+.trend{position:absolute;height:0;border-top:7px dashed var(--amber);transform-origin:0 50%}
+.strike{position:absolute;height:9px;background:var(--rust);border-radius:5px;transform-origin:0 50%}
+.check{position:absolute;width:76px;height:76px;border-radius:50%;background:var(--green);border:5px solid #fff;box-shadow:var(--shadow)}
+.check::after{content:'';position:absolute;left:21px;top:12px;width:20px;height:34px;border-right:9px solid #fff;border-bottom:9px solid #fff;transform:rotate(45deg)}
+.chip{position:absolute;background:#fff;border:5px solid var(--ink);border-radius:22px;padding:16px 30px 12px;font-size:44px;line-height:1.2;white-space:nowrap;box-shadow:var(--shadow)}
+.water{position:absolute;background:rgba(97,173,202,.62);border-top:7px solid #D4F2FB}
+.arrow{position:absolute;height:7px;background:var(--ink);border-radius:4px;transform-origin:0 50%}
+.arrow::after{content:'';position:absolute;right:-6px;top:-13px;width:24px;height:24px;border-right:7px solid var(--ink);border-top:7px solid var(--ink);transform:rotate(45deg)}
+.meter{position:absolute;display:flex;gap:8px;align-items:center;font-size:30px;white-space:nowrap}
+.meter i{display:block;width:22px;height:22px;border-radius:50%;background:#D8DFD3}
+.meter.heat i.on{background:var(--rust)}
+.meter.rain i.on{background:var(--water)}
+
+
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1920" data-height="1080" data-fps="30">
+      <div id="paper" class="clip paper" data-start="0" data-duration="15" data-track-index="0"></div>
+      <div id="head" class="clip head" data-start="0" data-duration="15" data-track-index="1">잎새의 탐구 노트 <small>· 도시 이상 신호 스캔</small></div>
+      <div id="stage" class="clip stage" data-start="0" data-duration="15" data-track-index="2" data-layout-allow-overflow><div id="zoom" class="zoom"><div id="ob-pic" class="pic" style="left:0px;top:30px;width:520px;height:293px"><img src="assets/img/scene-observe-v2.webp" alt=""></div><div id="ob-panel" class="panel" style="left:560px;top:0;width:740px;height:640px"></div><i id="ob-axis" class="axis" style="left:590px;top:560px;width:690px"></i><i id="ob-day" class="bar new" style="left:900px;top:300px;height:260px;width:60px"></i><i id="obo0" class="bar old" style="left:610px;top:456px;height:104px;width:60px"></i><i id="obo1" class="bar old" style="left:692px;top:404px;height:156px;width:60px"></i><i id="obo2" class="bar old" style="left:774px;top:404px;height:156px;width:60px"></i><i id="obo3" class="bar old" style="left:856px;top:352px;height:208px;width:60px"></i><i id="obn0" class="bar new" style="left:960px;top:300px;height:260px;width:60px"></i><i id="obn1" class="bar new" style="left:1042px;top:248px;height:312px;width:60px"></i><i id="obn2" class="bar new" style="left:1124px;top:196px;height:364px;width:60px"></i><i id="obn3" class="bar new" style="left:1206px;top:144px;height:416px;width:60px"></i><i id="ob-trend" class="trend" style="left:640px;top:426px;width:673px"></i><p id="ob-note" class="note" style="left:600px;top:580px">여름철 매우 더운 날 · 탐구용 가상 기록</p><div id="ob-t0" class="tag down" style="left:260px;top:60px"><i class="dot"></i><i class="lead" style="height:40px"></i><b class="card" style="top:40px">관측소</b></div><div id="ob-t1" class="tag up" style="left:930px;top:300px"><i class="dot"></i><i class="lead" style="height:60px"></i><b class="card" style="bottom:60px">오늘 하루</b></div><div id="ob-t2" class="tag up" style="left:733px;top:352px"><i class="dot"></i><i class="lead" style="height:120px"></i><b class="card" style="bottom:120px">예전 기록</b></div><div id="ob-t3" class="tag up hot" style="left:1113px;top:144px"><i class="dot"></i><i class="lead" style="height:60px"></i><b class="card" style="bottom:60px">최근 기록</b></div></div></div>
+      <div id="cast" class="clip cast" data-start="0" data-duration="15" data-track-index="3"><img id="pose-ask" class="on" src="assets/img/squirrel-think.webp" alt="잎새"><img id="pose-react" src="assets/img/squirrel-wow.webp" alt=""></div>
+      <div id="bubble" class="clip bubble" data-start="0.6" data-duration="4.7" data-track-index="4"><span class="w">하루</span> <span class="w">기록만</span> <span class="w">보면</span> <span class="w">알</span> <span class="w">수</span> <span class="w">있을까?</span></div>
+      <div id="big" class="clip big" data-start="10.2" data-duration="4.8" data-track-index="5"><span class="w">긴</span> <span class="w">기록에서</span> <span class="w"><em class="key">경향</em>을</span> <span class="w">찾아요</span></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+tl.set('.tag.up .lead',{transformOrigin:'50% 100%'},0);tl.set('.tag.up .card',{xPercent:-50,transformOrigin:'50% 100%'},0);
+      tl.set('.tag.down .lead',{transformOrigin:'50% 0%'},0);tl.set('.tag.down .card',{xPercent:-50,transformOrigin:'50% 0%'},0);
+      // 머리말과 캐릭터 등장(자세 바뀜은 찌그러짐 → 새 자세 → 복귀).
+      tl.fromTo('#cast',{x:420,opacity:0},{x:0,opacity:1,duration:.8,ease:'expo.out'},.3);
+      tl.fromTo('#cast',{scaleY:1,transformOrigin:'50% 100%'},{scaleY:.94,duration:.12,ease:'power2.in'},1.05);
+      tl.to('#cast',{scaleY:1,duration:.3,ease:'back.out(1.6)'},1.17);
+      // 질문(낱말씩 흐림→선명), 5초에 물러남.
+      tl.fromTo('#bubble',{opacity:0,scale:.92,transformOrigin:'85% 100%'},{opacity:1,scale:1,duration:.35,ease:'back.out(1.5)'},.6);
+      tl.fromTo('#bubble .w',{opacity:0,filter:'blur(6px)'},{opacity:1,filter:'blur(0px)',duration:.13,stagger:.07},.8);
+      tl.to('#bubble',{opacity:0,filter:'blur(8px)',duration:.22,ease:'power3.in'},5.0);
+      // 바뀌는 순간 캐릭터가 무대를 바라봄.
+      tl.fromTo('#cast',{rotation:0},{rotation:-4,duration:.35,ease:'power2.out'},6.2);
+      tl.to('#cast',{rotation:0,duration:.45,ease:'power2.inOut'},7.4);
+tl.fromTo('#ob-pic',{"opacity":0,"y":30},{opacity:1,y:0,duration:0.5,ease:'expo.out'},0.8);tl.set('#ob-t0',{opacity:1},2);tl.fromTo('#ob-t0 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},2);tl.fromTo('#ob-t0 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},2.15);tl.fromTo('#ob-panel,#ob-axis',{"opacity":0},{opacity:1,duration:0.4,ease:'expo.out'},1.4);tl.fromTo('#ob-day',{scaleY:0,transformOrigin:'50% 100%'},{scaleY:1,duration:.6,ease:'expo.out'},2.6);tl.set('#ob-t1',{opacity:1},3.2);tl.fromTo('#ob-t1 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},3.2);tl.fromTo('#ob-t1 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},3.35);tl.to('#ob-day,#ob-t1',{opacity:0,duration:.25,ease:'power3.in'},5.05);tl.fromTo('#obo0,#obo1,#obo2,#obo3',{scaleY:0,transformOrigin:'50% 100%'},{scaleY:1,duration:0.5,ease:'expo.out',stagger:0.14},5.3);tl.fromTo('#obn0,#obn1,#obn2,#obn3',{scaleY:0,transformOrigin:'50% 100%'},{scaleY:1,duration:0.5,ease:'expo.out',stagger:0.14},6.1);tl.fromTo('#ob-note',{"opacity":0},{opacity:1,duration:0.4,ease:'expo.out'},5.6);tl.set('#ob-trend',{rotation:-27.63,scaleX:0},0);tl.to('#ob-trend',{scaleX:1,duration:.8,ease:'power2.inOut'},7.1);tl.set('#ob-t2',{opacity:1},8.2);tl.fromTo('#ob-t2 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},8.2);tl.fromTo('#ob-t2 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},8.35);tl.set('#ob-t3',{opacity:1},8.8);tl.fromTo('#ob-t3 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},8.8);tl.fromTo('#ob-t3 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},8.950000000000001);
+      tl.fromTo('#zoom',{scale:1,x:0,y:0},{scale:1.08,x:20,y:10,duration:.9,ease:'power2.inOut'},7.7);
+      // 결론 한 줄(흐린 글자 → 잉크, 열쇠 낱말은 호박색) + 캐릭터 반응.
+      tl.fromTo('#big .w',{color:'#C9D6D0'},{opacity:1,duration:.01,stagger:.09},10.35);
+      tl.to('#big .w',{color:'#173F42',duration:.25,stagger:.09},10.45);
+      tl.fromTo('#big .key',{color:'#C9D6D0'},{color:'#9A5E0C',duration:.25},10.45);
+      tl.to('#cast',{scaleY:.9,duration:.12,ease:'power2.in'},10.9);
+      tl.set('#pose-ask',{opacity:0},11.02);
+      tl.set('#pose-react',{opacity:1},11.02);
+      tl.to('#cast',{scaleY:1,y:-18,duration:.25,ease:'back.out(1.6)'},11.02);
+      tl.to('#cast',{y:0,duration:.35,ease:'power2.in'},11.27);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>도시 활동 스캐너 개념 영상</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+/* 「잎새·물방울의 탐구 노트」 공통 모습 (films/SPEC.md). build.mjs가 각 편 index.html에 넣는다. */
+@font-face{font-family:'Jua';src:url('assets/fonts/jua-korean-400.woff2') format('woff2');font-weight:400}
+@font-face{font-family:'Jua';src:url('assets/fonts/jua-latin-400.woff2') format('woff2');font-weight:400;unicode-range:U+0000-00FF}
+:root{--paper:#FBF8F3;--grid:#D9E8DF;--ink:#173F42;--green:#1E665B;--mint:#BAD7B2;--amber:#C9821C;--amber-soft:#FFF3D6;--water:#61ADCA;--rust:#C2703F;--shadow:0 10px 18px rgba(23,63,66,.16)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--paper)}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden;font-family:'Jua',sans-serif;color:var(--ink);letter-spacing:0;background:var(--paper)}
+.paper{position:absolute;inset:0;background:var(--paper)}
+.paper::before{content:'';position:absolute;inset:0;opacity:.55;background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:60px 60px}
+.paper::after{content:'';position:absolute;top:0;bottom:0;left:72px;width:3px;background:#E9C9B5;opacity:.8}
+.head{position:absolute;left:110px;top:54px;font-size:40px;line-height:1.2;white-space:nowrap;color:var(--green)}
+.head small{font-size:32px;color:var(--ink);opacity:.75}
+.stage{position:absolute;left:110px;top:300px;width:1300px;height:690px}
+.zoom{position:absolute;inset:0}
+.cast{position:absolute;left:1470px;top:640px;width:370px;height:342px}
+.cast img{position:absolute;left:0;bottom:0;width:100%;height:auto;opacity:0}
+.cast img.on{opacity:1}
+.bubble{position:absolute;right:110px;top:150px;max-width:1240px;background:#fff;border:5px solid var(--ink);border-radius:30px;padding:22px 40px 18px;font-size:56px;line-height:1.25;white-space:nowrap;box-shadow:var(--shadow)}
+.bubble::after{content:'';position:absolute;width:40px;height:40px;background:#fff;border-right:5px solid var(--ink);border-bottom:5px solid var(--ink);right:150px;bottom:-25px;transform:rotate(45deg)}
+.w{display:inline-block;opacity:0}
+.big{position:absolute;left:110px;top:150px;font-size:72px;line-height:1.2;white-space:nowrap;color:var(--ink)}
+.big .w{color:#9DB3AA}
+.big .key{font-style:normal;color:#C9D6D0}
+.pic{position:absolute;border-radius:24px;overflow:hidden;border:5px solid #fff;box-shadow:var(--shadow);background:#e8efe6}
+.pic img{display:block;width:100%;height:100%;object-fit:cover}
+.obj{position:absolute}
+.obj img{display:block;width:100%;height:auto}
+.tag{position:absolute;width:0;height:0;opacity:0}
+.tag .dot{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;background:var(--ink);border:4px solid #fff}
+.tag .lead{position:absolute;left:-2px;width:5px;background:var(--ink);border-radius:3px}
+.tag.up .lead{bottom:0}
+.tag.down .lead{top:0}
+.tag .card{position:absolute;left:0;background:#fff;border:5px solid var(--ink);border-radius:20px;padding:10px 26px 8px;font-size:42px;line-height:1.15;white-space:nowrap;box-shadow:var(--shadow)}
+.tag .card small{display:block;font-size:30px;opacity:.8}
+.tag.hot .card{border-color:var(--amber);background:var(--amber-soft)}
+.tag.hot .lead,.tag.hot .dot{background:var(--amber)}
+.note{position:absolute;font-size:30px;color:var(--ink);opacity:.72;white-space:nowrap}
+.panel{position:absolute;background:#fff;border:4px solid #C9DCCF;border-radius:28px;box-shadow:var(--shadow)}
+.axis{position:absolute;height:5px;background:#8AA697;border-radius:3px}
+.bar{position:absolute;bottom:0;border-radius:10px 10px 4px 4px}
+.bar.old{background:var(--mint)}
+.bar.new{background:var(--green)}
+.bar.rust{background:var(--rust)}
+.bar.blue{background:var(--water)}
+.trend{position:absolute;height:0;border-top:7px dashed var(--amber);transform-origin:0 50%}
+.strike{position:absolute;height:9px;background:var(--rust);border-radius:5px;transform-origin:0 50%}
+.check{position:absolute;width:76px;height:76px;border-radius:50%;background:var(--green);border:5px solid #fff;box-shadow:var(--shadow)}
+.check::after{content:'';position:absolute;left:21px;top:12px;width:20px;height:34px;border-right:9px solid #fff;border-bottom:9px solid #fff;transform:rotate(45deg)}
+.chip{position:absolute;background:#fff;border:5px solid var(--ink);border-radius:22px;padding:16px 30px 12px;font-size:44px;line-height:1.2;white-space:nowrap;box-shadow:var(--shadow)}
+.water{position:absolute;background:rgba(97,173,202,.62);border-top:7px solid #D4F2FB}
+.arrow{position:absolute;height:7px;background:var(--ink);border-radius:4px;transform-origin:0 50%}
+.arrow::after{content:'';position:absolute;right:-6px;top:-13px;width:24px;height:24px;border-right:7px solid var(--ink);border-top:7px solid var(--ink);transform:rotate(45deg)}
+.meter{position:absolute;display:flex;gap:8px;align-items:center;font-size:30px;white-space:nowrap}
+.meter i{display:block;width:22px;height:22px;border-radius:50%;background:#D8DFD3}
+.meter.heat i.on{background:var(--rust)}
+.meter.rain i.on{background:var(--water)}
+
+
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1920" data-height="1080" data-fps="30">
+      <div id="paper" class="clip paper" data-start="0" data-duration="15" data-track-index="0"></div>
+      <div id="head" class="clip head" data-start="0" data-duration="15" data-track-index="1">잎새의 탐구 노트 <small>· 도시 활동 스캐너</small></div>
+      <div id="stage" class="clip stage" data-start="0" data-duration="15" data-track-index="2" data-layout-allow-overflow><div id="zoom" class="zoom"><div id="rs-a" class="pic" style="left:0px;top:0px;width:600px;height:338px"><img src="assets/img/scene-classroom.webp" alt=""></div><div id="rs-b" class="pic" style="left:340px;top:175px;width:600px;height:338px"><img src="assets/img/scene-repair.webp" alt=""></div><div id="rs-c" class="pic" style="left:680px;top:350px;width:600px;height:338px"><img src="assets/img/scene-forest.webp" alt=""></div><div id="rs-t1" class="tag up" style="left:330px;top:140px"><i class="dot"></i><i class="lead" style="height:60px"></i><b class="card" style="bottom:60px">전기<small>빈 교실의 조명</small></b></div><div id="rs-t2" class="tag up" style="left:640px;top:290px"><i class="dot"></i><i class="lead" style="height:60px"></i><b class="card" style="bottom:60px">자원과 에너지<small>고쳐 쓰기</small></b></div><div id="rs-t3" class="tag up hot" style="left:990px;top:470px"><i class="dot"></i><i class="lead" style="height:60px"></i><b class="card" style="bottom:60px">숲<small>나무 지키기</small></b></div></div></div>
+      <div id="cast" class="clip cast" data-start="0" data-duration="15" data-track-index="3"><img id="pose-ask" class="on" src="assets/img/squirrel-think.webp" alt="잎새"><img id="pose-react" src="assets/img/squirrel-wow.webp" alt=""></div>
+      <div id="bubble" class="clip bubble" data-start="0.6" data-duration="4.7" data-track-index="4"><span class="w">생활</span> <span class="w">속</span> <span class="w">어디에</span> <span class="w">자원이</span> <span class="w">쓰일까?</span></div>
+      <div id="big" class="clip big" data-start="10.2" data-duration="4.8" data-track-index="5"><span class="w">생활</span> <span class="w">곳곳에서</span> <span class="w"><em class="key">자원</em>을</span> <span class="w">아껴요</span></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+tl.set('.tag.up .lead',{transformOrigin:'50% 100%'},0);tl.set('.tag.up .card',{xPercent:-50,transformOrigin:'50% 100%'},0);
+      
+      // 머리말과 캐릭터 등장(자세 바뀜은 찌그러짐 → 새 자세 → 복귀).
+      tl.fromTo('#cast',{x:420,opacity:0},{x:0,opacity:1,duration:.8,ease:'expo.out'},.3);
+      tl.fromTo('#cast',{scaleY:1,transformOrigin:'50% 100%'},{scaleY:.94,duration:.12,ease:'power2.in'},1.05);
+      tl.to('#cast',{scaleY:1,duration:.3,ease:'back.out(1.6)'},1.17);
+      // 질문(낱말씩 흐림→선명), 5초에 물러남.
+      tl.fromTo('#bubble',{opacity:0,scale:.92,transformOrigin:'85% 100%'},{opacity:1,scale:1,duration:.35,ease:'back.out(1.5)'},.6);
+      tl.fromTo('#bubble .w',{opacity:0,filter:'blur(6px)'},{opacity:1,filter:'blur(0px)',duration:.13,stagger:.07},.8);
+      tl.to('#bubble',{opacity:0,filter:'blur(8px)',duration:.22,ease:'power3.in'},5.0);
+      // 바뀌는 순간 캐릭터가 무대를 바라봄.
+      tl.fromTo('#cast',{rotation:0},{rotation:-4,duration:.35,ease:'power2.out'},6.2);
+      tl.to('#cast',{rotation:0,duration:.45,ease:'power2.inOut'},7.4);
+tl.fromTo('#rs-a',{"opacity":0,"x":-60},{opacity:1,x:0,duration:0.6,ease:'expo.out'},1.2);tl.set('#rs-t1',{opacity:1},2.6);tl.fromTo('#rs-t1 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},2.6);tl.fromTo('#rs-t1 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},2.75);tl.to('#rs-a,#rs-t1',{opacity:.5,duration:.4},5.0);tl.fromTo('#rs-b',{"opacity":0,"x":-60},{opacity:1,x:0,duration:0.6,ease:'expo.out'},5.3);tl.set('#rs-t2',{opacity:1},6.1);tl.fromTo('#rs-t2 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},6.1);tl.fromTo('#rs-t2 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},6.25);tl.to('#rs-b,#rs-t2',{opacity:.5,duration:.4},7.0);tl.fromTo('#rs-c',{"opacity":0,"x":-60},{opacity:1,x:0,duration:0.6,ease:'expo.out'},7.2);tl.set('#rs-t3',{opacity:1},8.1);tl.fromTo('#rs-t3 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},8.1);tl.fromTo('#rs-t3 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},8.25);tl.to('#rs-a,#rs-t1,#rs-b,#rs-t2',{opacity:1,duration:.5},9.2);
+      
+      // 결론 한 줄(흐린 글자 → 잉크, 열쇠 낱말은 호박색) + 캐릭터 반응.
+      tl.fromTo('#big .w',{color:'#C9D6D0'},{opacity:1,duration:.01,stagger:.09},10.35);
+      tl.to('#big .w',{color:'#173F42',duration:.25,stagger:.09},10.45);
+      tl.fromTo('#big .key',{color:'#C9D6D0'},{color:'#9A5E0C',duration:.25},10.45);
+      tl.to('#cast',{scaleY:.9,duration:.12,ease:'power2.in'},10.9);
+      tl.set('#pose-ask',{opacity:0},11.02);
+      tl.set('#pose-react',{opacity:1},11.02);
+      tl.to('#cast',{scaleY:1,y:-18,duration:.25,ease:'back.out(1.6)'},11.02);
+      tl.to('#cast',{y:0,duration:.35,ease:'power2.in'},11.27);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

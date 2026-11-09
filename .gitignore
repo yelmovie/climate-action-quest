@@ -9,3 +9,8 @@ dist/
 
 # macOS resource forks on the shared SSD
 ._*
+
+# HyperFrames: assets are rebuilt from repository originals by films/build.mjs
+films/*/assets/
+films/*/.hyperframes/
+films/*/renders/

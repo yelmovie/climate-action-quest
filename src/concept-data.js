@@ -1,14 +1,16 @@
-// Three 3-second shots per discovery. Captions stay in the DOM, outside the video.
+// Three 5-second shots per discovery (films/: question → change → conclusion). Captions stay in the DOM, outside the video.
 export const concepts = [
   {id:'observe',title:'기록을 길게 모으면 보이는 것',cues:['하루의 날씨는 오르내릴 수 있어요.','같은 기준으로 여러 해의 기록을 모아 비교해요.','긴 기록에서 변화의 경향을 찾아요.']},
-  {id:'evidence',title:'날씨와 기후를 구별하는 증거',cues:['하루의 추위나 비는 그날의 날씨예요.','기후의 변화를 판단하려면 긴 기간의 자료가 필요해요.','같은 장소·같은 기준인지도 함께 확인해요.']},
+  {id:'evidence',title:'날씨와 기후를 구별하는 증거',cues:['하루의 눈이나 추위는 그날의 날씨예요.','기후의 변화를 판단하려면 긴 기간의 자료가 필요해요.','같은 장소·같은 기준인지도 함께 확인해요.']},
   {id:'resources',title:'생활 속에 숨어 있는 에너지와 자원',cues:['조명과 이동, 물건 만들기에 에너지와 자원이 쓰여요.','쓰지 않는 전기를 끄고, 물건을 오래 쓸 수 있어요.','숲을 지키는 일도 기후변화 대응과 연결돼요.']},
   {id:'connections',title:'활동과 기후 사이의 연결 고리',cues:['활동의 겉모습만으로 영향을 단정하지 않아요.','어떤 에너지와 자원을 쓰는지 연결해 살펴봐요.','불필요한 사용을 줄이는 대응을 찾아요.']},
   {id:'water',title:'물의 높이가 달라지면',cues:['땅의 높이를 살펴보고 물이 닿을 곳을 예상해요.','모형의 수위가 오르면 낮은 곳부터 물이 닿아요.','같은 수위에서도 땅 높이에 따라 영향이 달라요.']},
   {id:'effects',title:'환경의 변화는 어떻게 이어질까?',cues:['기후 상황은 물이 닿는 범위 같은 환경 조건을 바꿀 수 있어요.','공간의 변화는 사람과 생물의 생활에 영향을 줘요.','변화 → 영향 → 필요한 대응을 차례로 연결해요.']},
-  {id:'choices',title:'안전을 지키며 바꾸는 생활',cues:['생활에 필요한 에너지는 안전하게 사용해요.','필요 없는 사용을 줄이고 다시 쓸 수 있어요.','건강과 안전을 지키는 실천을 골라요.']},
+  {id:'choices',title:'안전을 지키며 바꾸는 생활',cues:['더운 날, 전기를 아끼려고 더위를 참아야 할까요?','더위를 참으면 몸이 위험해요. 물과 그늘에서 쉬어요.','건강과 안전을 지키면서 필요 없는 사용을 줄여요.']},
   {id:'compare',title:'한 가지를 바꾸어 비교하기',cues:['비교할 때 다른 조건은 같게 두어요.','생활의 선택 한 가지만 바꾸어 결과를 나란히 봐요.','생활 만족을 지키면서 자원 사용을 줄일 수 있어요.']},
   {id:'design',title:'구역의 위험에 맞는 도시 설계',cues:['구역마다 더위와 빗물의 위험이 달라요.','그늘은 더위에, 저류지는 빗물에 도움을 줘요.','한정된 자원을 나누어 두 위험에 대비해요.']},
-  {id:'test',title:'시험하고 고치고 다시 확인하기',cues:['내 도시를 폭염과 많은 비 조건에서 각각 시험해요.','남은 영향을 보고 필요한 시설을 다시 살펴봐요.','처음과 같은 조건으로 다시 시험해야 비교할 수 있어요.']}
+  {id:'test',title:'시험하고 고치고 다시 확인하기',cues:['먼저 시설이 없는 도시를 폭염 조건에서 시험해요.','시설을 놓고 같은 폭염 조건으로 다시 시험해요.','처음과 같은 조건으로 다시 시험해야 비교할 수 있어요.']}
 ];
-export const CONCEPT_DURATION=9;
+export const CONCEPT_DURATION=15;
+// Seconds where each caption and scene button begins; films/kit/kit.mjs CUES must match (tests/concept-films.test.mjs).
+export const CONCEPT_CUES=[0,5,10];

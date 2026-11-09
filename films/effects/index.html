@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>영향 연쇄 분석 개념 영상</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+/* 「잎새·물방울의 탐구 노트」 공통 모습 (films/SPEC.md). build.mjs가 각 편 index.html에 넣는다. */
+@font-face{font-family:'Jua';src:url('assets/fonts/jua-korean-400.woff2') format('woff2');font-weight:400}
+@font-face{font-family:'Jua';src:url('assets/fonts/jua-latin-400.woff2') format('woff2');font-weight:400;unicode-range:U+0000-00FF}
+:root{--paper:#FBF8F3;--grid:#D9E8DF;--ink:#173F42;--green:#1E665B;--mint:#BAD7B2;--amber:#C9821C;--amber-soft:#FFF3D6;--water:#61ADCA;--rust:#C2703F;--shadow:0 10px 18px rgba(23,63,66,.16)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--paper)}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden;font-family:'Jua',sans-serif;color:var(--ink);letter-spacing:0;background:var(--paper)}
+.paper{position:absolute;inset:0;background:var(--paper)}
+.paper::before{content:'';position:absolute;inset:0;opacity:.55;background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:60px 60px}
+.paper::after{content:'';position:absolute;top:0;bottom:0;left:72px;width:3px;background:#E9C9B5;opacity:.8}
+.head{position:absolute;left:110px;top:54px;font-size:40px;line-height:1.2;white-space:nowrap;color:var(--green)}
+.head small{font-size:32px;color:var(--ink);opacity:.75}
+.stage{position:absolute;left:110px;top:300px;width:1300px;height:690px}
+.zoom{position:absolute;inset:0}
+.cast{position:absolute;left:1470px;top:640px;width:370px;height:342px}
+.cast img{position:absolute;left:0;bottom:0;width:100%;height:auto;opacity:0}
+.cast img.on{opacity:1}
+.bubble{position:absolute;right:110px;top:150px;max-width:1240px;background:#fff;border:5px solid var(--ink);border-radius:30px;padding:22px 40px 18px;font-size:56px;line-height:1.25;white-space:nowrap;box-shadow:var(--shadow)}
+.bubble::after{content:'';position:absolute;width:40px;height:40px;background:#fff;border-right:5px solid var(--ink);border-bottom:5px solid var(--ink);right:150px;bottom:-25px;transform:rotate(45deg)}
+.w{display:inline-block;opacity:0}
+.big{position:absolute;left:110px;top:150px;font-size:72px;line-height:1.2;white-space:nowrap;color:var(--ink)}
+.big .w{color:#9DB3AA}
+.big .key{font-style:normal;color:#C9D6D0}
+.pic{position:absolute;border-radius:24px;overflow:hidden;border:5px solid #fff;box-shadow:var(--shadow);background:#e8efe6}
+.pic img{display:block;width:100%;height:100%;object-fit:cover}
+.obj{position:absolute}
+.obj img{display:block;width:100%;height:auto}
+.tag{position:absolute;width:0;height:0;opacity:0}
+.tag .dot{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;background:var(--ink);border:4px solid #fff}
+.tag .lead{position:absolute;left:-2px;width:5px;background:var(--ink);border-radius:3px}
+.tag.up .lead{bottom:0}
+.tag.down .lead{top:0}
+.tag .card{position:absolute;left:0;background:#fff;border:5px solid var(--ink);border-radius:20px;padding:10px 26px 8px;font-size:42px;line-height:1.15;white-space:nowrap;box-shadow:var(--shadow)}
+.tag .card small{display:block;font-size:30px;opacity:.8}
+.tag.hot .card{border-color:var(--amber);background:var(--amber-soft)}
+.tag.hot .lead,.tag.hot .dot{background:var(--amber)}
+.note{position:absolute;font-size:30px;color:var(--ink);opacity:.72;white-space:nowrap}
+.panel{position:absolute;background:#fff;border:4px solid #C9DCCF;border-radius:28px;box-shadow:var(--shadow)}
+.axis{position:absolute;height:5px;background:#8AA697;border-radius:3px}
+.bar{position:absolute;bottom:0;border-radius:10px 10px 4px 4px}
+.bar.old{background:var(--mint)}
+.bar.new{background:var(--green)}
+.bar.rust{background:var(--rust)}
+.bar.blue{background:var(--water)}
+.trend{position:absolute;height:0;border-top:7px dashed var(--amber);transform-origin:0 50%}
+.strike{position:absolute;height:9px;background:var(--rust);border-radius:5px;transform-origin:0 50%}
+.check{position:absolute;width:76px;height:76px;border-radius:50%;background:var(--green);border:5px solid #fff;box-shadow:var(--shadow)}
+.check::after{content:'';position:absolute;left:21px;top:12px;width:20px;height:34px;border-right:9px solid #fff;border-bottom:9px solid #fff;transform:rotate(45deg)}
+.chip{position:absolute;background:#fff;border:5px solid var(--ink);border-radius:22px;padding:16px 30px 12px;font-size:44px;line-height:1.2;white-space:nowrap;box-shadow:var(--shadow)}
+.water{position:absolute;background:rgba(97,173,202,.62);border-top:7px solid #D4F2FB}
+.arrow{position:absolute;height:7px;background:var(--ink);border-radius:4px;transform-origin:0 50%}
+.arrow::after{content:'';position:absolute;right:-6px;top:-13px;width:24px;height:24px;border-right:7px solid var(--ink);border-top:7px solid var(--ink);transform:rotate(45deg)}
+.meter{position:absolute;display:flex;gap:8px;align-items:center;font-size:30px;white-space:nowrap}
+.meter i{display:block;width:22px;height:22px;border-radius:50%;background:#D8DFD3}
+.meter.heat i.on{background:var(--rust)}
+.meter.rain i.on{background:var(--water)}
+
+.puddle{position:absolute;border-radius:50%;background:rgba(97,173,202,.62);border:6px solid #D4F2FB}.stop{position:absolute;width:110px;height:110px;border-radius:50%;background:#fff;border:12px solid #C2703F}.stop::after{content:"";position:absolute;left:12px;right:12px;top:37px;height:14px;background:#C2703F;border-radius:7px}.route{position:absolute;border:8px dashed #1E665B;border-left:0;border-bottom:0;border-radius:0 160px 0 0}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1920" data-height="1080" data-fps="30">
+      <div id="paper" class="clip paper" data-start="0" data-duration="15" data-track-index="0"></div>
+      <div id="head" class="clip head" data-start="0" data-duration="15" data-track-index="1">물방울의 탐구 노트 <small>· 영향 연쇄 분석</small></div>
+      <div id="stage" class="clip stage" data-start="0" data-duration="15" data-track-index="2" data-layout-allow-overflow><div id="zoom" class="zoom"><div id="ef-road" class="obj" style="left:40px;top:150px;width:640px"><img src="assets/img/road.webp" alt=""></div><p id="ef-n0" class="note" style="left:60px;top:150px">해안 도로</p><i id="ef-water" class="puddle" style="left:150px;top:400px;width:430px;height:170px"></i><i id="ef-stop" class="stop" style="left:420px;top:260px"></i><i id="ef-route" class="route" style="left:600px;top:150px;width:360px;height:200px"></i><div id="ef-refuge" class="obj" style="left:880px;top:60px;width:400px"><img src="assets/img/refuge.webp" alt=""></div><div id="ef-t1" class="tag down" style="left:300px;top:500px"><i class="dot"></i><i class="lead" style="height:50px"></i><b class="card" style="top:50px">물이 들어와요<small>변화</small></b></div><div id="ef-t2" class="tag up" style="left:475px;top:260px"><i class="dot"></i><i class="lead" style="height:70px"></i><b class="card" style="bottom:70px">지나기 어려워요<small>영향</small></b></div><div id="ef-t3" class="tag down hot" style="left:1080px;top:360px"><i class="dot"></i><i class="lead" style="height:60px"></i><b class="card" style="top:60px">안전한 다른 길<small>대응</small></b></div></div></div>
+      <div id="cast" class="clip cast" data-start="0" data-duration="15" data-track-index="3"><img id="pose-ask" class="on" src="assets/img/otter-think.webp" alt="물방울"><img id="pose-react" src="assets/img/otter-cheer.webp" alt=""></div>
+      <div id="bubble" class="clip bubble" data-start="0.6" data-duration="4.7" data-track-index="4"><span class="w">물이</span> <span class="w">도로에</span> <span class="w">들어오면</span> <span class="w">어떻게</span> <span class="w">될까?</span></div>
+      <div id="big" class="clip big" data-start="10.2" data-duration="4.8" data-track-index="5"><span class="w">변화</span> <span class="w">→</span> <span class="w"><em class="key">영향</em></span> <span class="w">→</span> <span class="w">대응을</span> <span class="w">이어요</span></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+tl.set('.tag.up .lead',{transformOrigin:'50% 100%'},0);tl.set('.tag.up .card',{xPercent:-50,transformOrigin:'50% 100%'},0);
+      tl.set('.tag.down .lead',{transformOrigin:'50% 0%'},0);tl.set('.tag.down .card',{xPercent:-50,transformOrigin:'50% 0%'},0);
+      // 머리말과 캐릭터 등장(자세 바뀜은 찌그러짐 → 새 자세 → 복귀).
+      tl.fromTo('#cast',{x:420,opacity:0},{x:0,opacity:1,duration:.8,ease:'expo.out'},.3);
+      tl.fromTo('#cast',{scaleY:1,transformOrigin:'50% 100%'},{scaleY:.94,duration:.12,ease:'power2.in'},1.05);
+      tl.to('#cast',{scaleY:1,duration:.3,ease:'back.out(1.6)'},1.17);
+      // 질문(낱말씩 흐림→선명), 5초에 물러남.
+      tl.fromTo('#bubble',{opacity:0,scale:.92,transformOrigin:'85% 100%'},{opacity:1,scale:1,duration:.35,ease:'back.out(1.5)'},.6);
+      tl.fromTo('#bubble .w',{opacity:0,filter:'blur(6px)'},{opacity:1,filter:'blur(0px)',duration:.13,stagger:.07},.8);
+      tl.to('#bubble',{opacity:0,filter:'blur(8px)',duration:.22,ease:'power3.in'},5.0);
+      // 바뀌는 순간 캐릭터가 무대를 바라봄.
+      tl.fromTo('#cast',{rotation:0},{rotation:-4,duration:.35,ease:'power2.out'},6.2);
+      tl.to('#cast',{rotation:0,duration:.45,ease:'power2.inOut'},7.4);
+tl.fromTo('#ef-road',{"opacity":0,"y":30},{opacity:1,y:0,duration:0.7,ease:'expo.out'},1.1);tl.fromTo('#ef-n0',{"opacity":0},{opacity:1,duration:0.4,ease:'expo.out'},2.2);tl.fromTo('#ef-water',{opacity:0,scale:.2},{opacity:1,scale:1,duration:1.0,ease:'power1.inOut'},5.2);tl.set('#ef-t1',{opacity:1},5.9);tl.fromTo('#ef-t1 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},5.9);tl.fromTo('#ef-t1 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},6.050000000000001);tl.fromTo('#ef-stop',{opacity:0,scale:.5},{opacity:1,scale:1,duration:.35,ease:'back.out(1.6)'},6.5);tl.set('#ef-t2',{opacity:1},6.9);tl.fromTo('#ef-t2 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},6.9);tl.fromTo('#ef-t2 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},7.050000000000001);tl.fromTo('#ef-route',{opacity:0,clipPath:'inset(0 100% 0 0)'},{opacity:1,clipPath:'inset(0 0% 0 0)',duration:.7,ease:'power2.inOut'},7.5);tl.fromTo('#ef-refuge',{"opacity":0,"y":20},{opacity:1,y:0,duration:0.5,ease:'expo.out'},7.9);tl.set('#ef-t3',{opacity:1},8.5);tl.fromTo('#ef-t3 .lead',{scaleY:0},{scaleY:1,duration:.2,ease:'power2.out'},8.5);tl.fromTo('#ef-t3 .card',{opacity:0,scale:.7},{opacity:1,scale:1,duration:.3,ease:'back.out(1.6)'},8.65);
+      
+      // 결론 한 줄(흐린 글자 → 잉크, 열쇠 낱말은 호박색) + 캐릭터 반응.
+      tl.fromTo('#big .w',{color:'#C9D6D0'},{opacity:1,duration:.01,stagger:.09},10.35);
+      tl.to('#big .w',{color:'#173F42',duration:.25,stagger:.09},10.45);
+      tl.fromTo('#big .key',{color:'#C9D6D0'},{color:'#9A5E0C',duration:.25},10.45);
+      tl.to('#cast',{scaleY:.9,duration:.12,ease:'power2.in'},10.9);
+      tl.set('#pose-ask',{opacity:0},11.02);
+      tl.set('#pose-react',{opacity:1},11.02);
+      tl.to('#cast',{scaleY:1,y:-18,duration:.25,ease:'back.out(1.6)'},11.02);
+      tl.to('#cast',{y:0,duration:.35,ease:'power2.in'},11.27);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

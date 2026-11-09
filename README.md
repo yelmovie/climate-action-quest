@@ -25,7 +25,7 @@ http://localhost:4173 에서 연다. `npm test`로 학습 모형·진행·지도
 
 ## 개념 영상·조작 개선 · 2026-10-22
 
-열 활동 완료 뒤 각각 9초 개념 영상을 보여 준다. 완료한 시설에서 다시 볼 수 있으며, 영상 로딩 실패 시 마지막 그림과 세 문장의 개념 설명을 제공한다. 영상과 CC0 효과음은 로컬 자원이며 배포본의 오프라인 캐시에 포함한다.
+열 활동 완료 뒤 각각 15초 개념 영상을 보여 준다(2026-11-09 HyperFrames 재제작, `films/`). 완료한 시설에서 다시 볼 수 있으며, 영상 로딩 실패 시 마지막 그림과 세 문장의 개념 설명을 제공한다. 영상과 CC0 효과음은 로컬 자원이며 배포본의 오프라인 캐시에 포함한다.
 
 카드 끌어 판단하기·자원 분류·이유 연결·순서 바꾸기·시설 배치를 지원한다. 끌기 대신 누르기·키보드로도 진행할 수 있다. 시간 비교 그래프·수면·생활 지표·도시의 남은 위험이 조작에 반응한다. 잎새와 물방울이 현재 행동과 추가 힌트를 안내한다.
 
@@ -47,7 +47,7 @@ http://localhost:4173 에서 연다. `npm test`로 학습 모형·진행·지도
 
 열 개념 영상은 같은 그림에 코드로 계산한 그래프·수면·시설 배치 움직임을 합성해 갱신했다. 설명·수치·정답 판단은 화면 텍스트와 활동 로직이 담당한다. 웹용 그림은 약 3.47MiB, 영상·포스터는 약 6.50MiB이며 원본 PNG와 제작 도구는 배포본에 포함하지 않는다.
 
-그림 연결은 `src/concept-art.js`, 개별 크기·용량·원본 해시는 `docs/concept-art-manifest.json`에 있다. 원본은 `references/generated/concept-art/`, 프롬프트는 `docs/generated-prompts-*.json`에 보존한다. `node scripts/prepare-concept-art.mjs`로 웹용 그림을 만들고 `npm run concepts:render`로 영상을 다시 만든다.
+그림 연결은 `src/concept-art.js`, 개별 크기·용량·원본 해시는 `docs/concept-art-manifest.json`에 있다. 원본은 `references/generated/concept-art/`, 프롬프트는 `docs/generated-prompts-*.json`에 보존한다. `node scripts/prepare-concept-art.mjs`로 웹용 그림을 만들고 `npm run concepts:render`(films/ HyperFrames, `RENDER_DIR` 지정)로 영상을 다시 만든다.
 
 개발 서버를 4175 포트로 실행한 상태에서 `npm run check:art`로 이미지 파일·장면 연결·시설 교체와 삭제 시 그림 갱신을 확인한다. [그림 개선과 검증 기록](docs/reviews/CONCEPT-ART-20261028.md)
 
