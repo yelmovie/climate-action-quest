@@ -1,5 +1,5 @@
 /** One shared, scalable icon family. The button supplies its accessible name. */
-const paths = {
+const paths = {fit:'<path d="M8 3H3v5m13-5h5v5M3 16v5h5m8 0h5v-5M8 8h8v8H8z"/>',
   home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
   back: '<path d="m10 5-7 7 7 7M3 12h18"/>',
   sound: '<path d="M11 4 6 8H3v8h3l5 4zM15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>',
