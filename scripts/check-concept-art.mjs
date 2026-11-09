@@ -12,11 +12,12 @@ const out='.tmp/concept-art-check';await mkdir(out,{recursive:true});
 const base=process.env.BASE_URL||'http://localhost:4175',checks=[],errors=[],failedAssets=[],requests=[];
 const manifest=JSON.parse(await readFile('docs/concept-art-manifest.json','utf8'));
 assert.equal(Object.keys(conceptArt).length,25,'all planned illustrations are registered');
-assert.equal(manifest.assets.length,25,'all planned illustrations were optimized');
+// The manifest also keeps retired versions (scene-observe v1 → v2, 2026-11-08); each registered file must be listed.
+assert.ok(manifest.assets.length>=25,'all planned illustrations were optimized');
 for(const [id,art] of Object.entries(conceptArt)){
- const file=resolve('.'+art.src),entry=manifest.assets.find(a=>a.id===id);
+ const file=resolve('.'+art.src),entry=manifest.assets.find(a=>'/'+a.src===art.src);
  assert.ok(entry,'optimization manifest contains '+id);
- assert.equal(entry.src,'assets/concept-art/'+id+'.webp');
+ assert.ok(entry.src.startsWith('assets/concept-art/'+id),'manifest entry belongs to '+id);
  assert.equal((await stat(file)).size,entry.bytes,'delivered file matches its manifest: '+id);
  assert.ok(entry.width>0&&entry.height>0&&art.alt.trim(),'dimensions and text alternative: '+id);
  if(art.kind==='object')assert.equal(entry.hasAlpha,true,'object retains transparency: '+id);

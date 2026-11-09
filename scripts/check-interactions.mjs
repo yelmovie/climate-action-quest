@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {freshState} from '../src/state.js';
-import {concepts} from '../src/concept-data.js';
+import {concepts,CONCEPT_DURATION} from '../src/concept-data.js';
 import {evidenceSites,humanSites,experimentLevels} from '../src/activity-data.js';
 const require=createRequire(import.meta.url);
 let chromium;try{({chromium}=require('playwright-core'));}catch{({chromium}=require('../.tools/node_modules/playwright-core'));}
@@ -18,7 +18,10 @@ async function load(index,record={},extra={},preview=false){
  const s=freshState();s.adminUnlocked=true;s.introSeen=true;
  if(!preview)for(let i=0;i<index;i++){s.records[i]={done:true,workComplete:true};s.completed.push(i);}
  s.records[index]=record;Object.assign(s.records,extra);
- await page.goto('about:blank');fixture=s;await page.goto(base+'/#activity/'+index);await page.locator('.guide-avatar').waitFor();await page.evaluate(()=>document.fonts.ready);
+ await page.goto('about:blank');fixture=s;await page.goto(base+'/#activity/'+index);
+ // Saved admin flags are ignored on load (5e780e5), so teacher preview is opened through settings like a teacher would.
+ if(preview){await page.locator('[data-settings]').click();await page.locator('.settings-dialog details').evaluateAll(items=>items.forEach(e=>e.open=true));await page.locator('#admin-unlock').click();await page.locator('#close-settings').click();await page.evaluate(i=>{location.hash='#activity/'+i;},index);}
+ await page.locator('.guide-avatar').waitFor();await page.evaluate(()=>document.fonts.ready);
 }
 const record=async i=>page.evaluate(i=>JSON.parse(localStorage.getItem('climate-future:v1')).records[i],i);
 async function drag(source,target,touch=false,cancel=false){
@@ -27,14 +30,14 @@ async function drag(source,target,touch=false,cancel=false){
  else{await page.mouse.move(start.x,start.y);await page.mouse.down();await page.mouse.move(end.x,end.y,{steps:12});await page.mouse.up();}
  assert.equal(await page.locator('.drag-ghost').count(),0,'drag ghost cleaned up');
 }
-async function video(index){
+async function video(index,preview=false){
  await page.locator('.concept-dialog video').waitFor();await page.waitForFunction(()=>document.querySelector('.concept-dialog video')?.readyState>=2);
- const metadata=await (await page.waitForFunction(()=>{const v=document.querySelector('.concept-dialog video');return v?.readyState>=2&&Number.isFinite(v.duration)&&v.videoWidth>0?{duration:v.duration,w:v.videoWidth,h:v.videoHeight}:false;})).jsonValue();assert.deepEqual(metadata,{duration:9,w:1280,h:720});
- assert.ok((await record(index)).done,'completion saved before media');
- await page.locator('.concept-dialog video').evaluate(v=>{v.currentTime=3.2;});await page.waitForFunction(cue=>document.querySelector('.concept-caption').textContent===cue,concepts[index].cues[1]);
- if(index===0){await page.locator('.concept-pause').click();assert.ok(await page.locator('video').evaluate(v=>v.paused));await page.screenshot({path:out+'/concept-observe.png'});await page.locator('.concept-pause').click();await page.locator('video').evaluate(v=>{v.currentTime=8.85;});await page.locator('.concept-play').waitFor();assert.equal(await page.locator('.concept-end').isVisible(),true);}
+ const metadata=await (await page.waitForFunction(()=>{const v=document.querySelector('.concept-dialog video');return v?.readyState>=2&&Number.isFinite(v.duration)&&v.videoWidth>0?{duration:v.duration,w:v.videoWidth,h:v.videoHeight}:false;})).jsonValue();assert.deepEqual({...metadata,duration:Math.round(metadata.duration)},{duration:CONCEPT_DURATION,w:1280,h:720});
+ if(!preview)assert.ok((await record(index)).done,'completion saved before media');
+ await page.locator('.concept-dialog video').evaluate(v=>{v.currentTime=d/3+.2;},CONCEPT_DURATION);await page.waitForFunction(cue=>document.querySelector('.concept-caption').textContent===cue,concepts[index].cues[1]);
+ if(index===0){await page.locator('.concept-pause').click();assert.ok(await page.locator('video').evaluate(v=>v.paused));await page.screenshot({path:out+'/concept-observe.png'});await page.locator('.concept-pause').click();await page.locator('video').evaluate(v=>{v.currentTime=d-.15;},CONCEPT_DURATION);await page.locator('.concept-play').waitFor();assert.equal(await page.locator('.concept-end').isVisible(),true);}
  if(index===8){await page.screenshot({path:out+'/concept-design.png'});}
- await page.locator('.dialog-close').click();await page.locator('video').waitFor({state:'detached'});await page.locator('.continue-activity').waitFor();checks.push('activity '+index+': completion + 9s video + caption + cleanup + continue');
+ await page.locator('.dialog-close').click();await page.locator('video').waitFor({state:'detached'});await page.locator('.continue-activity').waitFor();checks.push('activity '+index+': completion + '+CONCEPT_DURATION+'s video + caption + cleanup + continue');
 }
 try{
  if(!process.argv.includes('--media-only')){
@@ -85,7 +88,7 @@ try{
  for(let i=0;i<6;i++)await drag(`[data-tool="${good[i]}"]`,`[data-district="${i}"]`);
  await page.locator('.retest').click();assert.ok((await record(9)).after.heat);await page.reload();assert.equal((await record(9)).phase,3);for(let i=0;i<2;i++)await page.locator('.run').click();await video(9);assert.equal((await record(9)).verified,true);assert.deepEqual(Object.keys((await record(9)).after).sort(),['heat','rain']);checks.push('combined test actions preserve both hazards, failed design retry and saved retest');
  await page.locator('.continue-activity').click();assert.equal(new URL(page.url()).hash,'#ending');assert.equal(await page.locator('.report-record.connected').count(),5);assert.equal(await page.locator('#finalize').isEnabled(),true);await page.locator('#finalize').click();await page.waitForTimeout(220);await page.screenshot({path:out+'/certificate.png'});assert.equal(await page.locator('.certificate-dialog').count(),1);await page.locator('.dialog-close').click();checks.push('earned records connect without five extra clicks and issue certificate');
- await load(1,{round:7,answers:[]},{},true);await page.locator('[data-answer="1"]').click();await page.locator('.check').click();await video(1);assert.equal((await record(1)).example,true);assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('climate-future:v1')).completed),[]);await page.locator('.continue-activity').click();assert.equal(new URL(page.url()).hash,'#facility/0');await page.goto(base+'/#ending');await page.waitForURL('**/#map');checks.push('preview completion returns to facility and never earns a certificate');
+ await load(1,{round:7,answers:[]},{},true);await page.locator('[data-answer="1"]').click();await page.locator('.check').click();await video(1,true);assert.notEqual((await record(1))?.done,true,'teacher preview is never saved');assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('climate-future:v1')).completed),[]);await page.locator('.continue-activity').click();assert.equal(new URL(page.url()).hash,'#facility/0');await page.goto(base+'/#ending');await page.waitForURL('**/#map');checks.push('preview completion returns to facility and never earns a certificate');
  }
  // Failure and reduced-motion paths are tested in isolated contexts.
  await load(0,{done:true,workComplete:true,collected:evidenceSites.map(s=>s.id)});await page.route('**/assets/concepts/*.{webm,mp4}',r=>r.abort());await page.locator('.guide-avatar').click();await page.locator('.concept-revisit').click();await page.locator('.concept-fallback').waitFor();await page.screenshot({path:out+'/concept-fallback.png'});assert.equal(await page.locator('.concept-next').isEnabled(),true);await page.locator('.dialog-close').click();await page.unroute('**/assets/concepts/*.{webm,mp4}');checks.push('media failure poster + all captions + continue');
