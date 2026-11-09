@@ -74,13 +74,13 @@ img { max-width: 100%; }
 .screen-hud button { pointer-events: auto; }
 .icon-button { display: inline-grid; place-items: center; width: var(--hud-size); height: var(--hud-size); padding: 13px; border: 2px solid #365d51; border-radius: 18px; color: var(--ink); background: #fffbedf7; box-shadow: 0 4px 0 #234b3c55, 0 5px 15px #234b3c15; transition: transform var(--motion), background var(--motion), box-shadow var(--motion); }
 .icon-button .icon { width: 28px; height: 28px; }
-.icon-button:hover { background: white; transform: translateY(-2px); }
+@media (hover: hover) and (pointer: fine) { .icon-button:hover { background: white; transform: translateY(-2px); } }
 .icon-button:active { transform: translateY(3px); box-shadow: 0 1px 0 #234b3c55; }
 .icon-button:disabled { transform: none; }
 .screen-chip { max-width: 300px; padding: 6px 15px; border-radius: 30px; background: #fffbedeb; box-shadow: var(--shadow); font-size: var(--font-small); font-weight: 800; }
 
 .button { min-height: 52px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 11px 24px; border: 2px solid #537063; border-radius: 16px; background: var(--cream); color: var(--ink); font-weight: 800; line-height: 1.35; text-align: center; text-decoration: none; box-shadow: 0 4px 0 #244c3f28; transition: transform var(--motion), background var(--motion), box-shadow var(--motion); }
-.button:hover:not(:disabled) { transform: translateY(-2px); background: white; box-shadow: 0 6px 0 #244c3f28; }
+@media (hover: hover) and (pointer: fine) { .button:hover:not(:disabled) { transform: translateY(-2px); background: white; box-shadow: 0 6px 0 #244c3f28; } }
 .button:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #244c3f28; }
 .button.primary { color: white; border-color: var(--forest-dark); background: var(--forest); box-shadow: 0 5px 0 #133b35; }
 .button.primary:hover:not(:disabled) { background: #287768; }
@@ -114,7 +114,7 @@ img { max-width: 100%; }
 .map-node.current .map-label { background: #ffdf86; border-color: #8c6727; }
 .map-node.locked .map-label { color: #4b5b56; background: #e9e7ddeb; border-color: #7a867e; }
 .map-node.restored .map-label { background: #d5f4cf; border-color: #3f7b46; }
-.map-node:hover .map-label { transform: translateY(-3px); }
+@media (hover: hover) and (pointer: fine) { .map-node:hover .map-label { transform: translateY(-3px); } }
 .map-marker { width: 20px; height: 20px; margin-top: 8px; transform: rotate(45deg); border: 3px solid #fff9dd; background: #e1b14e; box-shadow: 0 2px 10px #302b1455; }
 .map-node.locked .map-marker { background: #778d80; }
 .map-node.restored .map-marker { background: #5eb25a; box-shadow: 0 0 30px #ffffa6; }
@@ -148,7 +148,7 @@ img { max-width: 100%; }
 .activity-card > p { grid-column: 1 / -1; grid-row: 3; font-size: clamp(18px,1.35vw,21px); line-height: 1.45; color: var(--ink-soft); font-weight: 500; }
 .activity-card > .card-go { grid-column: 1 / -1; grid-row: 4; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: clamp(18px,1.4vw,22px); margin-top: 3px; color: #23614c; }
 .activity-card > .card-go .icon { width: 24px; height: 24px; }
-.activity-card:hover:not(:disabled) { transform: translateX(4px); border-color: #317758; }
+@media (hover: hover) and (pointer: fine) { .activity-card:hover:not(:disabled) { transform: translateX(4px); border-color: #317758; } }
 .activity-card > .icon { width: 43px; height: 43px; padding: 8px; border-radius: 15px; color: var(--forest); background: var(--mint); }
 .activity-card strong { display: block; font-size: clamp(20px,1.65vw,26px); line-height: 1.4; }
 .activity-card small { display: block; margin-top: 4px; font-size: var(--font-small); color: var(--ink-soft); font-weight: 500; }
@@ -177,7 +177,7 @@ img { max-width: 100%; }
 .choice-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; width: min(1080px,100%); margin: 14px auto; }
 .choice-card { display: flex; align-items: center; gap: 14px; min-height: 82px; padding: 18px 23px; border: 2px solid #9cb9a7; border-radius: 19px; color: var(--ink); background: #fffdf4f5; text-align: left; box-shadow: 0 4px 0 #294b3520; line-height: 1.45; font-weight: 700; transition: border-color var(--motion),transform var(--motion),background var(--motion); }
 .choice-card::before { content: ""; display: block; width: 24px; height: 24px; flex: 0 0 24px; border: 2px solid #789783; border-radius: 50%; background: #fff; }
-.choice-card:hover:not(:disabled) { transform: translateY(-2px); border-color: #3d8067; background: #f9fff0; }
+@media (hover: hover) and (pointer: fine) { .choice-card:hover:not(:disabled) { transform: translateY(-2px); border-color: #3d8067; background: #f9fff0; } }
 .choice-card.selected, .choice-card[aria-pressed="true"] { border-color: var(--forest); background: #e1f5dd; }
 .choice-card.selected::before, .choice-card[aria-pressed="true"]::before { border: 6px solid var(--forest); background: #fff; }
 .choice-card.correct { border-color: #418148; background: #e7f6d7; }
@@ -194,7 +194,7 @@ img { max-width: 100%; }
 .scan-hotspot { position: absolute; transform: translate(-50%,-50%); min-height: 52px; min-width: 150px; max-width: 170px; padding: 8px 11px; display: inline-flex; gap: 6px; justify-content: center; align-items: center; border: 2px solid #fff9d8; border-radius: 21px; background: #164f48ed; color: white; font-weight: 800; font-size: clamp(18px,1.45vw,22px); line-height: 1.25; box-shadow: 0 0 0 5px #fff8bd3d,0 5px 12px #153b2959; }
 .scan-hotspot > span { white-space: normal; overflow-wrap: normal; word-break: keep-all; }
 .activity-2 .scan-hotspot { width: 150px; min-width: 150px; max-width: 150px; }
-.scan-hotspot:hover { background: #2d7460; transform: translate(-50%,-54%); }
+@media (hover: hover) and (pointer: fine) { .scan-hotspot:hover { background: #2d7460; transform: translate(-50%,-54%); } }
 .scan-hotspot.selected, .scan-hotspot.correct, .scan-hotspot[aria-pressed="true"] { color: #234934; background: #e4efb7; border-color: #477e54; }
 .scan-hotspot .icon { width: 24px; height: 24px; }
 .scan-layout { display: grid; grid-template-columns: minmax(0,1.7fr) minmax(280px,1fr); gap: 18px; min-height: 0; align-items: stretch; }
