@@ -126,3 +126,20 @@
   .activity-3 .ov-chain-step { min-height: 110px; padding: 14px; }
   .activity-3 .chain-options { grid-template-columns: minmax(0,1fr); }
 }
+
+/* Pattern plus position plus label distinguish periods without relying on color. */
+.activity-0 .ov-past > i, .activity-1 .ov-past > i {
+  background: repeating-linear-gradient(135deg, #89a76e 0 5px, #dce9cf 5px 8px);
+  outline: 1px solid #456442;
+  outline-offset: -1px;
+}
+.activity-0 .ov-now > i, .activity-1 .ov-now > i {
+  outline: 1px solid var(--forest);
+  outline-offset: -1px;
+}
+
+.activity-0 .ov-legend > span:first-child::before,
+.activity-1 .ov-legend > span:first-child::before {
+  background: repeating-linear-gradient(135deg,#89a76e 0 3px,#dce9cf 3px 5px);
+  outline: 1px solid #456442;
+}

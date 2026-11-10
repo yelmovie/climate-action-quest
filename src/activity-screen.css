@@ -286,3 +286,10 @@
   .activity-page .activity-footer { padding: 12px; }
   .activity-page .playback-speed { font-size: 18px; }
 }
+
+/* Short landscape: keep the full evidence chart above the learning footer. */
+@media (max-height: 420px) and (min-width: 761px) and (orientation: landscape) {
+  .activity-1 .judgment-heading { display: none; } /* The chart still names the observed quantity. */
+  .activity-1 .comparison-grid > .evidence-card { padding-top: 4px; padding-bottom: 4px; }
+  .activity-1 .ov-chart { --ov-unit: 4px; padding-top: 12px; }
+}

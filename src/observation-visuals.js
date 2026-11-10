@@ -12,9 +12,9 @@ const resourceIcon=n=>`<svg class="icon ov-resource-icon" aria-hidden="true" foc
 
 // Weather sites name their real short periods (어제·오늘, 요일) so a day's data never looks like a multi-year record.
 const periodsOf=site=>site.periods||['이전 여러 해','나중 여러 해'];
-function chart(site){
+export function observationChart(site){
   const [before,after]=periodsOf(site);
-  return `<div class="ov-legend"><span>${before}</span><span>${after}</span><small>${site.unit}<span class="ov-scale"> · 0~${chartMaximum} 단계</span></small></div><div class="ov-chart" style="--ov-maximum:${chartMaximum}" role="img" aria-label="${site.unit}. 같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. ${before} ${site.past.join(', ')}. ${after} ${site.now.join(', ')}.">${site.past.map((value,i)=>`<div class="ov-pair"><div class="ov-bars"><div class="ov-column ov-past" style="--ov-value:${value}"><span>${value}</span><i></i></div><div class="ov-column ov-now" style="--ov-value:${site.now[i]}"><span>${site.now[i]}</span><i></i></div></div><span class="ov-group-label">${site.groups?.[i]||`${i+1}묶음`}</span></div>`).join('')}</div>`;
+  return `<div class="ov-legend"><span>줄무늬 · ${before}</span><span>단색 · ${after}</span><small>가상 자료 · ${site.unit}<span class="ov-scale"> · 가상 상대 단계 0~${chartMaximum}</span></small></div><div class="ov-chart" style="--ov-maximum:${chartMaximum}" role="img" aria-label="${site.unit}. 같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. ${before} ${site.past.join(', ')}. ${after} ${site.now.join(', ')}.">${site.past.map((value,i)=>`<div class="ov-pair"><div class="ov-bars"><div class="ov-column ov-past" style="--ov-value:${value}"><span>${value}</span><i></i></div><div class="ov-column ov-now" style="--ov-value:${site.now[i]}"><span>${site.now[i]}</span><i></i></div></div><span class="ov-group-label">${site.groups?.[i]||`${i+1}묶음`}</span></div>`).join('')}</div>`;
 }
 
 /** Presentation only: source values and the activity's saved answers remain unchanged. */
@@ -23,7 +23,7 @@ export function enhanceObservation({host,index,rec,icon=()=>''}){
     const original=host.querySelector('.mini-chart'),data=host.querySelector('.evidence-data');
     if(!original||!data)return;
     const site=at(evidenceSites,rec.open),visual=document.createElement('div');
-    visual.className='ov-chart-wrap';visual.innerHTML=chart(site);
+    visual.className='ov-chart-wrap';visual.innerHTML=observationChart(site);
     original.replaceWith(visual);data.classList.add('ov-data');
     data.querySelector(':scope > p')?.remove();
     data.querySelector(':scope > .chart-legend')?.remove();
@@ -42,7 +42,7 @@ export function enhanceObservation({host,index,rec,icon=()=>''}){
   }
   if(index===1){
     const data=host.querySelector('.comparison-data');if(!data)return;
-    const site=at(evidenceSites,rec.round);data.classList.remove('paired-data');data.classList.add('ov-data');data.innerHTML=chart(site);
+    const site=at(evidenceSites,rec.round);data.classList.remove('paired-data');data.classList.add('ov-data');data.innerHTML=observationChart(site);
     const note=data.parentElement.querySelector(':scope > .science-note');
     if(note){data.setAttribute('title',note.textContent);note.remove();}
     const clue=data.previousElementSibling;if(clue?.tagName==='P')clue.classList.add('ov-evidence-clue');
