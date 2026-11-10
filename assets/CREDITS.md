@@ -118,3 +118,11 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 ## 2026-11-09 정리
 
 효과음은 866a6d0부터 Web Audio 합성음(`src/theme-effects.js`)이라 위 Kenney mp3 8개와 라이선스는 배포본에서 빼 `_unused/audio-kenney/`로 옮겼다(원본 보존). 관측소 그림 v1(`scene-observe.webp`)은 v2로 바뀌어 `_unused/concept-art/`로 옮겼다. 원본 PNG는 `references/generated/concept-art/`에 그대로 있다.
+
+## 나눔스퀘어 네오 UI 글꼴 (2026-11-10)
+
+네이버 공식 배포 원본 WOFF2 Regular/Bold를 수정 없이 함께 제공한다.
+- 공식 안내: https://campaign.naver.com/nanumsquare_neo/
+- 원본: https://campaign.naver.com/nanumsquare_neo/download/NaverNanumSquareNeo.zip
+- 라이선스: SIL Open Font License 1.1. 전체 저작권 안내·전문은 `fonts/NanumSquareNeo-OFL.txt`.
+- 기존 영상·삽화에 포함된 글자는 영상 제작 당시 글꼴을 유지한다.

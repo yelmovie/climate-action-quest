@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {evidenceSites,humanSites,relationCases,effectChains,dailyCases,compareCaseIndices,experimentLevels} from '../src/activity-data.js';
 const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_modules/playwright-core');
 const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
@@ -24,7 +24,11 @@ try{
  for(let i=0;i<3;i++)await page.locator('.run').click();const before=(await saved()).records[9].before;assert.deepEqual(Object.keys(before).sort(),['heat','rain']);units+=2;
  await page.locator('.retest').click();await page.reload();assert.equal((await saved()).records[9].phase,3);await page.locator('.run').click();units+=2;await page.locator('.run').click();await done(9);
  assert.equal(units,72);assert.equal(new URL(page.url()).hash,'#ending');await page.locator('#finalize').click();await page.locator('.certificate-dialog').waitFor();assert.equal((await saved()).finalized,true);
- const dl=page.waitForEvent('download');await page.locator('#download-certificate').click();const file=await dl;assert.match(file.suggestedFilename(),/인증서/);await page.screenshot({path:out+'/certificate.png'});
+ const dl=page.waitForEvent('download');await page.locator('#download-certificate').click();const file=await dl;assert.match(file.suggestedFilename(),/인증서/);await file.saveAs(out+'/certificate.svg');
+ const exported=await readFile(out+'/certificate.svg','utf8');assert.equal((exported.match(/data:font\/woff2;base64,/g)||[]).length,2);assert.match(exported,/OPEN FONT LICENSE/);assert.match(exported,/font-family="NanumSquareNeo, sans-serif"/);
+ await page.screenshot({path:out+'/certificate.png'});
+ const exportedPage=await context.newPage();await exportedPage.setContent(exported);await exportedPage.evaluate(()=>document.fonts.ready);
+ const exportedCdp=await context.newCDPSession(exportedPage);await exportedCdp.send('DOM.enable');await exportedCdp.send('CSS.enable');const doc=await exportedCdp.send('DOM.getDocument');const node=await exportedCdp.send('DOM.querySelector',{nodeId:doc.root.nodeId,selector:'svg text'});const rendered=await exportedCdp.send('CSS.getPlatformFontsForNode',{nodeId:node.nodeId});assert.ok(rendered.fonts.some(font=>font.postScriptName.startsWith('NanumSquareNeo')&&font.isCustomFont),'downloaded certificate must render the embedded font');await exportedPage.screenshot({path:out+'/certificate-export-font.png'});await exportedPage.close();checks.push('downloaded SVG contains both fonts and full license; embedded font actually renders');
  await page.reload();assert.equal((await saved()).completed.length,10);assert.equal((await saved()).finalized,true);assert.deepEqual(errors,[]);
  await writeFile(out+'/result.json',JSON.stringify({units,checks,certificate:true,reload:true,errors,state:await saved()},null,2));console.log('PASS: 72 actual units, cumulative records, certificate download, refresh; no injected completion state');
 }catch(e){await page.screenshot({path:out+'/failure.png'});await writeFile(out+'/failure.json',JSON.stringify({units,checks,errors,state:await saved(),error:String(e)},null,2));throw e;}finally{await browser.close();}

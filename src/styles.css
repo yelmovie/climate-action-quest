@@ -1,20 +1,9 @@
+/* NAVER NanumSquare Neo, official unmodified WOFF2. License: assets/fonts/NanumSquareNeo-OFL.txt. */
+@font-face { font-family: "NanumSquareNeo"; src: url("/assets/fonts/NanumSquareNeoTTF-bRg.woff2") format("woff2"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "NanumSquareNeo"; src: url("/assets/fonts/NanumSquareNeoTTF-cBd.woff2") format("woff2"); font-style: normal; font-weight: 700; font-display: swap; }
 /* Climate Future Operations: one shared design system, full-scene artwork. */
-@font-face {
-  font-family: "Jua";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/assets/fonts/jua-korean-400.woff2") format("woff2");
-  unicode-range: U+1100-11FF,U+3130-318F,U+A960-A97F,U+AC00-D7AF,U+D7B0-D7FF;
-}
-@font-face {
-  font-family: "Jua";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/assets/fonts/jua-latin-400.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF,U+FEFF,U+FFFD;
-}
+
+
 :root {
   color-scheme: light;
   --ink: #173f42;
@@ -41,7 +30,7 @@
   --edge: clamp(18px, 2.3vw, 36px);
   --hud-top: calc(var(--edge) + var(--hud-size) + 15px);
   --motion: 180ms ease;
-  font-family: "Jua", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  font-family: "NanumSquareNeo", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
   font-synthesis: none;
   color: var(--ink);
   background: #d9e9dd;

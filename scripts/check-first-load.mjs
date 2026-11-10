@@ -1,6 +1,7 @@
 // First screen load (edu-final-check D1 + 8번) and home/map/story layout at the classroom viewports.
 // Run against the deployment build: `npm run preview` (PORT), then BASE_URL=http://127.0.0.1:PORT node scripts/check-first-load.mjs
 // Throttled profile approximates a busy school Wi-Fi (20 Mbps down, 40 ms latency). Numbers are local measurements, not field data.
+import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 const require=createRequire(import.meta.url);
@@ -36,7 +37,8 @@ const inspect=()=>{
  const name=e=>(e.getAttribute('aria-label')||e.textContent).trim().replace(/\s+/g,' ').slice(0,60);
  const visible=e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.visibility!=='hidden'&&s.display!=='none'&&!e.closest('[hidden]');};
  for(const e of root.querySelectorAll('button,a[href],[role=button]')){
-  if(!visible(e))continue;const r=e.getBoundingClientRect();
+  // The camera deliberately clips the movable world; audit its fixed navigation controls here.
+  if(!visible(e)||e.closest('.map-world'))continue;const r=e.getBoundingClientRect();
   if(r.width<44||r.height<44)issues.push({type:'small-target',name:name(e),w:Math.round(r.width),h:Math.round(r.height)});
   let scroller=false;for(let p=e.parentElement;p;p=p.parentElement){const s=getComputedStyle(p);if(/auto|scroll/.test(s.overflowY)&&p.scrollHeight>p.clientHeight+2){scroller=true;break;}}
   if(!scroller&&(r.right>innerWidth+2||r.bottom>innerHeight+2||r.left<-2||r.top<-2))issues.push({type:'offscreen',name:name(e)});
@@ -56,7 +58,7 @@ for(const [w,h] of sizes){
  await page.keyboard.press('Escape');await page.waitForTimeout(150);
  if(await page.locator('dialog[open]').count()){const close=page.locator('dialog[open] button').last();await close.click();}
  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('climate-future:v1')||'{}');s.version=1;s.introSeen=true;s.route='map';localStorage.setItem('climate-future:v1',JSON.stringify(s));});
- await page.goto(base+'/#map');await page.locator('#map-viewport').waitFor();await page.waitForTimeout(300);
+ await page.evaluate(()=>history.replaceState(null,'','#map'));await page.reload();await page.locator('#map-viewport').waitFor();await page.waitForTimeout(300);
  result.layout.push({w,h,screen:'map',...await page.evaluate(inspect)});await page.screenshot({path:`${out}/map-${w}x${h}.png`});
  if(w===1280){await page.evaluate(()=>{location.hash='#facility/0';});await page.locator('[data-activity="0"]').waitFor();await page.goBack();await page.locator('#map-viewport').waitFor();result.back={hash:new URL(page.url()).hash,map:await page.locator('#map-viewport').isVisible()};}
  await context.close();
@@ -67,3 +69,6 @@ for(const l of result.load)console.log(`${l.label}: start button ${l.startVisibl
 for(const r of result.layout)console.log(`${r.w}x${r.h} ${r.screen}: ${r.issues.length} issues${r.overflowX?' +overflowX':''}, min font ${r.minFont}px (${r.minFontText}) ${r.issues.length?JSON.stringify(r.issues.slice(0,4)):''}`);
 console.log('browser back from facility:',JSON.stringify(result.back));
 console.log(result.errors.length?'ERRORS '+JSON.stringify(result.errors):'no page errors');
+
+assert.deepEqual(result.errors, []);
+assert.deepEqual(result.layout.filter(r=>r.issues.length||r.overflowX), [], 'fixed UI must stay visible; map-world camera clipping is intentional');

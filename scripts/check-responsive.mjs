@@ -7,7 +7,7 @@ const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_
 const out=fileURLToPath(new URL('../.tmp/responsive-check/',import.meta.url));
 await mkdir(out,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROME||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--disable-crash-reporter','--disable-breakpad'],downloadsPath:out});
-const context=await browser.newContext({reducedMotion:'reduce'}),page=await context.newPage(),errors=[],results=[];
+const context=await browser.newContext({reducedMotion:'reduce',serviceWorkers:'block'}),page=await context.newPage(),errors=[],results=[];
 page.on('pageerror',e=>errors.push(e.message));
 const base=process.env.BASE_URL||'http://127.0.0.1:5368';
 let fixture;

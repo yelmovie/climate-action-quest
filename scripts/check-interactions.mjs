@@ -8,7 +8,7 @@ const require=createRequire(import.meta.url);
 let chromium;try{({chromium}=require('playwright-core'));}catch{({chromium}=require('../.tools/node_modules/playwright-core'));}
 const out='.tmp/experience-check';await mkdir(out,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--no-sandbox'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
-const context=await browser.newContext({viewport:{width:1280,height:800},hasTouch:true}),page=await context.newPage(),cdp=await context.newCDPSession(page),errors=[],checks=[];
+const context=await browser.newContext({viewport:{width:1280,height:800},hasTouch:true,serviceWorkers:'block'}),page=await context.newPage(),cdp=await context.newCDPSession(page),errors=[],checks=[];
 page.on('pageerror',e=>errors.push(e.message));
 const base=process.env.BASE_URL||'http://localhost:4175';await page.goto(base);
 let fixture=null;
