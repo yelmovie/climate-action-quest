@@ -15,7 +15,7 @@ function coastProfile(host,rec,icon){
   figure.className='coast-profile'+(rec.ran?' is-tested':'');
   figure.style.setProperty('--water-height',level/5*100+'%');
   figure.setAttribute('title','땅과 물을 같은 높이 기준으로 비교해요.');
-  figure.innerHTML=`<figcaption>${icon('water')}<span>${rec.ran?'푸른 선: 실험 수면':'점선: 예상 수면'}</span></figcaption><div class="coast-profile-land" role="img" aria-label="수위 ${level}단계. 같은 기준의 땅 높이: ${coastDistricts.map(d=>d.name+' '+d.height+'단계').join(', ')}. ${rec.ran?'땅 높이가 수위보다 낮거나 같은 곳에 물이 닿았어요.':'점선은 실험할 수위예요.'}"><div class="coast-profile-water" aria-hidden="true"></div>${coastDistricts.map(d=>`<div class="coast-profile-column" style="--land-height:${d.height/5*100}%"><div class="coast-profile-ground"><b>${d.height}</b></div></div>`).join('')}</div><div class="coast-profile-names" aria-hidden="true">${coastDistricts.map(d=>`<span>${d.name}</span>`).join('')}</div>`;
+  figure.innerHTML=`<figcaption>${icon('water')}<span>${rec.ran?'푸른 선: 실험 수면':'점선: 실험할 수위'}</span></figcaption><div class="coast-profile-land" role="img" aria-label="수위 ${level}단계. 같은 기준의 땅 높이: ${coastDistricts.map(d=>d.name+' '+d.height+'단계').join(', ')}. ${rec.ran?'땅 높이가 수위보다 낮거나 같은 곳에 물이 닿았어요.':'점선은 실험할 수위예요.'}"><div class="coast-profile-water" aria-hidden="true"></div>${coastDistricts.map(d=>`<div class="coast-profile-column" style="--land-height:${d.height/5*100}%"><div class="coast-profile-ground"><b>${d.height}</b></div></div>`).join('')}</div><div class="coast-profile-names" aria-hidden="true">${coastDistricts.map(d=>`<span>${d.name}</span>`).join('')}</div>`;
   target.replaceWith(figure);
   host.querySelectorAll('.flood-district').forEach(button=>{
     const district=coastDistricts.find(d=>d.id===button.dataset.predict);
@@ -26,7 +26,7 @@ function coastProfile(host,rec,icon){
 }
 
 function effectSteps(host,rec,icon){
-  const labels=['환경의 변화','공간·조건의 변화','사람·생물의 영향'];
+  const labels=['환경의 변화','생활·환경의 영향','필요한 대응'];
   const symbols=['water','map','shield'];
   host.querySelectorAll('.link-chain > .chain-arrow').forEach(arrow=>{arrow.innerHTML=icon('arrow');});
   host.querySelectorAll('[data-remove]').forEach((slot,i)=>{

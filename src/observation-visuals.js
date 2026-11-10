@@ -10,8 +10,11 @@ const resourcePaths=[
 ];
 const resourceIcon=n=>`<svg class="icon ov-resource-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${resourcePaths[n]}</svg>`;
 
+// Weather sites name their real short periods (어제·오늘, 요일) so a day's data never looks like a multi-year record.
+const periodsOf=site=>site.periods||['이전 여러 해','나중 여러 해'];
 function chart(site){
-  return `<div class="ov-legend"><span>이전</span><span>나중</span><small>0~${chartMaximum} · 상대 단계</small></div><div class="ov-chart" style="--ov-maximum:${chartMaximum}" role="img" aria-label="같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. 이전 기록 ${site.past.join(', ')}. 나중 기록 ${site.now.join(', ')}.">${site.past.map((value,i)=>`<div class="ov-pair"><div class="ov-bars"><div class="ov-column ov-past" style="--ov-value:${value}"><span>${value}</span><i></i></div><div class="ov-column ov-now" style="--ov-value:${site.now[i]}"><span>${site.now[i]}</span><i></i></div></div><span class="ov-group-label">${i+1}묶음</span></div>`).join('')}</div>`;
+  const [before,after]=periodsOf(site);
+  return `<div class="ov-legend"><span>${before}</span><span>${after}</span><small>${site.unit}<span class="ov-scale"> · 0~${chartMaximum} 단계</span></small></div><div class="ov-chart" style="--ov-maximum:${chartMaximum}" role="img" aria-label="${site.unit}. 같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. ${before} ${site.past.join(', ')}. ${after} ${site.now.join(', ')}.">${site.past.map((value,i)=>`<div class="ov-pair"><div class="ov-bars"><div class="ov-column ov-past" style="--ov-value:${value}"><span>${value}</span><i></i></div><div class="ov-column ov-now" style="--ov-value:${site.now[i]}"><span>${site.now[i]}</span><i></i></div></div><span class="ov-group-label">${site.groups?.[i]||`${i+1}묶음`}</span></div>`).join('')}</div>`;
 }
 
 /** Presentation only: source values and the activity's saved answers remain unchanged. */
@@ -22,6 +25,7 @@ export function enhanceObservation({host,index,rec,icon=()=>''}){
     const site=at(evidenceSites,rec.open),visual=document.createElement('div');
     visual.className='ov-chart-wrap';visual.innerHTML=chart(site);
     original.replaceWith(visual);data.classList.add('ov-data');
+    data.querySelector(':scope > p')?.remove();
     data.querySelector(':scope > .chart-legend')?.remove();
     data.querySelector('.period-label')?.remove();
     const sliderLabel=host.querySelector('.compare-slider')?.parentElement;
@@ -31,7 +35,8 @@ export function enhanceObservation({host,index,rec,icon=()=>''}){
       visual.style.setProperty('--ov-reveal',String(reveal));
       // Reveal the actual second record, never invent intermediate measurements.
       visual.querySelectorAll('.ov-now').forEach(el=>el.setAttribute('aria-hidden',String(reveal===0)));
-      visual.querySelector('.ov-chart').setAttribute('aria-label',reveal===0?`같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. 이전 기록 ${site.past.join(', ')}. 손잡이를 밀어 나중 기록을 비교해요.`:`같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. 이전 기록 ${site.past.join(', ')}. 나중 기록 ${site.now.join(', ')}.`);
+      const [before,after]=periodsOf(site);
+      visual.querySelector('.ov-chart').setAttribute('aria-label',reveal===0?`${site.unit}. 같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. ${before} ${site.past.join(', ')}. 손잡이를 밀어 ${after} 기록을 비교해요.`:`${site.unit}. 같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. ${before} ${site.past.join(', ')}. ${after} ${site.now.join(', ')}.`);
     };
     update();host.querySelector('.compare-slider')?.addEventListener('input',update);
   }

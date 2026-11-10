@@ -598,3 +598,4 @@ img { max-width: 100%; }
 /* Notched phones in landscape (viewport-fit=cover): keep edge controls clear of the cut-out and home bar. 0 on tablets. */
 .screen-hud { left: max(var(--edge), env(safe-area-inset-left, 0px)); right: max(var(--edge), env(safe-area-inset-right, 0px)); }
 #toast { bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
+.map-talking .map-repair:not([open]){visibility:hidden}

@@ -212,6 +212,8 @@
   .activity-1 .judgment-heading .observation-art { display: none; }
   .activity-1 .judgment-heading .eyebrow { font-size: 14px; }
   .activity-1 .ov-chart { --ov-unit: 5px; padding-top: 16px; }
+  .activity-1 .ov-legend { gap: 2px 8px; }
+  .activity-1 .ov-scale { display: none; }
   .activity-1 .comparison-data.ov-data { padding: 2px; margin-top: 4px; gap: 2px; }
   .activity-1 .ov-evidence-clue { padding: 4px; }
   .activity-1 .evidence-card h2 { font-size: 18px; }
