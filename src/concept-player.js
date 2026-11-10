@@ -1,3 +1,4 @@
+import {voiceControl} from './narration.js';
 import {bindConceptFocus} from './concept-focus.js';
 import {concepts,CONCEPT_DURATION,CONCEPT_CUES} from './concept-data.js';
 
@@ -5,6 +6,7 @@ import {concepts,CONCEPT_DURATION,CONCEPT_CUES} from './concept-data.js';
 export function openConcept({index,dialog,audio,icon,next,label,reward=''}){
  const clip=concepts[index],base=`/assets/concepts/${clip.id}`;
  const d=dialog(`<header class="concept-heading"><span class="eyebrow">${reward||'발견을 움직임으로 다시 보기'} · ${CONCEPT_DURATION}초</span><h2>${clip.title}</h2></header><div class="concept-screen"><video playsinline muted preload="metadata" poster="${base}.webp" aria-label="${clip.title}"></video><img class="concept-end" src="${base}.webp" alt="${clip.title}의 마지막 장면" hidden><button class="button primary concept-play">${icon('play')} 영상 재생</button></div><div class="concept-explanation"><p class="concept-caption" role="status" aria-live="polite">${clip.cues[0]}</p><ol class="concept-fallback" hidden>${clip.cues.map(t=>`<li>${t}</li>`).join('')}</ol><div class="concept-timeline" aria-hidden="true">${clip.cues.map(()=>'<i></i>').join('')}</div></div><footer class="concept-actions"><button class="button secondary concept-pause" hidden>잠깐 멈춤</button><button class="button primary concept-next">${label} ${icon('arrow')}</button></footer>`,'concept-dialog');
+ if(index%2===1&&reward.endsWith('배지 획득!'))voiceControl(d.querySelector('.concept-heading'),`badge-${Math.floor(index/2)}`,{autoplay:true});
  const video=d.querySelector('video'),play=d.querySelector('.concept-play'),pause=d.querySelector('.concept-pause'),still=d.querySelector('.concept-end'),caption=d.querySelector('.concept-caption');
  let closed=false,failed=false,current=-1,formatFallback=false;let releaseFocus=()=>{};
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;

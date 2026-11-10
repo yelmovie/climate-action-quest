@@ -1,3 +1,4 @@
+import {voiceControl} from './narration.js';
 import {mountRepair} from './map-repair.js';
 import {world,nodePoint,projectPath,routeTo,isWalkable,inputVector} from './world.js';
 import {stages,chapterDone,stageOpen,certificateEligible} from './state.js';
@@ -40,7 +41,7 @@ export function mountMap(host,{state,save,go,icon,announce}){
  function destination(id){bubble.hidden=true;talking();target=id;free=null;route=routeTo(p,nodePoint(world.buildings.find(b=>b.stage===id).node));announce(`${stages[id]?.name||'중앙 작전실'}로 길을 따라 이동해요.`);}
  host.querySelectorAll('[data-building]').forEach(button=>button.onclick=()=>destination(Number(button.dataset.building)));
  host.querySelector('.map-action').onclick=()=>destination(next?.id??5);
- talk.onclick=()=>{bubble.hidden=!bubble.hidden;talking();bubble.textContent=next?`${done?`${stages[done-1].reward}${josa(stages[done-1].reward)} 잘 모았어요! `:''}이번 목적지는 ${next.name}! ${next.subtitle}. 건물 이름을 누르면 같이 걸어가요!`:'다섯 연구 기록이 모두 모였어요. 중앙 작전실에 보고하러 가요!';};
+ talk.onclick=()=>{bubble.hidden=!bubble.hidden;talking();bubble.textContent=next?`${done?`${stages[done-1].reward}${josa(stages[done-1].reward)} 잘 모았어요! `:''}이번 목적지는 ${next.name}! ${next.subtitle}. 건물 이름을 누르면 같이 걸어가요!`:'다섯 연구 기록이 모두 모였어요. 중앙 작전실에 보고하러 가요!';if(!bubble.hidden)voiceControl(bubble,`map-${next?.id??5}`,{autoplay:true});};
  // The repair panel is fixed above the map layer; step it aside while 잎새 is talking so the bubble is never covered.
  function talking(){host.classList.toggle('map-talking',!bubble.hidden);}
  function walkTo(e){const r=viewport.getBoundingClientRect(),q={x:(e.clientX-r.left-tx)/scale,y:(e.clientY-r.top-ty)/scale},near=projectPath(q);if(near.distance>90){announce('흙길이나 건물 이름을 눌러 주세요. 강과 건물 안은 걸을 수 없어요.');return;}bubble.hidden=true;talking();target=null;free=null;route=routeTo(p,near);}

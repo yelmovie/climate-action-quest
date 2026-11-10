@@ -1,5 +1,6 @@
+import {mountWelcomeVoice} from './welcome-voice.js';
 import { certificateFontStyle } from './certificate-font.js';
-import { mountWelcomeVoice } from './welcome-voice.js';
+import {configureNarration,voiceControl,stopNarration} from './narration.js';
 let welcomeCleanup = () => {};
 import {VERSION,SAVE_KEY,stages,createSaveSession,freshState,stageOpen,activityOpen,chapterDone,certificateEligible} from './state.js';
 import {icon} from './icons.js';
@@ -14,6 +15,7 @@ let storage;try{storage=window.localStorage;}catch{storage={getItem:()=>null,set
 const loaded=createSaveSession(storage);let studentState=null;let state=loaded.state,cleanup=()=>{},activeRoute='',toastTimer,saveWarning=false;
 let resumeActivity=state.route.startsWith('activity/')?Number(state.route.split('/')[1]):null;
 const audio=createAudio(storage),asset=name=>`/assets/${name}.webp`,esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+configureNarration(audio);
 function announce(message){live.textContent='';requestAnimationFrame(()=>live.textContent=message);toast.textContent=message;toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.hidden=true,5500);}
 function storageNotice(message){
  let notice=document.querySelector('#save-protection');
@@ -27,7 +29,7 @@ function hud(home=false){return `<div class="screen-hud"><div class="hud-left">$
 function wireHud(){app.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>go(b.dataset.nav));app.querySelector('[data-back]')?.addEventListener('click',back);app.querySelector('[data-settings]')?.addEventListener('click',settings);app.querySelector('[data-sound]')?.addEventListener('click',e=>{audio.toggle();e.currentTarget.innerHTML=icon(audio.settings.bgm||audio.settings.sfx?'sound':'mute');e.currentTarget.setAttribute('aria-label',audio.settings.bgm||audio.settings.sfx?'전체 소리 끄기':'전체 소리 켜기');announce(audio.settings.bgm||audio.settings.sfx?'소리를 켰어요.':'전체 소리를 껐어요.');});}
 function back(){if(document.querySelector('dialog[open]')){document.querySelector('dialog[open]').close();return;}if(activeRoute.startsWith('activity/'))go('facility/'+Math.floor(Number(activeRoute.split('/')[1])/2));else if(activeRoute.startsWith('facility/')||activeRoute==='ending')go('map');else go('home');}
 function go(route){
- welcomeCleanup(); welcomeCleanup = () => {};
+ stopNarration(); welcomeCleanup(); welcomeCleanup = () => {};
  if(!/^(home|map|ending|facility\/[0-4]|activity\/[0-9])$/.test(route))route='home';
  if(route.startsWith('facility/')&&!stageOpen(state,Number(route.split('/')[1]))){announce('먼저 앞 연구를 마쳐 주세요.');route='map';}
  if(route.startsWith('activity/')&&!activityOpen(state,Number(route.split('/')[1]))){announce('앞 활동의 기록이 필요해요. 먼저 연구 기록을 모아 주세요.');route='map';}
@@ -67,7 +69,8 @@ function home(){
  const begun=Object.keys(state.records).length>0;
  const restored=stages.filter(s=>chapterDone(state,s.id)).length;
  app.innerHTML=`<section class="screen home-screen"><img class="home-art" src="${asset('home')}" alt="강과 초록 도시를 바라보는 따뜻한 기후 연구실"><div class="home-copy"><span class="home-tag">${icon('leaf')} 작은 발견이 모여, 더 나은 내일로</span><h1 class="home-title"><img class="home-logo" src="${asset('logo-title')}" alt="기후 미래 작전실"></h1><p class="hero-subtitle">관측하고, 실험하고, 도시를 설계해요.<br><strong>잎새·물방울과 함께 더 안전한 미래 도시를 만들어 봐!</strong></p><div class="hero-actions"><button class="button gold" id="start">${begun?'탐구 이어하기':'연구 시작하기'} ${icon('arrow')}</button><button class="button ghost" id="mission-story">${icon('book')} 어떤 모험인가요?</button></div>${begun?`<div class="home-progress" aria-label="완료한 연구 ${state.completed.length}개, 복구한 시설 ${restored}곳"><span class="home-progress-bar"><i style="width:${state.completed.length*10}%"></i></span><span>연구 ${state.completed.length} / 10 · 시설 복구 ${restored} / 5</span></div>`:''}</div><div class="home-cast" aria-hidden="true"><p class="home-bubble">${begun?'다음 연구 기록도 같이 모아 보자!':'같이 기후 단서를 찾아보자!'}</p><img class="home-squirrel" src="${asset('home-squirrel')}" alt=""><img class="home-otter" src="${asset('home-otter')}" alt=""></div>${hud(true)}</section>`;
- welcomeCleanup=mountWelcomeVoice(app.querySelector('.home-copy'),{caption:'기후 연구기지에 온 걸 환영해! 날씨와 기후의 차이를 알아보고, 관찰한 자료를 바탕으로 지구를 지킬 실천 방법을 찾아보자.',isMuted:()=>!audio.settings.sfx,duck:value=>audio.quiet(value)});
+ welcomeCleanup=mountWelcomeVoice(app.querySelector('.home-copy'),{caption:'기후 연구기지에 온 걸 환영해! 날씨와 기후의 차이를 알아보고, 관찰한 자료를 바탕으로 지구를 지킬 실천 방법을 찾아보자.'});
+ const panel=app.querySelector('.npc-welcome-voice'),greeting=voiceControl(panel,begun?'home-bubble-back':'home-bubble-new');greeting.textContent='잎새 인사 듣기';panel.querySelector('small').before(greeting);
  app.querySelector('#start').onclick=()=>{if(!state.introSeen)story(()=>{state.introSeen=true;save();go('map');});else go(resumeRoute());};
  app.querySelector('#mission-story').onclick=()=>story();
 }
@@ -78,7 +81,8 @@ function facility(id){
  app.querySelectorAll('[data-activity]').forEach(b=>b.onclick=()=>go('activity/'+b.dataset.activity));
  const clips=s.activities.map((name,j)=>({name,index:id*2+j})).filter(c=>state.completed.includes(c.index));
  if(clips.length){app.querySelector('.facility-activities').insertAdjacentHTML('beforeend',`<nav class="facility-clips" aria-label="완료한 탐구의 개념 영상">${clips.map((c,j)=>`<button class="button secondary" data-clip="${c.index}">${icon('play')} ${j===0?'첫 탐구':'다음 탐구'} 개념 영상</button>`).join('')}</nav>`);app.querySelectorAll('[data-clip]').forEach(b=>b.onclick=()=>openConcept({index:+b.dataset.clip,dialog,audio,icon,next:()=>{},label:'시설로 돌아가기'}));}
- const help=app.querySelector('.facility-help');app.querySelector('.guide-character').onclick=()=>{help.hidden=!help.hidden;help.textContent=`${s.subtitle}! 연구 카드를 순서대로 눌러 시작해 봐. 활동 중에 내 그림을 누르면 힌트를 볼 수 있어.`;};
+ const facilityVoice=voiceControl(app.querySelector('.facility-copy'),`facility-${id}`);
+ const help=app.querySelector('.facility-help');app.querySelector('.guide-character').onclick=()=>{help.hidden=!help.hidden;help.textContent=`${s.subtitle}! 연구 카드를 순서대로 눌러 시작해 봐. 활동 중에 내 그림을 누르면 힌트를 볼 수 있어.`;if(!help.hidden)facilityVoice.click();};
 }
 function activity(index){
  const s=stages[Math.floor(index/2)];
@@ -96,11 +100,12 @@ function activity(index){
  }});
 }
 function dialog(html,classes=''){
- const opener=document.activeElement,d=document.createElement('dialog');d.className='game-dialog '+classes;d.innerHTML=`<button class="dialog-close icon-button" aria-label="닫기">${icon('close')}</button><div class="dialog-body">${html}</div>`;document.body.append(d);d.querySelector('.dialog-close').onclick=()=>d.close();d.addEventListener('close',()=>{d.remove();if(opener?.isConnected)opener.focus({preventScroll:true});},{once:true});d.showModal();return d;
+ stopNarration();
+ const opener=document.activeElement,d=document.createElement('dialog');d.className='game-dialog '+classes;d.innerHTML=`<button class="dialog-close icon-button" aria-label="닫기">${icon('close')}</button><div class="dialog-body">${html}</div>`;document.body.append(d);d.querySelector('.dialog-close').onclick=()=>d.close();d.addEventListener('close',()=>{stopNarration();d.remove();if(opener?.isConnected)opener.focus({preventScroll:true});},{once:true});d.showModal();return d;
 }
 function story(after){
  const pages=[['끊어진 연구기지를 다시 연결해요','도시를 살펴보던 연구 기록이 흩어졌어요. 무엇이 달라졌는지, 어떤 준비가 필요한지 확인할 단서가 필요해요.','home'],['대원은 생각하고, 잎새는 함께 걸어요','관측하고 → 관련성을 찾고 → 영향을 실험해요. 생활의 선택을 비교한 뒤, 직접 설계한 도시를 시험해요.','village'],['다섯 기록이 모이면, 나만의 최종 보고!','연구를 마칠 때마다 지도 속 시설에 불빛이 켜져요. 기록을 모아 탐구 인증서를 완성해요. 현실의 기후 문제는 우리 실천으로 계속 대응해야 해요.','design']];let n=0;
- const d=dialog('','story-dialog');const body=d.querySelector('.dialog-body');function draw(){const p=pages[n];body.innerHTML=`<img class="story-art" src="${asset(p[2])}" alt=""><span class="eyebrow">잎새가 보낸 연구 의뢰 · ${n+1} / 3</span><h2>${p[0]}</h2><p>${p[1]}</p><button class="button primary story-next">${n===2?'연구기지로 출발!':'다음 이야기'} ${icon('arrow')}</button>`;body.querySelector('button').onclick=()=>{if(n<2){n++;draw();}else{d.close();after?.();}};}draw();
+ const d=dialog('','story-dialog');const body=d.querySelector('.dialog-body');function draw(){stopNarration();const p=pages[n];body.innerHTML=`<img class="story-art" src="${asset(p[2])}" alt=""><span class="eyebrow">잎새가 보낸 연구 의뢰 · ${n+1} / 3</span><h2>${p[0]}</h2><p>${p[1]}</p><button class="button primary story-next">${n===2?'연구기지로 출발!':'다음 이야기'} ${icon('arrow')}</button>`;body.querySelector('button').onclick=()=>{if(n<2){n++;draw();}else{d.close();after?.();}};voiceControl(body,`story-${n+1}`,{autoplay:true});}draw();
 }
 function settings(){
  const s=audio.settings;const paras=items=>items.map(t=>`<p>${esc(t)}</p>`).join('');
@@ -118,6 +123,7 @@ function confirmReset(){const d=dialog('<h2>탐구 기록을 초기화할까요?
 function ending(){
  app.innerHTML=`<section class="screen ending-screen"><img class="scene-bg" src="${asset('home')}" alt="다시 연결된 기후 미래 작전실"><div class="ending-copy"><span class="eyebrow">${state.finalized?'연구 대원의 마지막 기록':'다섯 연구 기록, 하나의 대응안'}</span><h1>${state.finalized?'우리의 탐구는 계속돼요':'다섯 연구 기록이 모두 연결됐어요'}</h1><p>${state.finalized?'모형 속 답을 찾았다면, 이제 생활 속 작은 실천을 이어가요.':'모은 발견으로 작전실을 켜고 탐구를 마무리해요.'}</p><div class="report-records" role="list" aria-label="연결한 다섯 연구 기록">${stages.map(s=>`<div class="report-record button secondary connected" data-record="${s.id}" role="listitem">${icon(s.icon)}<span>${s.reward}</span>${icon('check')}</div>`).join('')}</div><div class="final-actions"><button class="button primary" id="finalize">${state.finalized?'탐구 인증서 받기':'작전실 켜고 인증서 받기'} ${icon('trophy')}</button><button class="button secondary" id="back-map">연구기지 돌아보기</button></div></div>${hud()}</section>`;
 
+ voiceControl(app.querySelector('.ending-copy'),state.finalized?'ending-2':'ending-1');
  app.querySelector('#back-map').onclick=()=>go('map');app.querySelector('#finalize').onclick=()=>{if(!certificateEligible(state))return;state.finalized=true;save();audio.effect();certificate();};
 }
 function certificate(){if(state.adminUnlocked){announce("교사 미리보기에서는 인증서를 발급하지 않아요.");return;}if(!state.finalized||!certificateEligible(state))return;const d=dialog(`<div class="certificate"><div class="certificate-stamp">${icon('trophy')}</div><span class="eyebrow">기후 미래 작전실</span><h2>기후 미래 탐구 대원 인증서</h2><p>자료로 판단하고, 예상과 결과를 비교하며,<br>생활과 도시의 대응을 설계했어요.</p><div class="certificate-badges">${stages.map(s=>`<span>${icon(s.icon)} ${s.badge}</span>`).join('')}</div><p>내가 남긴 연구 기록</p><p class="certificate-summary">나의 실천: ${esc(researchHighlights()[0])}<br>${esc(researchHighlights()[1])}</p><p class="science-note">게임 속 탐구를 마친 기록이에요. 배운 것은 수업과 생활에서 계속 이어 가요.</p><strong>옐샘 & 아이스크림미디어</strong></div><button class="button primary" id="download-certificate">인증서 내려받기 ${icon('download')}</button>`,'certificate-dialog');d.querySelector('#download-certificate').onclick=downloadCertificate;}

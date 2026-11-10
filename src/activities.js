@@ -1,3 +1,5 @@
+import {voiceControl} from './narration.js';
+import {voiceLines} from './voice-lines.js';
 import {activityTitles,evidenceSites,humanSites,resourceNames,relationCases,coastDistricts,experimentLevels,effectChains,dailyCases,compareCaseIndices,facilities,cityDistricts,CITY_BUDGET} from './activity-data.js';
 import {activityGuide} from './activity-guide.js';
 import {bindManipulation} from './manipulation.js';
@@ -96,6 +98,7 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
     controller?.abort();controller=new AbortController();
     [scanEvidence,judgeEvidence,scanHuman,linkRelations,waterExperiment,orderEffects,dailyChoice,compareChoices,designCity,stressTest][index]();
     enhance();
+    const retry=`retry-${index}`;if(voiceLines[retry]&&rec.feedback===voiceLines[retry].text)voiceControl(host.querySelector('.guide-message'),retry,{autoplay:true});
     presentActivity();
     playback?.refresh();
     host.querySelectorAll('.choice-card,.flood-district,.scan-hotspot,.facility-button,[data-district]').forEach(el=>el.setAttribute('aria-pressed',String(el.classList.contains('selected')||el.classList.contains('correct'))));
@@ -108,7 +111,7 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
     on('.guide-avatar','click',()=>{
       playback?.pause();const help=host.querySelector('.activity-help'),tools=host.closest('.screen')?.querySelector('.teacher-dock');
       if(tools&&!help.contains(tools)){const title=document.createElement('h3');title.textContent='교사 단계 이동';help.append(title,tools);}
-      help.showModal();effect('hint');
+      help.showModal();effect('hint');help.querySelectorAll('.voice-replay,.voice-status').forEach(el=>el.remove());voiceControl(help,index===4?`hint-4${rec.ran?'b':'a'}`:`hint-${index}`,{autoplay:true});
     });
     on('.help-close','click',()=>host.querySelector('.activity-help').close());
     on('[data-playback]','click',()=>playback.toggle());
