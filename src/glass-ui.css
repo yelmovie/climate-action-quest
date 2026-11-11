@@ -1,9 +1,9 @@
 /* Translucent classroom UI. Keep typography opaque and preserve semantic states. */
 :root { --glass-surface: rgba(251,255,247,.76); --glass-control: rgba(252,255,249,.84); --glass-reading: rgba(252,255,248,.94); --glass-line: rgba(58,100,78,.28); }
-html body :is(.activity-card,.facility-help,.map-next-card,.notice,.science-note,.evidence-card,.comparison-card,.screen-chip) { background-color:var(--glass-surface); background-image:none; border-color:var(--glass-line); box-shadow:0 8px 24px rgba(24,64,47,.1),inset 0 1px 0 rgba(255,255,255,.65); -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }
-html body :is(.button,.icon-button,.choice-card,.dpad button):not(.primary):not(.gold):not(.golden):not(.selected):not(.active):not(.correct):not(.wrong):not([aria-pressed="true"]) { background-color:var(--glass-control); background-image:none; border-color:var(--glass-line); box-shadow:0 3px 10px rgba(24,64,47,.13),inset 0 1px 0 rgba(255,255,255,.8); -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px); }
+html body :is(.activity-card,.facility-help,.map-next-card,.notice,.science-note,.evidence-card,.comparison-card,.screen-chip) { background-color:var(--glass-surface)!important; background-image:none!important; border-color:var(--glass-line); box-shadow:0 8px 24px rgba(24,64,47,.1),inset 0 1px 0 rgba(255,255,255,.65); -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px); }
+html body :is(.button,.icon-button,.choice-card,.dpad button):not(.primary):not(.gold):not(.golden):not(.selected):not(.active):not(.correct):not(.wrong):not([aria-pressed="true"]) { background-color:var(--glass-control)!important; background-image:none!important; border-color:var(--glass-line); box-shadow:0 3px 10px rgba(24,64,47,.13),inset 0 1px 0 rgba(255,255,255,.8); -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px); }
 html body :is(dialog,.dialog-body,.activity-help,.certificate) { background-color:var(--glass-reading); background-image:none; border-color:var(--glass-line); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); }
-html body :is(.button.primary,.start-button) { background-color:rgba(28,94,78,.94); color:#fff; border-color:rgba(18,65,51,.6); box-shadow:0 4px 12px rgba(18,65,51,.22); }
+html body :is(.button.primary,.start-button) { background-color:rgba(28,94,78,.94)!important; color:#fff; border-color:rgba(18,65,51,.6); box-shadow:0 4px 12px rgba(18,65,51,.22); }
 html body :is(button,a,input,summary):focus-visible { outline:3px solid #194f91; outline-offset:3px; }
 @supports not (backdrop-filter:blur(1px)) { :root { --glass-surface:rgba(251,255,247,.92); --glass-control:rgba(252,255,249,.96); } }
 @media(prefers-reduced-transparency:reduce) { :root { --glass-surface:#fbfff7; --glass-control:#fcfff9; --glass-reading:#fcfff8; } }
@@ -22,3 +22,9 @@ html body .map-navigation {background:rgba(251,255,247,.76);backdrop-filter:blur
  .map-next-card .map-action{grid-column:2;grid-row:1/3;font-size:16px;padding:8px}
 }
 #map-viewport.overview .companion-talk{left:92%!important;top:82%!important}
+
+/* Consistent card geometry; puzzle grids retain their meaningful joins. */
+html body #app :is(.chapter-card,.specimen-card,.role-card,.strategy-card,.measurement-card,.gas-card,.part-card,.activity-card,.choice-card,.evidence-card,.comparison-card){border-radius:18px}
+html body #app :is(.world-panel,.work-area,.observation-note,.compare-panel,.lab-panel,.map-next-card){border-radius:22px}
+html body #app :is(.role-grid,.classification-grid,.strategy-grid,.settings-replays,.research-book){gap:12px}
+html body #app :is(.button,.choice,.icon-button){border-radius:14px}
