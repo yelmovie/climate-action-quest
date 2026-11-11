@@ -11,6 +11,14 @@ const browser=await chromium.launch({executablePath:process.env.CHROME||'/Applic
 const result={base,load:[],layout:[],errors:[]};
 async function firstLoad(label,throttle){
  const context=await browser.newContext({viewport:{width:1280,height:800},serviceWorkers:'block'}),page=await context.newPage();
+ await page.addInitScript(()=>{
+  window.bootPlaceholderObserved=false;
+  const observer=new MutationObserver(()=>{
+   if(document.querySelector('.boot'))window.bootPlaceholderObserved=true;
+   if(document.querySelector('#start'))observer.disconnect();
+  });
+  observer.observe(document,{childList:true,subtree:true});
+ });
  page.on('pageerror',e=>result.errors.push(label+': '+e.message));
  const cdp=await context.newCDPSession(page);await cdp.send('Network.enable');await cdp.send('Network.setCacheDisabled',{cacheDisabled:true});
  if(throttle)await cdp.send('Network.emulateNetworkConditions',{offline:false,latency:40,downloadThroughput:20e6/8,uploadThroughput:5e6/8});
@@ -18,9 +26,8 @@ async function firstLoad(label,throttle){
  cdp.on('Network.responseReceived',e=>{seen.set(e.requestId,e.response.url);if(!e.response.url.startsWith(base)&&!e.response.url.startsWith('data:'))external.push(e.response.url);});
  cdp.on('Network.loadingFinished',e=>{bytes+=e.encodedDataLength;requests++;});
  const t0=Date.now();await page.goto(base+'/',{waitUntil:'commit'});
- await page.locator('.boot').waitFor({state:'attached',timeout:5000}).catch(()=>{});
- const bootShown=await page.locator('.boot').count();
  await page.locator('#start').waitFor({state:'visible'});const startVisible=Date.now()-t0;
+ const bootShown=await page.evaluate(()=>window.bootPlaceholderObserved);
  await page.evaluate(()=>Promise.all([document.fonts.ready,...[...document.images].map(i=>i.complete?0:i.decode().catch(()=>{}))]));const artReady=Date.now()-t0;
  const bytesAtStart=bytes;
  await page.waitForLoadState('networkidle');const idle=Date.now()-t0;
@@ -28,7 +35,7 @@ async function firstLoad(label,throttle){
  result.load.push({label,startVisibleMs:startVisible,artReadyMs:artReady,networkIdleMs:idle,bytesAtStart,bytesAtIdle:bytes,requests,bootPlaceholder:bootShown>0,laterStageAssetsFetched:urls,external});
  await context.close();
 }
-await firstLoad('local',false);
+await firstLoad('unthrottled',false);
 await firstLoad('school-wifi-20mbps',true);
 // Layout: title, story dialog, map. The activity screens are covered by check-responsive.mjs.
 const sizes=[[1280,800],[1920,1080],[1024,768],[915,412],[1024,600],[830,515]];
