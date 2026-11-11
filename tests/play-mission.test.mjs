@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import{evaluate}from'../src/play-mission-model.js';
+test('alternative adaptation designs and budget',()=>{assert.equal(evaluate([],0).ok,false);assert.equal(evaluate(['park','park'],0).ok,true);assert.equal(evaluate(['roof','roof','roof'],0).ok,true);assert.equal(evaluate(Array(6).fill('park'),0).ok,false);});
+test('adaptation and mitigation are distinct',()=>{assert.equal(evaluate(['park','park','wetland','wetland'],1).ok,true);assert.equal(evaluate(['park','park','wetland','wetland'],2).ok,false);assert.equal(evaluate(['park','park','wetland','wetland','bus'],2).ok,true);assert.equal(evaluate(['bus','solar'],2).ok,false);});
