@@ -126,3 +126,17 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 - 원본: https://campaign.naver.com/nanumsquare_neo/download/NaverNanumSquareNeo.zip
 - 라이선스: SIL Open Font License 1.1. 전체 저작권 안내·전문은 `fonts/NanumSquareNeo-OFL.txt`.
 - 기존 영상·삽화에 포함된 글자는 영상 제작 당시 글꼴을 유지한다.
+
+## 과학 개념 장면 보강 · 2026-11-12
+
+사용자의 교육게임 고도화 요청에 따라 Codex 내장 `image_gen`으로 해안 지형, 많은 비의 영향과 안전한 이동, 하루의 눈 관찰 장면 3장을 생성했다. 그림은 글자 없이 만들고 설명·개념 강조·조작 안내는 HTML로 제공한다.
+
+| 적용 파일 | 용도 |
+|---|---|
+| `assets/concept-art/scene-coast-landscape.webp` | 해안 모형의 공간 이해와 영향 활동 도움말 |
+| `assets/concept-art/scene-rain-safety.webp` | 낮은 길에 고인 빗물과 높은 길로 안전하게 이동하는 대응 |
+| `assets/concept-art/scene-snow-day.webp` | 하루의 눈과 긴 기간 기록을 구별하는 관측·판단 |
+
+원본은 `references/generated/concept-art/`에 보존한다. 배포 파일은 960×540 WebP이며 세 장 합계 410,492바이트다. 생성 프롬프트·원본·이용 조건 확인 사항은 `docs/generated-prompts-learning-20261112.json`, 크기·해시는 `docs/concept-art-manifest.json`에 기록했다. 그림과 실제 활동 화면을 직접 확인했다.
+
+`evidence`·`effects` 영상의 장면 그림을 적용하고 `observe` 영상의 누락된 단위 문구를 복구해 기존 HyperFrames 제작 경로로 다시 렌더링했다. 모형 수면과 그래프는 계산된 자료로 표현한다. 생성 장면의 수위·날씨·배치는 수치 판정에 사용하지 않는다.

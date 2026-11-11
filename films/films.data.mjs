@@ -42,17 +42,15 @@ export const films = [
   })(),
   (() => { // 1 증거 판독실
     const s = site('warm'), c = longChart('ev', s, { x: 620, base: 540, step: 62, width: 58, gap: 20 });
-    const flakes = [[70, 210], [150, 250], [235, 205], [320, 260], [395, 215], [120, 330], [280, 340], [360, 320]];
     return {
       id: 'evidence', cast: 'otter', question: '눈이 온 날, 기후가 바뀐 걸까?', conclusion: '기후는 **긴 기간**의 기록으로 판단해요',
-      css: '.cloud{position:absolute;background:#fff;border:5px solid #9DB8C4;border-radius:999px}.flake{position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;border:4px solid #8FB4C4}',
-      body: `<div id="ev-card" class="panel" style="left:0;top:40px;width:470px;height:540px"><div class="cloud" style="left:70px;top:70px;width:330px;height:120px"></div><div class="cloud" style="left:150px;top:40px;width:150px;height:110px;border-bottom-color:#fff"></div>` +
-        flakes.map(([x, y], i) => `<i id="ev-f${i}" class="flake" style="left:${x}px;top:${y}px"></i>`).join('') + `<p class="note" style="left:30px;top:460px;opacity:.9;font-size:38px">오늘의 눈</p></div>` +
+      body: img('ev-card', 'scene-snow-day', 0, 80, 500, 360) +
+        `<p class="note" style="left:40px;top:470px;opacity:.95;font-size:38px">오늘의 눈</p>` +
         `<div id="ev-panel" class="panel" style="left:540px;top:0;width:760px;height:640px"></div><i id="ev-axis" class="axis" style="left:575px;top:540px;width:700px"></i>` + c.html +
         `<p id="ev-note" class="note" style="left:600px;top:560px">${s.unit} · 탐구용 가상 기록</p>` +
         tag('ev-t1', 235, 580, '하루 날씨', { dir: 'down', len: 30 }) + tag('ev-t2', c.top(5, 5).x, c.top(7, 6).y, '여러 해 기록', { len: 80, hot: true, small: '기후를 판단해요' }) +
         tag('ev-t3', 930, 600, '같은 장소 · 같은 기준', { dir: 'down', len: 30 }),
-      js: show('#ev-card', 1.0, { opacity: 0, scale: .94 }) + flakes.map((_, i) => `tl.fromTo('#ev-f${i}',{y:-40,opacity:0},{y:${20 + (i % 3) * 14},opacity:1,duration:1.6,ease:'power1.inOut'},${1.4 + i * .18});`).join('') + tagIn('ev-t1', 3.2) +
+      js: show('#ev-card', 1.0, { opacity: 0, scale: .94 }) + tagIn('ev-t1', 3.2) +
         `tl.to('#ev-card',{opacity:.55,duration:.4},5.1);` + show('#ev-panel,#ev-axis', 5.2, { opacity: 0 }, .4) + growBars('evo', 4, 5.6, .14) + growBars('evn', 4, 6.4, .14) + show('#ev-note', 5.8, { opacity: 0 }, .4) +
         tagIn('ev-t2', 8.2) + tagIn('ev-t3', 8.9),
       zoom: { at: 7.5, scale: 1.06, x: 0, y: 0 },
@@ -98,17 +96,13 @@ export const films = [
       zoom: { at: 7.9, scale: 1.1, x: 20, y: 40 },
     };
   })(),
-  { // 5 영향 연쇄 분석 — 해안 도로 한 곳에서 변화 → 영향 → 대응
-    id: 'effects', cast: 'otter', question: '물이 도로에 들어오면 어떻게 될까?', conclusion: '변화 → **영향** → 대응을 이어요',
-    css: '.puddle{position:absolute;border-radius:50%;background:rgba(97,173,202,.62);border:6px solid #D4F2FB}.stop{position:absolute;width:110px;height:110px;border-radius:50%;background:#fff;border:12px solid #C2703F}.stop::after{content:"";position:absolute;left:12px;right:12px;top:37px;height:14px;background:#C2703F;border-radius:7px}.route{position:absolute;border:8px dashed #1E665B;border-left:0;border-bottom:0;border-radius:0 160px 0 0}',
-    body: `<div id="ef-road" class="obj" style="left:40px;top:150px;width:640px"><img src="assets/img/road.webp" alt=""></div><p id="ef-n0" class="note" style="left:60px;top:150px">해안 도로</p>` +
-      `<i id="ef-water" class="puddle" style="left:150px;top:400px;width:430px;height:170px"></i><i id="ef-stop" class="stop" style="left:420px;top:260px"></i>` +
-      `<i id="ef-route" class="route" style="left:600px;top:150px;width:360px;height:200px"></i><div id="ef-refuge" class="obj" style="left:880px;top:60px;width:400px"><img src="assets/img/refuge.webp" alt=""></div>` +
-      tag('ef-t1', 300, 500, '물이 들어와요', { dir: 'down', len: 50, small: '변화' }) + tag('ef-t2', 475, 260, '지나기 어려워요', { len: 70, small: '영향' }) + tag('ef-t3', 1080, 360, '안전한 다른 길', { dir: 'down', len: 60, hot: true, small: '대응' }),
-    js: show('#ef-road', 1.1, { opacity: 0, y: 30 }, .7) + show('#ef-n0', 2.2, { opacity: 0 }, .4) +
-      `tl.fromTo('#ef-water',{opacity:0,scale:.2},{opacity:1,scale:1,duration:1.0,ease:'power1.inOut'},5.2);` + tagIn('ef-t1', 5.9) +
-      `tl.fromTo('#ef-stop',{opacity:0,scale:.5},{opacity:1,scale:1,duration:.35,ease:'back.out(1.6)'},6.5);` + tagIn('ef-t2', 6.9) +
-      `tl.fromTo('#ef-route',{opacity:0,clipPath:'inset(0 100% 0 0)'},{opacity:1,clipPath:'inset(0 0% 0 0)',duration:.7,ease:'power2.inOut'},7.5);` + show('#ef-refuge', 7.9, { opacity: 0, y: 20 }, .5) + tagIn('ef-t3', 8.5),
+  { // 5 영향 연쇄 분석 — 많은 비 사례에서 변화 → 영향 → 대응
+    id: 'effects', cast: 'otter', question: '물이 고인 길, 어떻게 해야 할까?', conclusion: '변화 → **영향** → 대응을 이어요',
+    body: img('ef-scene', 'scene-rain-safety', 0, 0, 1300, 690) +
+      tag('ef-t1', 260, 520, '낮은 길에 물이 고여요', { len: 110, small: '변화' }) +
+      tag('ef-t2', 590, 330, '지나기 어려워요', { len: 110, small: '영향' }) +
+      tag('ef-t3', 1070, 300, '어른과 안전한 길로', { dir: 'down', len: 190, hot: true, small: '대응' }),
+    js: show('#ef-scene', .8, { opacity: 0 }, .5) + tagIn('ef-t1', 2.0) + tagIn('ef-t2', 5.5) + tagIn('ef-t3', 8.0),
   },
   { // 6 오늘의 기후 선택 — 더운 날 쉬는 시간(dailyCases[4])
     id: 'choices', cast: 'squirrel', question: '더운 날, 전기를 아끼려고 참을까?', conclusion: '**건강과** 안전을 먼저 지켜요',

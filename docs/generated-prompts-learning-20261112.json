@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-12",
+  "tool": "built-in image_gen",
+  "transparentBackground": false,
+  "assets": [
+    {
+      "id": "scene-coast-landscape",
+      "prompt": "Use case: scientific-educational. Create ONE landscape illustration asset for a Korean elementary climate inquiry game, aspect ratio 16:9. A single coherent coastal village scene seen from a gentle elevated three-quarter view. Calm blue seawater reaches a low coastal road and the lowest edge of a sandy beach beside a reed wetland. A few seaside houses are farther inland on visibly higher gently rising terrain, and a school and leafy park stand on the dry upper hill. Emphasize the spatial relation between low coastal land, water, and a safe higher inland route. Water remains calm, no storm clouds and no falling rain, no dramatic disaster, no harmed people. Friendly polished storybook game art, soft painterly 2.5D forms, crisp readable silhouettes, natural greens and cool turquoise water, neutral daylight, no sepia or yellow cast. Whole scene is one connected landscape with no panels, no collage, no UI. No text, no letters, no numbers, no arrows, no icons, no watermark. Include adequate margins and a clear water-land boundary. This is an illustrative coastal setting, not a map of a real location or a numeric prediction.",
+      "source": "/Users/yel/.codex/generated_images/01a1cb04-d34a-7e91-b4f7-bec8aeb44f9a/exec-80937234-50ba-4f29-82e1-525b9044bf71.png",
+      "output": "assets/concept-art/scene-coast-landscape.webp",
+      "original": "references/generated/concept-art/scene-coast-landscape.png",
+      "purpose": "해안 지형을 살피는 설명용 장면. 수치 판정과 독립.",
+      "review": "직접 시각 확인. 글자 없음. 특정 지역의 예측이 아닌 교육용 일러스트.",
+      "rights": "이번 대화의 사용자 요청으로 OpenAI 기본 이미지 생성 도구에서 생성. 계정 이용 조건은 납품자가 최종 확인."
+    },
+    {
+      "id": "scene-rain-safety",
+      "prompt": "Use case: scientific-educational. ONE landscape illustration, aspect ratio 16:9, for a Korean elementary climate inquiry game. A single unified inland neighborhood on a rainy day. Show rain visibly falling and rainwater pooled across a LOW road in the lower-left foreground, a shallow flooded underpass farther left, and a clear road closure barrier separating it from a HIGHER DRY pedestrian path on the right. On the higher path, a teacher-like adult accompanies two fully clothed schoolchildren walking AWAY from the flooded road toward a dry community shelter uphill. All people must be safely well away from the water and behind the barrier, no wading, no driving in floodwater, no lightning, no injury, no panic. Show rising ground clearly. No sea or ocean in this inland scene. Polished friendly 2.5D storybook game illustration, soft painterly rendering and crisp readable shapes, natural greens, soft cool blue rain and neutral daylight, no sepia or yellow tint. Whole scene one connected landscape, not panels or a collage. No words, no letters, no numbers, no arrows, no speech bubbles, no logos, no watermark. Adequate margin, readable at small tablet scale.",
+      "source": "/Users/yel/.codex/generated_images/01a1cb04-d34a-7e91-b4f7-bec8aeb44f9a/exec-21c7d07f-fa00-497e-994e-89bb7d72ec8b.png",
+      "output": "assets/concept-art/scene-rain-safety.webp",
+      "original": "references/generated/concept-art/scene-rain-safety.png",
+      "purpose": "많은 비의 영향과 안전한 높은 길로 이동하는 대응",
+      "review": "직접 시각 확인. 글자 없음. 특정 지역의 예측이 아닌 교육용 일러스트.",
+      "rights": "이번 대화의 사용자 요청으로 OpenAI 기본 이미지 생성 도구에서 생성. 계정 이용 조건은 납품자가 최종 확인."
+    },
+    {
+      "id": "scene-snow-day",
+      "prompt": "Use case: scientific-educational. Create ONE 16:9 landscape illustration for an elementary climate inquiry game. A familiar Korean school courtyard on ONE snowy day, a small weather observation station near trees, snowflakes visibly falling, a modest covering of fresh snow on school roof, lawn and tree branches, paved footpath cleared and safe. Clear view of the local school and the falling snow as a short-term weather observation. No planet Earth, no ice age imagery, no charts, no dramatic blizzard. No people required. Polished friendly hand-painted 2.5D storybook game art matching a green coastal research village, soft natural forms and crisp silhouettes, neutral cool daylight, blue sky partly overcast, clean white snow, natural greens, no yellow tint or sepia. One coherent connected landscape, no panels, no collage. No text, no letters, no numbers, no arrows, no UI, no logos, no watermark. Adequate margins, focus on readable snowy courtyard.",
+      "source": "/Users/yel/.codex/generated_images/01a1cb04-d34a-7e91-b4f7-bec8aeb44f9a/exec-91e5c284-32ad-42cb-acd5-994f70ae3084.png",
+      "output": "assets/concept-art/scene-snow-day.webp",
+      "original": "references/generated/concept-art/scene-snow-day.png",
+      "purpose": "하루의 눈 관찰과 여러 해 기록 비교",
+      "review": "직접 시각 확인. 글자 없음. 특정 지역의 예측이 아닌 교육용 일러스트.",
+      "rights": "이번 대화의 사용자 요청으로 OpenAI 기본 이미지 생성 도구에서 생성. 계정 이용 조건은 납품자가 최종 확인."
+    }
+  ]
+}

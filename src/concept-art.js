@@ -13,6 +13,9 @@ const objects={
   school:'운동장이 있는 학교',
 };
 const scenes={
+  'coast-landscape':'낮은 해안과 높은 언덕이 이어진 마을의 설명용 그림',
+  'rain-safety':'많은 비로 물이 고인 낮은 길을 피해 어른과 높은 길로 이동하는 장면',
+  'snow-day':'눈이 내리는 하루의 학교와 관측 장면',
   observe:'날씨를 꾸준히 관측하는 기상 관측소',
   classroom:'아무도 없는 교실에 켜져 있는 조명',
   commute:'자동차와 버스, 보행자가 함께 있는 등굣길',
@@ -35,8 +38,8 @@ export const conceptArt=Object.freeze(Object.fromEntries([
 export const dailyArt=['scene-home','scene-commute','scene-classroom','scene-meal','scene-heat','scene-reuse','scene-repair','scene-cooling','scene-bottle','scene-power'];
 export const humanArt=['scene-classroom','scene-commute','scene-cooling','scene-workshop','scene-forest','scene-meal','scene-commute','scene-repair','park','scene-power'];
 // A place illustration is context, not a generated prediction of flooding or drought.
-export const effectArt=['road','wetland','homes','beach','scene-heat','scene-drought','road','park'];
-export const chapterArt=['scene-observe','scene-classroom','beach','scene-home','trees'];
+export const effectArt=['road','wetland','homes','beach','scene-heat','scene-drought','scene-rain-safety','park'];
+export const chapterArt=['scene-observe','scene-classroom','scene-coast-landscape','scene-home','trees'];
 const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function artImage(id,className='',decorative=false){
   const art=conceptArt[id];if(!art)return '';

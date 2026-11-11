@@ -340,6 +340,57 @@
       "model": "not disclosed",
       "generated": "2026-11-08",
       "usage": "Observation notebook and chapter illustration; depicts instruments, not climate evidence or measured data"
+    },
+    {
+      "id": "scene-coast-landscape",
+      "kind": "scene",
+      "src": "assets/concept-art/scene-coast-landscape.webp",
+      "original": "references/generated/concept-art/scene-coast-landscape.png",
+      "width": 960,
+      "height": 540,
+      "bytes": 134812,
+      "hasAlpha": false,
+      "sourceWidth": 1672,
+      "sourceHeight": 941,
+      "sourceSha256": "9dda6c8257d823b277d5b9146e4cb6e0769469f21172eeac0bfbb7aae29cb1ef",
+      "sourceType": "generated",
+      "generatedOn": "2026-11-12",
+      "tool": "built-in image_gen",
+      "promptRecord": "docs/generated-prompts-learning-20261112.json"
+    },
+    {
+      "id": "scene-rain-safety",
+      "kind": "scene",
+      "src": "assets/concept-art/scene-rain-safety.webp",
+      "original": "references/generated/concept-art/scene-rain-safety.png",
+      "width": 960,
+      "height": 540,
+      "bytes": 142422,
+      "hasAlpha": false,
+      "sourceWidth": 1672,
+      "sourceHeight": 941,
+      "sourceSha256": "51e23306a0b91f26d8100cfa6aedcc2ea301f11b26512da8bbdbf67ece1eb68b",
+      "sourceType": "generated",
+      "generatedOn": "2026-11-12",
+      "tool": "built-in image_gen",
+      "promptRecord": "docs/generated-prompts-learning-20261112.json"
+    },
+    {
+      "id": "scene-snow-day",
+      "kind": "scene",
+      "src": "assets/concept-art/scene-snow-day.webp",
+      "original": "references/generated/concept-art/scene-snow-day.png",
+      "width": 960,
+      "height": 540,
+      "bytes": 133258,
+      "hasAlpha": false,
+      "sourceWidth": 1672,
+      "sourceHeight": 941,
+      "sourceSha256": "21d3a4f4f0a8e5f8a8d5414d6af58cfe12394a4701da37ccea7abdc70af85a8f",
+      "sourceType": "generated",
+      "generatedOn": "2026-11-12",
+      "tool": "built-in image_gen",
+      "promptRecord": "docs/generated-prompts-learning-20261112.json"
     }
   ]
 }

@@ -11,9 +11,9 @@ let chromium;try{({chromium}=require('playwright-core'));}catch{({chromium}=requ
 const out='.tmp/concept-art-check';await mkdir(out,{recursive:true});
 const base=process.env.BASE_URL||'http://localhost:4175',checks=[],errors=[],failedAssets=[],requests=[];
 const manifest=JSON.parse(await readFile('docs/concept-art-manifest.json','utf8'));
-assert.equal(Object.keys(conceptArt).length,25,'all planned illustrations are registered');
+assert.equal(Object.keys(conceptArt).length,28,'all planned illustrations are registered');
 // The manifest also keeps retired versions (scene-observe v1 → v2, 2026-11-08); each registered file must be listed.
-assert.ok(manifest.assets.length>=25,'all planned illustrations were optimized');
+assert.ok(manifest.assets.length>=28,'all planned illustrations were optimized');
 for(const [id,art] of Object.entries(conceptArt)){
  const file=resolve('.'+art.src),entry=manifest.assets.find(a=>'/'+a.src===art.src);
  assert.ok(entry,'optimization manifest contains '+id);
@@ -23,7 +23,7 @@ for(const [id,art] of Object.entries(conceptArt)){
  if(art.kind==='object')assert.equal(entry.hasAlpha,true,'object retains transparency: '+id);
 }
 assert.deepEqual((await readdir('assets/concept-art')).filter(f=>f.endsWith('.png')),[],'large source PNGs remain outside deployed assets');
-checks.push('25 optimized assets match the manifest; objects retain alpha and source PNGs are not shipped');
+checks.push('28 optimized assets match the manifest; objects retain alpha and source PNGs are not shipped');
 
 const browser=await chromium.launch({executablePath:process.env.CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--no-sandbox'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
 const context=await browser.newContext({viewport:{width:1280,height:800},serviceWorkers:'block'}),page=await context.newPage();
@@ -61,6 +61,26 @@ try{
  for(const index of [0,1]){await fixture(index);await rendered('scene-observe');}
  checks.push('observation and evidence judgment display the weather observation context');
 
+ for(const index of [0,1]){await fixture(index,index===0?{open:2}:{round:2});await rendered('scene-snow-day');}
+ checks.push('the short snowy-day records use the newly generated local weather illustration');
+
+ for(let index=0;index<10;index++){
+  await fixture(index);
+  const concept=page.locator('.learning-key');
+  assert.ok(await concept.isVisible(),'visible scientific concept on activity '+index);
+  assert.ok((await concept.locator('strong').textContent()).trim(),'emphasized concept on activity '+index);
+  await page.locator('.guide-avatar').click();
+  const help=page.locator('.activity-help');
+  for(const heading of ['기억할 개념','내 말로 설명해 봐요','다음 탐구와 연결해요'])assert.ok(await help.getByRole('heading',{name:heading,exact:true}).isVisible(),heading+' '+index);
+  if(index===4){await rendered('scene-coast-landscape',help);assert.match(await help.textContent(),/밀물·파도·둑/);}
+  await page.locator('.help-close').click();
+ }
+ checks.push('all ten activities expose the concept, explanation prompt and next-learning bridge; coastal model limits are readable');
+
+ await fixture(5,{round:6,order:[],chains:[]});await rendered('scene-rain-safety');
+ await page.screenshot({path:out+'/rain-safety-learning.png'});
+ checks.push('heavy rain impact uses the newly generated safe-route scene');
+
  const daily=['scene-home','scene-commute','scene-classroom','scene-meal','scene-heat','scene-reuse','scene-repair','scene-cooling','scene-bottle','scene-power'];
  for(let round=0;round<daily.length;round++){await fixture(6,{round,choices:[]});await rendered(daily[round],page.locator('.daily-scene'));assert.equal(await page.locator('.daily-scene img.concept-art').count(),1,'one scene for daily situation '+round);}
  checks.push('all 10 daily situations display the matching scene instead of the shared bedroom');
@@ -95,9 +115,9 @@ try{
 
  // This deliberate library-wide decode happens last, after demand-loading assertions.
  const decoded=await page.evaluate(async entries=>Promise.all(entries.map(async ([id,art])=>{const image=new Image();image.src=art.src;await image.decode();return {id,width:image.naturalWidth,height:image.naturalHeight};})),Object.entries(conceptArt));
- assert.equal(decoded.length,25);assert.ok(decoded.every(image=>image.width>0&&image.height>0));
+ assert.equal(decoded.length,28);assert.ok(decoded.every(image=>image.width>0&&image.height>0));
  assert.deepEqual(failedAssets,[]);assert.deepEqual(errors,[]);
- checks.push('all 25 shipped images decode successfully with no missing art requests or page errors');
+ checks.push('all 28 shipped images decode successfully with no missing art requests or page errors');
  await writeFile(out+'/art.json',JSON.stringify({checks,decoded,errors,failedAssets},null,2)+'\n');
  console.log(JSON.stringify({passed:checks.length,checks,errors,failedAssets},null,2));
 }catch(error){console.error('Concept art validation failed:',error);await page.screenshot({path:out+'/failure.png',timeout:5000}).catch(()=>{});throw error;}finally{await browser.close();}

@@ -12,6 +12,10 @@
 .activity-heading { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; min-height: 60px; width: fit-content; max-width: calc(100% - 248px); margin: 0 auto; padding: 4px 16px; }
 .activity-heading h1 { margin: 0; font-size: clamp(22px,min(2.25vw,3.7dvh),40px); line-height: 1.2; }
 .activity-heading .round-progress { flex: none; margin: 0; padding: 1px 8px; font-size: clamp(14px,1vw,18px); line-height: 1.25; }
+.activity-heading .learning-key { display: block; margin: 2px 0 0; font-size: clamp(16px,1.1vw,20px); line-height: 1.3; color: var(--ink); }
+.learning-key strong { color: var(--forest-dark); background: var(--mint); padding: 1px 4px; border-radius: 4px; }
+.activity-page .learning-action { margin: 4px 0 0; color: var(--forest-dark); font-size: clamp(14px,1.1vw,20px); font-weight: 700; line-height: 1.3; }
+.activity-help .learning-illustration { display: block; width: 100%; height: auto; max-height: 260px; object-fit: contain; margin: 12px 0; border-radius: 12px; }
 .activity-page .activity-workspace {
   display: flex; flex-direction: column; justify-content: center; align-items: stretch;
   width: 100%; min-height: 0; margin: 0; padding: 2px; gap: 8px;
@@ -193,7 +197,9 @@
 
 @media (max-height:600px) and (min-width:601px) {
   .activity-page { padding: 4px 8px 8px; gap: 6px; }
-  .activity-heading { min-height: 56px; }
+  .activity-heading { display: grid; grid-template-columns: auto auto; min-height: 56px; gap: 2px 8px; }
+  .activity-heading h1 { grid-column: 1 / -1; }
+  .activity-heading .learning-key { margin: 0; font-size: 14px; }
   .activity-screen .screen-hud { --edge: 8px; }
   #app .activity-page .scan-layout .scan-scene { grid-template-columns: repeat(3,minmax(0,1fr)); padding: 6px; gap: 6px; }
   .activity-page :is(.evidence-card,.comparison-card) { padding: 8px; }
@@ -300,4 +306,16 @@
  .activity-page .guide-avatar img {width:48px;height:36px;}
  .activity-page .guide-avatar > span {font-size:18px;}
  .activity-help :is(.teacher-keys,.teacher-badge,.teacher-skip small) {font-size:18px;}
+}
+
+/* Give explanatory art enough room to read on classroom tablets. */
+@media (min-width:601px) and (min-height:601px) {
+ .activity-2 .scene-brief,.activity-3 .chain-source .scene-brief { grid-template-columns: minmax(0,1fr); }
+ .activity-2 .scene-brief > .concept-art,.activity-3 .chain-source .scene-brief > .concept-art { width: 100%; height: clamp(96px,18dvh,190px); object-fit: contain; }
+ .activity-2 .scene-brief > div,.activity-3 .chain-source .scene-brief > div { display: block; grid-column: 1; grid-row: 2; }
+ .activity-2 .scene-brief p,.activity-3 .chain-source .scene-brief :is(h2,p) { text-align: center; }
+ .activity-page .effect-context:has(.art-scene) .effect-art { width: clamp(160px,22vw,300px); flex-basis: clamp(160px,22vw,300px); height: clamp(90px,15dvh,168px); object-fit: contain; }
+ .activity-4 .flood-district { grid-template-columns: minmax(0,1fr); align-content: center; justify-items: center; }
+ .activity-4 .flood-district .coast-art { height: clamp(56px,12dvh,130px); object-fit: contain; }
+ .activity-4 .flood-copy { align-items: center; text-align: center; }
 }
