@@ -28,7 +28,7 @@ export function mountMap(host,{state,save,go,icon,announce}){
   if(!cam||free||reduced||dt>=1)cam=want;else{const k=Math.min(1,dt*7);cam={x:cam.x+(want.x-cam.x)*k,y:cam.y+(want.y-cam.y)*k};}
   tx=cam.x;ty=cam.y;layer.style.width=W+'px';layer.style.height=H+'px';layer.style.transform=`translate3d(${tx}px,${ty}px,0)`;
  }
- function tools(){overviewButton.innerHTML=icon(overview?'locate':'fit');overviewButton.setAttribute('aria-label',overview?'대원 따라 보기':'지도 전체 보기');overviewButton.title=overviewButton.getAttribute('aria-label');overviewButton.setAttribute('aria-pressed',String(overview));handButton.setAttribute('aria-pressed',String(hand));viewport.classList.toggle('hand-on',hand);}
+ function tools(){viewport.classList.toggle('overview',overview);overviewButton.innerHTML=icon(overview?'locate':'fit');overviewButton.setAttribute('aria-label',overview?'대원 따라 보기':'지도 전체 보기');overviewButton.title=overviewButton.getAttribute('aria-label');overviewButton.setAttribute('aria-pressed',String(overview));handButton.setAttribute('aria-pressed',String(hand));viewport.classList.toggle('hand-on',hand);}
  overviewButton.onclick=()=>{overview=!overview;free=null;cam=null;tools();announce(overview?'지도 전체를 한눈에 보여 줘요.':'다시 대원을 따라가요.');};
  handButton.onclick=()=>{hand=!hand;if(hand){clear();route=[];target=null;}tools();announce(hand?'손으로 밀기를 켰어요. 지도를 끌어서 둘러봐요.':'손으로 밀기를 껐어요. 길을 누르면 걸어가요.');};
  tools();

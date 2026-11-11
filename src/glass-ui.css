@@ -21,3 +21,4 @@ html body .map-navigation {background:rgba(251,255,247,.76);backdrop-filter:blur
  .map-next-card p{display:none}
  .map-next-card .map-action{grid-column:2;grid-row:1/3;font-size:16px;padding:8px}
 }
+#map-viewport.overview .companion-talk{left:92%!important;top:82%!important}
