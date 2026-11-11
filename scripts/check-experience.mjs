@@ -25,10 +25,10 @@ const viewport=process.argv.find(arg=>/^--viewport=\d+x\d+$/.test(arg))?.split('
 const profiles=viewport?[viewport.split('x').map(Number)]:process.argv.includes('--quick')?[[1280,800]]:[[906,755],[1024,768],[1280,720],[1366,768],[1920,1080],[873,580]];
 async function inspect(name,w,h){
  const checks=await page.evaluate(()=>{
-  const visible=e=>{const scroll=e.closest('.settings-scroll'),r=e.getBoundingClientRect(),s=scroll?.getBoundingClientRect();return !!(e.offsetWidth||e.offsetHeight||e.getClientRects().length)&&getComputedStyle(e).visibility!=='hidden'&&(!e.closest('details')||e.closest('details').open||e.tagName==='SUMMARY')&&(!s||(r.top<s.bottom&&r.bottom>s.top));};
+  const visible=e=>{const scroll=e.closest('.settings-scroll,.home-copy'),r=e.getBoundingClientRect(),s=scroll?.getBoundingClientRect();return !!(e.offsetWidth||e.offsetHeight||e.getClientRects().length)&&getComputedStyle(e).visibility!=='hidden'&&(!e.closest('details')||e.closest('details').open||e.tagName==='SUMMARY')&&(!s||(r.top<s.bottom&&r.bottom>s.top));};
   const root=document.querySelector('dialog[open]')||document.querySelector('.screen');
   // Map labels live on the pannable world layer; off-screen ones are reached by walking or dragging.
-  const clipped=[...root.querySelectorAll('button,input[type=range],[role=button]')].filter(visible).filter(e=>!e.closest('.map-world')).filter(e=>{const r=e.getBoundingClientRect();return r.left<-.5||r.right>innerWidth+.5||r.top<-.5||r.bottom>innerHeight+.5;}).map(e=>(e.getAttribute('aria-label')||e.textContent).trim().slice(0,50));
+  const clipped=[...root.querySelectorAll('button,input[type=range],[role=button]')].filter(visible).filter(e=>!e.closest('.map-world')).filter(e=>!e.closest('.home-copy')||getComputedStyle(e.closest('.home-copy')).overflowY!=='auto').filter(e=>{const r=e.getBoundingClientRect();return r.left<-.5||r.right>innerWidth+.5||r.top<-.5||r.bottom>innerHeight+.5;}).map(e=>(e.getAttribute('aria-label')||e.textContent).trim().slice(0,50));
   const small=[...root.querySelectorAll('button,input[type=range],[role=button]')].filter(visible).filter(e=>{const r=e.getBoundingClientRect();return r.width<43||r.height<43;}).map(e=>(e.getAttribute('aria-label')||e.textContent).trim().slice(0,40));
   const workspace=document.querySelector('.activity-workspace');
   const overlaps=[];
@@ -50,6 +50,14 @@ try{
    await page.goto(base+'/#'+route);await page.locator('h1,.map-action').first().waitFor();await page.evaluate(()=>Promise.race([Promise.all([document.fonts.ready,...[...document.images].filter(img=>img.getBoundingClientRect().width&&img.getBoundingClientRect().height).map(img=>img.decode().catch(()=>{}))]),new Promise((_,reject)=>setTimeout(()=>reject(Error('Page assets did not settle within 10 seconds')),10000))]));await page.waitForTimeout(220);
    if(new URL(page.url()).hash!=='#'+route)throw new Error('Expected route '+route+', got '+page.url());
    await inspect(route,w,h);
+   if(route==='home'&&await page.locator('.home-copy').evaluate(el=>getComputedStyle(el).overflowY==='auto')){
+    for(const button of await page.locator('.home-copy [data-voice]').all()){
+     await button.click();
+     const bounds=await button.boundingBox();
+     if(!bounds||bounds.y<0||bounds.y+bounds.height>h)throw Error('Scrolled home voice remains offscreen');
+    }
+    await page.locator('.home-copy').evaluate(el=>el.scrollTop=0);
+   }
   }
   await page.getByRole('button',{name:'설정',exact:true}).click();await page.waitForTimeout(220);await inspect('settings',w,h);
   for(let i=0;i<4;i++){await page.locator('.settings-section').nth(i).locator('summary').first().click();await inspect('settings-section-'+i,w,h);}

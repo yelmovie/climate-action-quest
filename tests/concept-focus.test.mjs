@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
 import {emphasizeConcept,bindConceptFocus} from '../src/concept-focus.js';
 test('concept terms are highlighted without changing readable science text',()=>{
  const text='행성은 별에서 온 빛을 반사해 보여요.';
@@ -12,3 +13,7 @@ test('longest literal term wins and unsafe text is escaped',()=>{
  assert.equal(emphasizeConcept('a+b', ['a+b']),'<mark class="science-keyword">a+b</mark>');
 });
 test('missing media context is harmless and returns cleanup',()=>{assert.doesNotThrow(bindConceptFocus(null,null,{}));});
+test('concept controls have their stylesheet before the first dialog opens',async()=>{
+ const html=await readFile(new URL('../index.html',import.meta.url),'utf8');
+ assert.match(html,/<link[^>]+rel="stylesheet"[^>]+href="\/src\/concept-focus.css"[^>]+data-concept-focus-style/);
+});
