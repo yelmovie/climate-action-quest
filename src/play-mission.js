@@ -1,15 +1,110 @@
-import {title,intro,background,items,missions,note,evaluate} from './play-mission-model.js';
-const MODE=16,KEY=`science-play-${MODE}-v1`;
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fresh=()=>({version:1,level:0,plans:missions.map(()=>Array(6).fill(null)),links:missions.map(()=>[]),won:[],history:missions.map(()=>[])});
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s?.version!==1)return fresh();const clean=fresh();clean.level=Math.max(0,Math.min(2,Math.trunc(s.level)||0));clean.plans=missions.map((_,i)=>Array.from({length:6},(_,j)=>items.some(x=>x.id===s.plans?.[i]?.[j])?s.plans[i][j]:null));clean.links=missions.map((_,i)=>(s.links?.[i]||[]).filter(x=>['plant>insect','insect>frog'].includes(x)));clean.won=(s.won||[]).filter(x=>Number.isInteger(x)&&x>=0&&x<3);clean.history=missions.map((_,i)=>Array.isArray(s.history?.[i])?s.history[i].slice(-2).map(v=>Object.fromEntries(['heat','rain','carbon'].map(k=>[k,Math.max(0,Math.min(99,Number(v?.[k])||0))]))):[]);return clean;}catch{return fresh();}}
-export function openPlayMission(){if(document.querySelector('dialog.play-mission'))return;let state=load(),selected=items[0].id,result=null,linkFrom=null,undo=[],saveError=false;const opener=document.activeElement,dialog=document.createElement('dialog');dialog.className='play-mission play-mode-'+MODE;dialog.setAttribute('aria-label',title);document.body.append(dialog);const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));saveError=false;}catch{saveError=true;}};const changed=()=>{result=null;persist();render();};
- const picture=item=>item?.art?`<img src="${item.art}" alt="">`:`<span class="pm-symbol" aria-hidden="true">${item?.symbol||'＋'}</span>`;
- function render(){const m=missions[state.level],plan=state.plans[state.level],links=state.links[state.level],past=state.history[state.level];dialog.innerHTML=`<div class="pm-shell" style="--pm-bg:url('${background}')"><header class="pm-head"><div><h2>${title}</h2><p>${intro}</p></div><button data-close aria-label="탐구로 돌아가기">닫기 ×</button></header><nav class="pm-levels" aria-label="게임 미션">${missions.map((x,i)=>`<button data-level="${i}" class="${i===state.level?'active':''}" ${i>0&&!state.won.includes(i-1)?'disabled':''}>${state.won.includes(i)?'✓ ':''}${i+1}. ${x.name}</button>`).join('')}</nav><p class="pm-goal">${m.goal} ${MODE===16?`<span class="pm-badge">예산 ${evaluate(plan,state.level).cost} / ${m.budget}</span>`:''}</p><div class="pm-content"><section class="pm-scene" aria-label="설계 공간"><p class="pm-mission-help">오른쪽 도구를 고른 뒤 빈 곳을 눌러 놓아 봐. 놓인 곳을 누르면 바꿀 수 있어.</p><div class="pm-grid ${result?'tested':''}">${plan.map((id,i)=>{const item=items.find(x=>x.id===id);return `<button class="pm-cell ${item?'occupied':''} ${result?.ok?'active-life':''}" data-cell="${i}" aria-label="${i+1}번 공간 ${item?.name||'빈 공간'}">${picture(item)}<span>${item?.name||'여기에 놓기'}</span></button>`;}).join('')}</div>${MODE===14?`<div class="pm-links" aria-label="먹이 관계 연결"><span>먹이 → 먹는 생물</span>${['plant','insect','frog'].map(id=>`<button data-link="${id}" class="${linkFrom===id?'on':''}">${items.find(x=>x.id===id).name}</button>`).join('')}</div><div class="pm-links">${links.map(x=>`<button data-remove-link="${x}" class="on">${x==='plant>insect'?'식물 → 메뚜기':'메뚜기 → 개구리'} ×</button>`).join('')}</div>`:result?`<div class="pm-metrics"><span>폭염 부담<br><b>${result.heat}</b></span><span>비 부담<br><b>${result.rain}</b></span><span>배출 줄이기<br><b>${result.carbon}</b></span></div>`:''}</section><aside class="pm-palette" aria-label="설계 도구">${items.map(x=>`<button class="pm-tool" data-tool="${x.id}" aria-pressed="${selected===x.id}">${picture(x)}<span>${x.name}</span>${MODE===16?`<small>비용 ${x.cost} · ${x.id==='empty'?'비우기':x.carbon&&(x.heat||x.rain)?'적응·완화':x.carbon?'완화':'적응'}</small>`:''}</button>`).join('')}</aside></div><div class="pm-feedback ${result?.ok?'good':''}" role="status" aria-live="polite">${result?esc(result.summary):'도구를 선택하고 공간에 놓아 봐. 준비되면 시험해 보자!'}${saveError?'<span class="pm-error"> 이 기기에 저장하지 못했어. 창을 닫으면 이번 기록을 잃을 수 있어.</span>':''}</div>${MODE===16&&past.length>1?`<p class="pm-compare">앞 설계와 비교: 폭염 ${past[0].heat} → ${past[1].heat} / 비 ${past[0].rain} → ${past[1].rain} / 배출 줄이기 ${past[0].carbon} → ${past[1].carbon}</p>`:''}<footer class="pm-actions"><button class="primary" data-test>${MODE===14?'환경 변화 관찰':'폭염·많은 비 시험'}</button><button data-undo ${undo.length?'':'disabled'}>한 번 되돌리기</button>${result?.ok&&state.level<2?'<button data-next>다음 미션 →</button>':''}${result?.ok&&state.level===2?'<span class="pm-badge">설계 탐험 완료 · 다른 방법도 시험해 봐!</span>':''}</footer><p class="pm-note">${note}</p></div>`;
- dialog.querySelector('[data-close]').onclick=()=>dialog.close();dialog.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{selected=b.dataset.tool;render();});dialog.querySelectorAll('[data-cell]').forEach(b=>b.onclick=()=>{undo.push({plan:[...plan],links:[...links]});if(undo.length>20)undo.shift();plan[+b.dataset.cell]=selected==='empty'?null:selected;changed();});dialog.querySelectorAll('[data-level]').forEach(b=>b.onclick=()=>{state.level=+b.dataset.level;result=null;undo=[];linkFrom=null;persist();render();});
- dialog.querySelectorAll('[data-link]').forEach(b=>b.onclick=()=>{const id=b.dataset.link;if(!plan.includes(id)){result={summary:'먼저 그 생물을 설계 공간에 놓아 봐.'};render();return;}if(!linkFrom){linkFrom=id;render();return;}const link=linkFrom+'>'+id;linkFrom=null;if(!['plant>insect','insect>frog'].includes(link)){result={summary:'화살표는 먹이가 되는 생물에서 먹는 생물로 이어. 이 세 생물의 먹이 관계를 다시 관찰해 봐.'};render();return;}if(!links.includes(link)){undo.push({plan:[...plan],links:[...links]});links.push(link);}changed();});dialog.querySelectorAll('[data-remove-link]').forEach(b=>b.onclick=()=>{undo.push({plan:[...plan],links:[...links]});state.links[state.level]=links.filter(x=>x!==b.dataset.removeLink);changed();});
- dialog.querySelector('[data-undo]').onclick=()=>{const old=undo.pop();if(old){state.plans[state.level]=old.plan;state.links[state.level]=old.links;changed();}};
- dialog.querySelector('[data-test]').onclick=()=>{result=MODE===14?evaluate(plan,links,state.level):evaluate(plan,state.level);if(result.ok&&!state.won.includes(state.level))state.won.push(state.level);if(MODE===16){const h=state.history[state.level];h.push({heat:result.heat,rain:result.rain,carbon:result.carbon});if(h.length>2)h.shift();}persist();render();};const next=dialog.querySelector('[data-next]');if(next)next.onclick=()=>{state.level++;result=null;undo=[];linkFrom=null;persist();render();};}
- dialog.addEventListener('close',()=>{dialog.remove();opener?.focus?.();},{once:true});render();dialog.showModal();dialog.querySelector('[data-close]').focus();}
-function install(){const host=document.querySelector(MODE===14?'.title-actions, .chapter-card .chapter-actions':'.hero-actions, .facility-copy');if(host&&!host.querySelector('.play-mission-entry')){const b=document.createElement('button');b.className='play-mission-entry';b.textContent=MODE===14?'생태 설계 미션':'도시 운영 미션';b.onclick=openPlayMission;host.append(b);}}
-const observer=new MutationObserver(install);observer.observe(document.getElementById('app'),{childList:true,subtree:true});install();
+import {title,intro,background,items,missions,note,evaluate,MISSION_SAVE_KEY,freshMissionState,normalizeMissionState} from './play-mission-model.js';
+import {createSaveSession} from './state.js';
+import {icon} from './icons.js';
+
+const escapeText=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+
+export function openPlayMission(){
+ if(document.querySelector('dialog[open]'))return;
+ let storage;
+ try{storage=window.localStorage;}catch{storage={getItem(){throw Error('unavailable');}};}
+ const session=createSaveSession(storage,{key:MISSION_SAVE_KEY,createState:freshMissionState,normalize:normalizeMissionState});
+ let state=session.state,selected=items[0].id,result=null,undo=[],resetPending=false;
+ let saveError=session.error?'기존 미션 기록을 읽지 못해 자동 저장을 멈췄어. 기존 기록은 보존돼.':'';
+ const opener=document.activeElement;
+ const dialog=document.createElement('dialog');
+ dialog.className='play-mission play-mode-16';
+ dialog.setAttribute('aria-labelledby','pm-title');
+ document.body.append(dialog);
+
+ function persist(){
+  const status=session.save(state);
+  saveError=status.ok?'':status.reason==='conflict'
+   ?'다른 탭에서 미션 기록이 바뀌어 저장을 멈췄어. 탭을 하나만 열고 다시 시작해 줘.'
+   :'이번 변경을 저장하지 못했어. 창을 닫으면 이번 변경을 잃을 수 있어. 기존 기록은 보존돼.';
+ }
+ function changed(){result=null;persist();render();}
+ const picture=item=>item?.art
+  ?`<img src="${item.art}" alt="">`
+  :icon(item?.icon||'plus');
+
+ function render(){
+  const active=document.activeElement;
+  const focusAttribute=active?.getAttributeNames?.().find(name=>name.startsWith('data-'));
+  const focusValue=focusAttribute?active.getAttribute(focusAttribute):null;
+  const scrollTop=dialog.querySelector('.pm-workspace')?.scrollTop||0;
+  const mission=missions[state.level],plan=state.plans[state.level],past=state.history[state.level];
+  const selectedItem=items.find(item=>item.id===selected);
+  dialog.innerHTML=`<div class="pm-shell" style="--pm-bg:url('${background}')">
+   <header class="pm-head"><div><h2 id="pm-title">${title}</h2><p>${intro}</p></div><button data-close aria-label="탐구로 돌아가기">닫기 ${icon('close')}</button></header>
+   ${resetPending?`<div class="pm-workspace pm-reset"><h3>도시 운영 미션을 처음부터 할까?</h3><p>세 미션의 설계와 시험 기록을 초기화해. 직전 기록 한 개는 이 기기에 보관돼. 열 가지 탐구 활동 기록은 그대로 이어갈 수 있어.</p></div>`:`
+   <nav class="pm-levels" aria-label="도시 운영 미션">${missions.map((item,level)=>`<button data-level="${level}" class="${level===state.level?'active':''}" ${level===state.level?'aria-current="step"':''} ${level>0&&!state.won.includes(level-1)?'disabled':''}>${state.won.includes(level)?icon('check'):''}${level+1}. ${item.name}</button>`).join('')}</nav>
+   <div class="pm-goal"><p>${mission.goal}</p><span class="pm-budget">예산 ${evaluate(plan,state.level).cost} / ${mission.budget}</span></div>
+   <div class="pm-workspace">
+    <div class="pm-content">
+     <section class="pm-scene" aria-label="설계 공간"><p class="pm-mission-help">${selectedItem.name} 선택 중 · 공간을 누르면 ${selected==='empty'?'시설을 지워.':'놓거나 바꿀 수 있어.'}</p>
+      <div class="pm-grid ${result?'tested':''}">${plan.map((id,cell)=>{const item=items.find(item=>item.id===id);return `<button class="pm-cell ${item?'occupied':''} ${result?.ok?'active-life':''}" data-cell="${cell}" aria-label="${cell+1}번 공간 ${item?.name||'빈 공간'}">${picture(item)}<span>${item?.name||'여기에 놓기'}</span></button>`;}).join('')}</div>
+      ${result?`<div class="pm-metrics"><span>폭염 부담 <b>${result.heat}</b></span><span>비 부담 <b>${result.rain}</b></span><span>배출 줄이기 <b>${result.carbon}</b></span></div>`:''}
+     </section>
+     <aside class="pm-palette" aria-label="설계 도구">${items.map(item=>`<button class="pm-tool" data-tool="${item.id}" aria-pressed="${selected===item.id}">${picture(item)}<span>${item.name}</span><small>비용 ${item.cost} · ${item.effect}</small></button>`).join('')}</aside>
+    </div>
+    ${past.length>1?`<p class="pm-compare">이전 시험 → 이번 시험 · 폭염 ${past[0].heat} → ${past[1].heat} / 비 ${past[0].rain} → ${past[1].rain} / 배출 줄이기 ${past[0].carbon} → ${past[1].carbon}</p>`:''}
+    <p class="pm-note">${note}</p>
+   </div>`}
+   <footer class="pm-footer">
+    ${resetPending?'':`<div class="pm-feedback ${result?.ok?'good':''}" role="status" aria-live="polite">${result?icon(result.ok?'check':'search')+escapeText(result.summary):'도구를 골라 도시를 만들고, 준비되면 시험해 봐.'}</div>`}
+    ${saveError?`<p class="pm-error" role="alert">${saveError}</p>`:''}
+    <div class="pm-actions">${resetPending?'<button data-cancel-reset>계속 탐구하기</button><button class="pm-danger" data-confirm-reset>미션 기록 초기화</button>':`
+     <button class="${result?.ok&&state.level<missions.length-1?'':'primary'}" data-test>${icon('flask')} 폭염·많은 비 시험</button>
+     <button data-undo ${undo.length?'':'disabled'} aria-label="${undo.length?'마지막 배치를 한 번 되돌리기':'시설을 놓은 뒤 되돌릴 수 있어요'}">${icon('back')} 한 번 되돌리기</button>
+     ${result?.ok&&state.level<missions.length-1?`<button class="primary" data-next>다음 미션 ${icon('arrow')}</button>`:''}
+     ${result?.ok&&state.level===missions.length-1?`<span class="pm-badge">${icon('trophy')} 세 미션 완료!</span>`:''}
+     <button class="pm-reset-button" data-reset>기록 초기화</button>`}</div>
+   </footer>
+  </div>`;
+  dialog.querySelector('[data-close]').onclick=()=>dialog.close();
+  if(resetPending){
+   dialog.querySelector('[data-cancel-reset]').onclick=()=>{resetPending=false;render();dialog.querySelector('[data-reset]').focus();};
+   dialog.querySelector('[data-confirm-reset]').onclick=()=>{
+    const status=session.reset();
+    if(!status.ok){saveError='기존 기록을 안전하게 보관하지 못해 초기화를 멈췄어.';render();return;}
+    state=freshMissionState();result=null;undo=[];saveError='';resetPending=false;render();dialog.querySelector('[data-level="0"]').focus();
+   };
+   dialog.querySelector('[data-cancel-reset]').focus();
+   return;
+  }
+  dialog.querySelectorAll('[data-tool]').forEach(button=>button.onclick=()=>{selected=button.dataset.tool;render();});
+  dialog.querySelectorAll('[data-cell]').forEach(button=>button.onclick=()=>{
+   undo.push([...plan]);if(undo.length>20)undo.shift();
+   plan[Number(button.dataset.cell)]=selected==='empty'?null:selected;changed();
+  });
+  dialog.querySelectorAll('[data-level]').forEach(button=>button.onclick=()=>{
+   state.level=Number(button.dataset.level);result=null;undo=[];persist();render();
+  });
+  dialog.querySelector('[data-undo]').onclick=()=>{const previous=undo.pop();if(previous){state.plans[state.level]=previous;changed();}};
+  dialog.querySelector('[data-test]').onclick=()=>{
+   result=evaluate(plan,state.level);
+   if(result.ok&&!state.won.includes(state.level))state.won.push(state.level);
+   const history=state.history[state.level];history.push({heat:result.heat,rain:result.rain,carbon:result.carbon});if(history.length>2)history.shift();
+   persist();render();
+  };
+  const next=dialog.querySelector('[data-next]');
+  if(next)next.onclick=()=>{state.level++;result=null;undo=[];persist();render();dialog.querySelector(`[data-level="${state.level}"]`).focus();};
+  dialog.querySelector('[data-reset]').onclick=()=>{resetPending=true;render();};
+  dialog.querySelector('.pm-workspace').scrollTop=scrollTop;
+  if(focusAttribute)dialog.querySelector(`[${focusAttribute}="${CSS.escape(focusValue)}"]`)?.focus({preventScroll:true});
+ }
+ dialog.addEventListener('close',()=>{dialog.remove();if(opener?.isConnected)opener.focus({preventScroll:true});},{once:true});
+ render();dialog.showModal();dialog.querySelector('[data-close]').focus();
+}
+
+function install(){
+ const host=document.querySelector('.hero-actions, .facility-copy');
+ if(!host||host.querySelector('.play-mission-entry'))return;
+ const button=document.createElement('button');
+ button.className='play-mission-entry';button.textContent='도시 운영 미션';button.onclick=openPlayMission;
+ host.append(button);
+}
+const observer=new MutationObserver(install);
+observer.observe(document.getElementById('app'),{childList:true,subtree:true});
+install();

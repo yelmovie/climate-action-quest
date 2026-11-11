@@ -31,14 +31,14 @@ export function loadState(storage){try{return {state:normalizeState(JSON.parse(s
 export function storeState(storage,state){try{storage.setItem(SAVE_KEY,JSON.stringify(state));return true;}catch{return false;}}
 
 /** One tab owns its observed save revision; damaged or foreign saves are read-only. */
-export function createSaveSession(storage){
- let baseline=null,blocked=null,state=freshState();
+export function createSaveSession(storage,{key=SAVE_KEY,createState=freshState,normalize=normalizeState}={}){
+ let baseline=null,blocked=null,state=createState();
  try{
-  baseline=storage.getItem(SAVE_KEY);
-  if(baseline!==null){const raw=JSON.parse(baseline);if(!raw||Array.isArray(raw)||raw.version!==1)blocked='invalid';else state=normalizeState(raw);}
+  baseline=storage.getItem(key);
+  if(baseline!==null){const raw=JSON.parse(baseline);if(!raw||Array.isArray(raw)||raw.version!==1)blocked='invalid';else state=normalize(raw);}
  }catch{blocked='unavailable';}
- state.adminUnlocked=false;
- const check=()=>{if(blocked)return {ok:false,reason:blocked};try{if(storage.getItem(SAVE_KEY)!==baseline)return {ok:false,reason:'conflict'};}catch{return {ok:false,reason:'unavailable'};}return {ok:true};};
- const save=next=>{if(next.adminUnlocked)return {ok:true,reason:'preview'};const status=check();if(!status.ok)return status;try{const value=JSON.stringify(next);storage.setItem(SAVE_KEY,value);baseline=value;return {ok:true};}catch{return {ok:false,reason:'unavailable'};}};
- return {state,error:Boolean(blocked),save,reset(){const status=check();if(!status.ok)return status;try{if(baseline!==null)storage.setItem(SAVE_KEY+':before-reset',baseline);}catch{return {ok:false,reason:'backup'};}return save(freshState());}};
+ if('adminUnlocked' in state)state.adminUnlocked=false;
+ const check=()=>{if(blocked)return {ok:false,reason:blocked};try{if(storage.getItem(key)!==baseline)return {ok:false,reason:'conflict'};}catch{return {ok:false,reason:'unavailable'};}return {ok:true};};
+ const save=next=>{if(next.adminUnlocked)return {ok:true,reason:'preview'};const status=check();if(!status.ok)return status;try{const value=JSON.stringify(next);storage.setItem(key,value);baseline=value;return {ok:true};}catch{return {ok:false,reason:'unavailable'};}};
+ return {state,error:Boolean(blocked),save,reset(){const status=check();if(!status.ok)return status;try{if(baseline!==null)storage.setItem(key+':before-reset',baseline);}catch{return {ok:false,reason:'backup'};}return save(createState());}};
 }

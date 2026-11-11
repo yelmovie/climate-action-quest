@@ -1,6 +1,9 @@
 /** One shared, scalable icon family. The button supplies its accessible name. */
 const paths = {fit:'<path d="M8 3H3v5m13-5h5v5M3 16v5h5m8 0h5v-5M8 8h8v8H8z"/>',
   home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+  bus: '<rect x="5" y="3" width="14" height="16" rx="3"/><path d="M5 11h14M8 19v2m8-2v2M9 7h6"/><circle cx="8.5" cy="15.5" r=".5"/><circle cx="15.5" cy="15.5" r=".5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  erase: '<path d="m8 19-5-5 10-11 8 8-8 8H8Zm-2-8 8 8M13 21h8"/>',
   back: '<path d="m10 5-7 7 7 7M3 12h18"/>',
   sound: '<path d="M11 4 6 8H3v8h3l5 4zM15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>',
   mute: '<path d="M11 4 6 8H3v8h3l5 4zM16 9l6 6m0-6-6 6"/>',

@@ -9,8 +9,7 @@ export function stopNarration(){
 export function voiceControl(host,id,{autoplay=false}={}){
  if(!host||!voiceLines[id])return;
  const button=document.createElement('button');button.type='button';button.className='voice-replay';button.dataset.voice=id;button.textContent='음성 듣기';button.setAttribute('aria-label',voiceLines[id].text+' 음성 듣기');button.setAttribute('aria-pressed','false');
- button.style.cssText='font:inherit;font-size:14px;min-height:44px;padding:6px 12px;border:1px solid currentColor;border-radius:12px;background:#fff;color:#193d43;cursor:pointer;pointer-events:auto;';
- const status=document.createElement('span');status.className='voice-status';status.setAttribute('role','status');status.style.cssText='font-size:13px;display:block;';
+ const status=document.createElement('span');status.className='voice-status';status.setAttribute('role','status');
  host.append(button,status);
  button.onclick=async()=>{
   if(owner===button){stopNarration();return;}stopNarration();

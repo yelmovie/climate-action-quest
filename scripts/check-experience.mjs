@@ -4,9 +4,10 @@ import {freshState} from '../src/state.js';
 const require=createRequire(import.meta.url);
 let chromium;try{({chromium}=require('playwright-core'));}catch{({chromium}=require('../.tools/node_modules/playwright-core'));}
 const out='.tmp/experience-check';await mkdir(out,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--no-sandbox'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
-const page=await browser.newPage(),errors=[];page.on('requestfailed',req=>{if(req.failure()?.errorText!=='net::ERR_ABORTED')console.warn('Failed request',req.url(),req.failure()?.errorText);});page.on('pageerror',e=>errors.push(e.message));
+const browser=await chromium.launch({executablePath:process.env.CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--disable-crash-reporter','--disable-breakpad'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
+const page=await browser.newPage({serviceWorkers:'block'}),errors=[];page.on('requestfailed',req=>{if(req.failure()?.errorText!=='net::ERR_ABORTED')console.warn('Failed request',req.url(),req.failure()?.errorText);});page.on('pageerror',e=>errors.push(e.message));
 const state=freshState();state.adminUnlocked=true;state.introSeen=true;
+for(let i=0;i<10;i++){state.records[i]={done:true,workComplete:true};state.completed.push(i);}
 
 const base=process.env.BASE_URL||'http://localhost:4175',results=[];
 await page.goto(base);
@@ -18,7 +19,7 @@ async function loadFixture(route,index,record={}){
  const s=freshState();s.adminUnlocked=true;s.introSeen=true;
  for(let i=0;i<10;i++){s.records[i]={done:true,workComplete:true};s.completed.push(i);}
  s.records[8].plan=good;if(index!==undefined){Object.assign(s.records[index],record,{done:false,workComplete:false});s.completed=s.completed.filter(n=>n!==index);}s.finalized=true;
- await page.evaluate(({s,route})=>{localStorage.setItem('climate-future:v1',JSON.stringify(s));history.replaceState(null,'','#'+route);},{s,route});await page.reload();await page.locator('h1').waitFor();await page.evaluate(()=>Promise.all([document.fonts.ready,...[...document.images].map(img=>img.decode().catch(()=>{}))]));await page.waitForTimeout(220);
+ await page.evaluate(({s,route})=>{localStorage.setItem('climate-future:v1',JSON.stringify(s));history.replaceState(null,'','#'+route);},{s,route});await page.reload();await page.locator('h1').waitFor();await page.evaluate(()=>Promise.race([Promise.all([document.fonts.ready,...[...document.images].filter(img=>img.getBoundingClientRect().width&&img.getBoundingClientRect().height).map(img=>img.decode().catch(()=>{}))]),new Promise((_,reject)=>setTimeout(()=>reject(Error('Page assets did not settle within 10 seconds')),10000))]));await page.waitForTimeout(220);
 }
 const viewport=process.argv.find(arg=>/^--viewport=\d+x\d+$/.test(arg))?.split('=')[1];
 const profiles=viewport?[viewport.split('x').map(Number)]:process.argv.includes('--quick')?[[1280,800]]:[[906,755],[1024,768],[1280,720],[1366,768],[1920,1080],[873,580]];
@@ -36,7 +37,7 @@ async function inspect(name,w,h){
   return {clipped,small,shortText,overlaps,scroll:workspace?Math.max(0,workspace.scrollHeight-workspace.clientHeight):0,overflowX:document.documentElement.scrollWidth>innerWidth};
  });
  results.push({name,w,h,...checks});
- if(w===1280||checks.clipped.length||checks.overflowX||checks.overlaps.length)await page.screenshot({path:`${out}/${w}-${h}-${name.replaceAll('/','-')}.png`});
+ if(w===1280||checks.clipped.length||checks.overflowX||checks.overlaps.length)await page.screenshot({path:`${out}/${w}-${h}-${name.replaceAll('/','-')}.png`,animations:'disabled',timeout:15000});
 }
 try{
  for(const [w,h] of profiles){
@@ -46,7 +47,8 @@ try{
   await page.evaluate(s=>{localStorage.setItem('climate-future:v1',JSON.stringify(s));history.replaceState(null,'','#home');},state);
   await page.reload();
   for(const route of ['home','map','facility/0','facility/1','facility/2','facility/3','facility/4',...Array.from({length:10},(_,i)=>'activity/'+i)]){
-   await page.goto(base+'/#'+route);await page.locator('h1,.map-action').first().waitFor();await page.evaluate(()=>Promise.all([document.fonts.ready,...[...document.images].map(img=>img.decode().catch(()=>{}))]));await page.waitForTimeout(220);
+   await page.goto(base+'/#'+route);await page.locator('h1,.map-action').first().waitFor();await page.evaluate(()=>Promise.race([Promise.all([document.fonts.ready,...[...document.images].filter(img=>img.getBoundingClientRect().width&&img.getBoundingClientRect().height).map(img=>img.decode().catch(()=>{}))]),new Promise((_,reject)=>setTimeout(()=>reject(Error('Page assets did not settle within 10 seconds')),10000))]));await page.waitForTimeout(220);
+   if(new URL(page.url()).hash!=='#'+route)throw new Error('Expected route '+route+', got '+page.url());
    await inspect(route,w,h);
   }
   await page.getByRole('button',{name:'설정',exact:true}).click();await page.waitForTimeout(220);await inspect('settings',w,h);
