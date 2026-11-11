@@ -7,6 +7,9 @@ const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=u
 createServer(async(req,res)=>{
  try{
   const path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
+  if(path==='/index.html'&&process.argv.includes('--redirect-index')){
+   res.writeHead(307,{Location:'/'});res.end();return;
+  }
   const file=resolve(root,'.'+(path==='/'?'/index.html':path));
   if(!file.startsWith(root+sep)||path.includes('\0')){res.writeHead(403);res.end();return;}
   if(!(await stat(file)).isFile())throw new Error('not file');

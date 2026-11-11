@@ -83,3 +83,7 @@ http://localhost:4173 에서 연다. `npm test`로 학습 모형·진행·지도
 `npm run check:mission`은 도시 운영 미션의 터치·키보드·세 단계 완주·회전·저장 복구·초기화 백업을 검사한다. 전체 검수 결과와 점수는 `docs/reviews/RELEASE-REVIEW-20261111.md`, `docs/reviews/SCORE-20261111.md`에 기록한다.
 
 도시 운영 미션은 자체 기록 초기화를 제공한다. 열 탐구 활동의 초기화와 별개이며 초기화 직전 원문 한 개를 기기에 보관한다. 저장은 브라우저·접속 origin별로 구분되어 로컬·미리보기·운영 주소 사이에서 자동 이동하지 않는다.
+
+운영 Cloudflare Workers Static Assets의 미디어 검사는 `node scripts/check-delivery.mjs --static-assets`를 사용한다. 이 플랫폼은 온라인 Range 요청에 전체 파일을 200으로 제공하므로 파일 바이트 일치와 서비스워커 없는 실제 H.264 재생·탐색을 함께 검증한다. 기본 명령은 로컬 서버의 206/416 동작을 검사한다.
+
+운영 호스트의 `index.html` 리다이렉트까지 재현하려면 `node scripts/dev.mjs --dist --redirect-index`로 검증 서버를 실행하고 해당 `BASE_URL`에서 `check-delivery.mjs`를 실행한다. 오프라인 시작 문서는 리다이렉트 없는 루트 `/`를 캐시한다.
