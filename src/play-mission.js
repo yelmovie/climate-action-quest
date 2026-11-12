@@ -37,7 +37,7 @@ export function openPlayMission(){
   const selectedItem=items.find(item=>item.id===selected);
   dialog.innerHTML=`<div class="pm-shell" style="--pm-bg:url('${background}')">
    <header class="pm-head"><div><h2 id="pm-title">${title}</h2><p>${intro}</p></div><button data-close aria-label="탐구로 돌아가기">닫기 ${icon('close')}</button></header>
-   ${resetPending?`<div class="pm-workspace pm-reset"><h3>도시 운영 미션을 처음부터 할까?</h3><p>세 미션의 설계와 시험 기록을 초기화해. 직전 기록 한 개는 이 기기에 보관돼. 열 가지 탐구 활동 기록은 그대로 이어갈 수 있어.</p></div>`:`
+   ${resetPending?`<div class="pm-workspace pm-reset"><h3>도시 운영 미션을 처음부터 할까?</h3><p>세 미션의 설계와 시험 기록을 초기화해. 직전 기록 한 개는 이 기기에 보관돼. 열 가지 탐구 활동 기록은 그대로 이어 갈 수 있어.</p></div>`:`
    <nav class="pm-levels" aria-label="도시 운영 미션">${missions.map((item,level)=>`<button data-level="${level}" class="${level===state.level?'active':''}" ${level===state.level?'aria-current="step"':''} ${level>0&&!state.won.includes(level-1)?'disabled':''}>${state.won.includes(level)?icon('check'):''}${level+1}. ${item.name}</button>`).join('')}</nav>
    <div class="pm-goal"><p>${mission.goal}</p><span class="pm-budget">예산 ${evaluate(plan,state.level).cost} / ${mission.budget}</span></div>
    <div class="pm-workspace">
