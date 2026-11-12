@@ -3,3 +3,10 @@
 @media(max-width:680px){.home-copy{width:86%;left:7%;top:15%}.home-copy .hero-title{font-size:54px}.hero-seal{display:none}.home-copy .hero-subtitle{font-size:21px}.home-screen:after{background:linear-gradient(90deg,#eef4e4e8,#eef4e4c9)}.facility-copy{left:6%;right:6%}.facility-activities{left:6%;right:6%}.guide-character{display:none}.final-actions .button{font-size:18px}.certificate{padding:10px}.map-label{font-size:17px}.settings-dialog .dialog-footer .button{font-size:17px;padding:10px}}
 .map-load-status{position:absolute;z-index:18;left:50%;top:50%;transform:translate(-50%,-50%);max-width:80%;padding:24px;background:#fffbed;border:2px solid #467655;border-radius:22px;text-align:center;font-size:22px}.map-load-status button{margin-top:16px}#app .dpad [data-key=ArrowUp] svg{transform:rotate(-90deg)}#app .dpad [data-key=ArrowDown] svg{transform:rotate(90deg)}
 .activity-footer-wrap{width:min(1380px,100%);margin:0 auto;min-width:0}.activity-footer-wrap>.science-note{margin:0 0 12px;min-height:40px;overflow:visible}.activity-footer-wrap>.activity-footer{width:100%}.activity-0 .activity-workspace,.activity-2 .activity-workspace{border-radius:24px}.activity-footer-wrap .science-note{font-size:16px}@media(max-height:650px){.activity-footer-wrap>.science-note{margin-bottom:7px;padding:7px 11px;line-height:1.3;min-height:34px}}
+
+/* Map controls: clear local feedback without moving the layout. */
+[data-map-pad] { min-width:44px; min-height:44px; touch-action:none; user-select:none; -webkit-user-select:none; }
+[data-map-pad] > * { pointer-events:none; }
+[data-map-pad][data-map-held] { filter:brightness(1.15); outline:3px solid #f4bc45; outline-offset:1px; box-shadow:inset 0 0 0 2px #fff8da; }
+[data-map-pad]:focus-visible { outline:3px solid #165fba; outline-offset:3px; }
+[data-map-pad]:disabled { opacity:.5; }
