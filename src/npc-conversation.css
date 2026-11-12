@@ -1,0 +1,52 @@
+/* An atlas paints one complete pose at a time. Frame changes never affect layout. */
+.npc-art-frame {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--npc-frame-ratio, 1);
+  background: var(--npc-sprite) 0 0 / 200% 100% no-repeat;
+  filter: drop-shadow(0 9px 10px #163b2e24);
+}
+.npc-dialogue-grid {
+  display: grid;
+  grid-template-columns: minmax(130px, 38%) minmax(0, 1fr);
+  gap: clamp(10px, 2.2vw, 24px);
+  align-items: end;
+}
+.npc-dialogue-grid > .npc-art-frame {
+  max-width: min(280px, 41dvh);
+  justify-self: center;
+  align-self: end;
+}
+.npc-dialogue-copy {
+  padding: clamp(12px, 2vw, 22px);
+  background: linear-gradient(150deg, #fffcef, #edf4df);
+  border: 1px solid #c3cfaf;
+  border-radius: 14px;
+  color: #224c40;
+  overflow-wrap: anywhere;
+}
+.npc-dialogue-copy > :first-child { margin-top: 0; }
+.npc-dialogue-copy > :last-child { margin-bottom: 0; }
+.npc-dialogue-copy p { line-height: 1.55; word-break: keep-all; margin: 8px 0 10px; }
+.npc-dialogue-copy .npc-dialogue-voice { margin-top: 5px; }
+.npc-dialogue-copy .voice-status { display: block; min-height: 0; }
+.npc-dialogue-grid:has([data-voice-playing="true"]) .npc-art-frame {
+  animation: npc-portrait-talking 920ms step-end infinite;
+}
+@keyframes npc-portrait-talking {
+  0%, 48%, 100% { background-position-x: 0%; }
+  13%, 67% { background-position-x: 100%; }
+}
+html:is(.reduced-motion,.reduce-motion) .npc-art-frame { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .npc-art-frame { animation: none !important; }
+}
+@media (max-width: 480px) {
+  .npc-dialogue-grid { grid-template-columns: minmax(90px, 34%) minmax(0, 1fr); gap: 8px; }
+  .npc-dialogue-grid .npc-dialogue-copy { padding: 10px; }
+}
+.game-dialog.npc-facility-dialog .dialog-body { padding: clamp(15px,3vw,28px); }
+.game-dialog.npc-facility-dialog .dialog-body > h2 { padding-right: 40px; margin-bottom: 9px; }
+.activity-help .npc-dialogue-copy p { margin: 0 0 8px; font-size: clamp(15px,1.8vw,19px); }
+body:has(.npc-facility-dialog[open]) .guide-character,
+body:has(.activity-help[open]) .guide-avatar { visibility: hidden; }

@@ -3,7 +3,7 @@ let audio, player, owner, serial=0;
 export function configureNarration(value){audio=value;}
 export function stopNarration(){
  serial++;if(player){player.pause();try{player.currentTime=0;}catch{}player.removeAttribute('src');player.load();player=null;}
- if(owner){owner.textContent='음성 다시 듣기';owner.setAttribute('aria-pressed','false');owner=null;}
+ if(owner){delete owner.dataset.voicePlaying;owner.textContent='음성 다시 듣기';owner.setAttribute('aria-pressed','false');owner=null;}
  audio?.duckVoice(false);
 }
 export function voiceControl(host,id,{autoplay=false}={}){
@@ -18,7 +18,7 @@ export function voiceControl(host,id,{autoplay=false}={}){
   status.textContent='AI 생성 음성';const request=++serial;const current=new Audio('/'+voiceLines[id].target);player=current;owner=button;current.preload='none';button.textContent='음성 멈추기';button.setAttribute('aria-pressed','true');audio.duckVoice(true);
   const fail=()=>{if(request!==serial)return;stopNarration();status.textContent='음성을 불러오지 못했어요. 화면의 글을 읽고 계속할 수 있어요.';};
   current.onended=()=>{if(request===serial)stopNarration();};current.onerror=fail;
-  try{await current.play();if(request===serial&&(document.hidden||!button.isConnected||!audio.settings.sfx))stopNarration();}catch{fail();}
+  try{await current.play();if(request!==serial)return;if(document.hidden||!button.isConnected||!audio.settings.sfx){stopNarration();return;}button.dataset.voicePlaying='true';}catch{fail();}
  };
  if(autoplay)button.click();return button;
 }

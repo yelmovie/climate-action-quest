@@ -1,6 +1,8 @@
 import {mountWelcomeVoice} from './welcome-voice.js';
 import { certificateFontStyle } from './certificate-font.js';
 import {configureNarration,voiceControl,stopNarration} from './narration.js';
+import {voiceLines} from './voice-lines.js';
+import {npcName,npcPortrait} from './npc-conversation.js';
 let welcomeCleanup = () => {};
 import {VERSION,SAVE_KEY,stages,createSaveSession,freshState,stageOpen,activityOpen,chapterDone,certificateEligible} from './state.js';
 import {icon} from './icons.js';
@@ -77,12 +79,16 @@ function home(){
 function map(){app.innerHTML=`<section class="screen map-screen"><div id="map-host"></div>${hud()}</section>`;cleanup=mountMap(app.querySelector('#map-host'),{state,save,go,icon,announce});}
 function facility(id){
  const s=stages[id];
- app.innerHTML=`<section class="screen facility-screen"><img class="facility-art" src="${asset(s.background)}" alt="${s.name}의 2D 연구 장면"><div class="facility-copy"><span class="eyebrow">${s.badge}의 연구 의뢰</span><h1>${s.name}</h1><p>${s.subtitle}</p><div class="facility-reward">${icon('book')}<span>모을 기록 <strong>${s.reward}</strong></span></div></div><div class="facility-activities">${s.activities.map((name,j)=>{const i=id*2+j,done=state.completed.includes(i),open=activityOpen(state,i);return `<button class="activity-card ${done?'done':''} ${open?'':'locked'}" data-activity="${i}" ${!open?'disabled':''}><span class="activity-card-visual">${artImage(chapterArt[id],'chapter-art',true)}<span class="activity-card-state">${icon(done?'check':open?j===0?s.icon:'book':'lock')}</span></span><span class="eyebrow">${j===0?'먼저 탐구해요':'기록을 이어 써요'} · ${s.counts[j]}</span><h2>${name}</h2><p>${done?'연구 완료 · 다시 탐구할 수 있어요':open?'눌러서 연구를 시작해요':'앞 활동의 기록을 먼저 모아 주세요'}</p><span class="card-go">${done?'다시 살펴보기':'연구하러 가기'} ${icon('arrow')}</span></button>`;}).join('')}</div><button class="guide-character" aria-label="${id===2||id===4?'물방울':'잎새'}의 도움말"><img src="${asset(id===2||id===4?'otter':'squirrel')}" alt=""><span>…</span></button><div class="facility-help" hidden></div>${hud()}</section>`;
+ app.innerHTML=`<section class="screen facility-screen"><img class="facility-art" src="${asset(s.background)}" alt="${s.name}의 2D 연구 장면"><div class="facility-copy"><span class="eyebrow">${s.badge}의 연구 의뢰</span><h1>${s.name}</h1><p>${s.subtitle}</p><div class="facility-reward">${icon('book')}<span>모을 기록 <strong>${s.reward}</strong></span></div></div><div class="facility-activities">${s.activities.map((name,j)=>{const i=id*2+j,done=state.completed.includes(i),open=activityOpen(state,i);return `<button class="activity-card ${done?'done':''} ${open?'':'locked'}" data-activity="${i}" ${!open?'disabled':''}><span class="activity-card-visual">${artImage(chapterArt[id],'chapter-art',true)}<span class="activity-card-state">${icon(done?'check':open?j===0?s.icon:'book':'lock')}</span></span><span class="eyebrow">${j===0?'먼저 탐구해요':'기록을 이어 써요'} · ${s.counts[j]}</span><h2>${name}</h2><p>${done?'연구 완료 · 다시 탐구할 수 있어요':open?'눌러서 연구를 시작해요':'앞 활동의 기록을 먼저 모아 주세요'}</p><span class="card-go">${done?'다시 살펴보기':'연구하러 가기'} ${icon('arrow')}</span></button>`;}).join('')}</div><button class="guide-character" aria-label="${id===2||id===4?'물방울':'잎새'}의 도움말" aria-haspopup="dialog"><img src="${asset(id===2||id===4?'otter':'squirrel')}" alt=""><span>…</span></button>${hud()}</section>`;
  app.querySelectorAll('[data-activity]').forEach(b=>b.onclick=()=>go('activity/'+b.dataset.activity));
  const clips=s.activities.map((name,j)=>({name,index:id*2+j})).filter(c=>state.completed.includes(c.index));
  if(clips.length){app.querySelector('.facility-activities').insertAdjacentHTML('beforeend',`<nav class="facility-clips" aria-label="완료한 탐구의 개념 영상">${clips.map((c,j)=>`<button class="button secondary" data-clip="${c.index}">${icon('play')} ${j===0?'첫 탐구':'다음 탐구'} 개념 영상</button>`).join('')}</nav>`);app.querySelectorAll('[data-clip]').forEach(b=>b.onclick=()=>openConcept({index:+b.dataset.clip,dialog,audio,icon,next:()=>{},label:'시설로 돌아가기'}));}
- const facilityVoice=voiceControl(app.querySelector('.facility-copy'),`facility-${id}`);
- const help=app.querySelector('.facility-help');app.querySelector('.guide-character').onclick=()=>{help.hidden=!help.hidden;help.textContent=`${s.subtitle}! 연구 카드를 순서대로 눌러 시작해 봐. 활동 중에 내 그림을 누르면 힌트를 볼 수 있어.`;if(!help.hidden)facilityVoice.click();};
+ app.querySelector('.guide-character').onclick=()=>{
+  const voiceId=`facility-${id}`, line=voiceLines[voiceId], name=npcName(line.speaker);
+  const d=dialog(`<h2 id="facility-npc-name">${name}의 연구 안내</h2><div class="npc-dialogue-grid">${npcPortrait(line.speaker)}<div class="npc-dialogue-copy"><p>${esc(line.text)}</p></div></div>`,'npc-facility-dialog');
+  d.setAttribute('aria-labelledby','facility-npc-name');
+  voiceControl(d.querySelector('.npc-dialogue-copy'),voiceId,{autoplay:true});
+ };
 }
 function activity(index){
  const s=stages[Math.floor(index/2)];
@@ -105,7 +111,7 @@ function dialog(html,classes=''){
 }
 function story(after){
  const pages=[['끊어진 연구기지를 다시 연결해요','도시를 살펴보던 연구 기록이 흩어졌어요. 무엇이 달라졌는지, 어떤 준비가 필요한지 확인할 단서가 필요해요.','home'],['대원은 생각하고, 잎새는 함께 걸어요','관측하고 → 관련성을 찾고 → 영향을 실험해요. 생활의 선택을 비교한 뒤, 직접 설계한 도시를 시험해요.','village'],['다섯 기록이 모이면, 나만의 최종 보고!','연구를 마칠 때마다 지도 속 시설에 불빛이 켜져요. 기록을 모아 탐구 인증서를 완성해요. 현실의 기후 문제는 우리 실천으로 계속 대응해야 해요.','design']];let n=0;
- const d=dialog('','story-dialog');const body=d.querySelector('.dialog-body');function draw(){stopNarration();const p=pages[n];body.innerHTML=`<img class="story-art" src="${asset(p[2])}" alt=""><span class="eyebrow">잎새가 보낸 연구 의뢰 · ${n+1} / 3</span><h2>${p[0]}</h2><p>${p[1]}</p><button class="button primary story-next">${n===2?'연구기지로 출발!':'다음 이야기'} ${icon('arrow')}</button>`;body.querySelector('button').onclick=()=>{if(n<2){n++;draw();}else{d.close();after?.();}};voiceControl(body,`story-${n+1}`,{autoplay:true});}draw();
+ const d=dialog('','story-dialog');audio.storyMusic(true);d.addEventListener('close',()=>audio.storyMusic(false),{once:true});const body=d.querySelector('.dialog-body');function draw(){stopNarration();const p=pages[n];body.innerHTML=`<img class="story-art" src="${asset(p[2])}" alt=""><span class="eyebrow">잎새가 보낸 연구 의뢰 · ${n+1} / 3</span><h2>${p[0]}</h2><p>${p[1]}</p><button class="button primary story-next">${n===2?'연구기지로 출발!':'다음 이야기'} ${icon('arrow')}</button>`;body.querySelector('button').onclick=()=>{if(n<2){n++;draw();}else{d.close();after?.();}};voiceControl(body,`story-${n+1}`,{autoplay:true});}draw();
 }
 function settings(){
  const s=audio.settings;const paras=items=>items.map(t=>`<p>${esc(t)}</p>`).join('');
