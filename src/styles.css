@@ -590,3 +590,10 @@ img { max-width: 100%; }
 .screen-hud { left: max(var(--edge), env(safe-area-inset-left, 0px)); right: max(var(--edge), env(safe-area-inset-right, 0px)); }
 #toast { bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
 .map-talking .map-repair:not([open]){visibility:hidden}
+
+/* The full font remains the default for the story, map and activities. */
+@font-face{font-family:"Climate Lab Title";src:url("/assets/fonts/title-400.woff2") format("woff2");font-style:normal;font-weight:400;font-display:swap;}
+@font-face{font-family:"Climate Lab Title";src:url("/assets/fonts/title-700.woff2") format("woff2");font-style:normal;font-weight:700;font-display:swap;}
+body.title-font{font-family:"Climate Lab Title","Apple SD Gothic Neo",system-ui,sans-serif}
+
+body.title-font .boot{font-family:inherit}
