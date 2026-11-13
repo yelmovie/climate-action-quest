@@ -27,7 +27,7 @@ const story = [
   ]
 ];
 const hit = ["팝! 관측점이 켜졌어!", "카드가 들려 추세선이 보이잖아!"], finish = "카드가 접혔어. 관측선이 다시 보여!";
-export const encounterLook = {palette:'#ffcc8e', effect:'trend', art:{left:base+'villain-left.png',right:base+'villain-right.png',frames:6}};
+export const encounterLook = {palette:'#ffcc8e', effect:'trend', art:{left:base+'villain-poses-left.png',right:base+'villain-poses-right.png',frames:6}};
 export function encounterStage(index,id,name,point){
   const [one,two,prop]=story[index];
   return {id:String(id),name,x:point.x,y:point.y,lines:[one,two],prop,hit,finish};
