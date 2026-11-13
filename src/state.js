@@ -8,7 +8,8 @@ export const stages=[
  {id:3,name:'생활 연구소',subtitle:'안전하고 지속할 수 있는 실천을 골라요',reward:'나의 생활 대응 실천안',badge:'생활 실천가',icon:'leaf',background:'bedroom',activities:['오늘의 기후 선택','선택 비교와 실천'],counts:['10가지 상황','4번 비교']},
  {id:4,name:'도시 설계소',subtitle:'내가 만든 도시를 같은 조건에서 시험해요',reward:'검증된 기후 대응 도시 설계도',badge:'미래 설계자',icon:'city',background:'design',activities:['미래도시 설계','기후 스트레스 테스트'],counts:['6구역 설계','4번 검증']}
 ];
-export function freshState(){return {version:1,mapRepairs:[],mapRepairLayouts:{},records:{},completed:[],adminUnlocked:false,introSeen:false,finalized:false,route:'home',position:{x:500,y:603},summaries:{}};}
+import { normalizeMapHits } from "./map-encounter-progress.js";
+export function freshState(){return {version:1,mapRepairs:[],mapHits:{},mapRepairLayouts:{},records:{},completed:[],adminUnlocked:false,introSeen:false,finalized:false,route:'home',position:{x:500,y:603},summaries:{}};}
 export function normalizeState(raw){
  const base=freshState();if(!raw||typeof raw!=='object'||raw.version!==1)return base;
  base.mapRepairs=Array.isArray(raw.mapRepairs)?[...new Set(raw.mapRepairs.filter(n=>Number.isInteger(n)&&n>=0&&n<5))]:[];
@@ -21,6 +22,7 @@ export function normalizeState(raw){
  if(typeof raw.route==='string'&&/^(home|map|ending|facility\/[0-4]|activity\/[0-9])$/.test(raw.route))base.route=raw.route;
  if(Number.isFinite(raw.position?.x)&&Number.isFinite(raw.position?.y))base.position=raw.position;
  if(raw.summaries&&typeof raw.summaries==='object')base.summaries=Object.fromEntries(Object.entries(raw.summaries).filter(([k,v])=>/^\d$/.test(k)&&typeof v==='string').map(([k,v])=>[k,v.slice(0,1000)]));
+ base.mapHits=normalizeMapHits(raw.mapHits,stages.filter(s=>chapterDone(base,s.id)).map(s=>String(s.id)));
  return base;
 }
 export function stageOpen(state,id){return id===0||state.adminUnlocked||chapterDone(state,id-1);}

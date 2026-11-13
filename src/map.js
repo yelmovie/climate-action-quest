@@ -1,4 +1,6 @@
 import { createMapCamera, bindMapCameraPointer, mapLabelGuard } from './map-camera.js';
+import { mountMapEncounters } from './map-encounters.js';
+import { encounterLook,encounterStage,loadEncounterActor,drawEncounterActor } from './map-encounter-theme.js';
 import { buildingReveal, paintRestoredBuildings } from './building-restoration.js';
 import {voiceControl} from './narration.js';
 import {bindDirectionPad,assistMapStep,MAP_VECTORS} from './map-controls.js';
@@ -9,7 +11,7 @@ import {stages,chapterDone,stageOpen,certificateEligible} from './state.js';
 // times the cover scale; dragging, or hand mode, frees the camera until the walker moves again.
 const FOLLOW=1.4;
 const josa=word=>{const c=word.charCodeAt(word.length-1)-0xac00;return c>=0&&c<11172&&c%28?'을':'를';};
-export function mountMap(host,{state,save,go,icon,announce,takeRestorations},[mapArt,sheet]){
+export function mountMap(host,{state,save,go,icon,announce,tone,takeRestorations},[mapArt,sheet]){
  const point=projectPath(state.position),p={x:point.x,y:point.y},follower={x:p.x-42,y:p.y+12};let route=[],target=null,frame=0,last=0,raf=0,direction=0,disposed=false,walk=false,lastSave=0;
  let padKey=null;const held=new Set(),trail=[{...follower},{...p}],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const done=stages.filter(s=>state.adminUnlocked||chapterDone(state,s.id)).length,next=stages.find(s=>!chapterDone(state,s.id));
@@ -21,6 +23,14 @@ export function mountMap(host,{state,save,go,icon,announce,takeRestorations},[ma
  const restoredIds=takeRestorations?.()??[],reveal=buildingReveal(reduced,restoredIds);let lastRestoration=null;
  const camera=createMapCamera({width:world.width,height:world.height,baseZoom:FOLLOW,focusY:.46,reduced:()=>matchMedia('(prefers-reduced-motion: reduce)').matches});
  const blocked=()=>disposed||document.hidden||!!document.querySelector('dialog[open]')||!!host.querySelector('.map-repair[open]');
+ const encounterStages=state.adminUnlocked?[]:stages.flatMap(s=>{
+  const b=world.buildings.find(b=>b.stage===s.id),anchor=nodePoint(b.node);
+  const edge=world.edges.find(([from,to])=>from===b.node||to===b.node);
+  const p=nodePoint(edge[0]===b.node?edge[1]:edge[0]),d=Math.hypot(p.x-anchor.x,p.y-anchor.y)||1;
+  return chapterDone(state,s.id)?[encounterStage(s.id,s.id,s.name,{x:anchor.x+(p.x-anchor.x)*34/d,y:anchor.y+(p.y-anchor.y)*34/d})]:[];
+ });
+ const encounters=mountMapEncounters({host:viewport,stages:encounterStages,progress:state.mapHits,onSave:patch=>{state.mapHits={...state.mapHits,...patch};save();},blocked,reduced:()=>reduced,tone,reach:92,contact:23,...encounterLook});
+ const heroPose=encounterStages.length?loadEncounterActor('hero'):null,allyPose=encounterStages.length?loadEncounterActor('ally'):null;
  const guardLabels=mapLabelGuard(viewport,'.map-node','.screen-hud button,.map-bottom button,.map-repair summary');
  let lastScale=0,lastTransform='';
  const cameraEvents=new AbortController(),{signal}=cameraEvents;
@@ -48,7 +58,8 @@ export function mountMap(host,{state,save,go,icon,announce,takeRestorations},[ma
   if(key!==lastRestoration){land.clearRect(0,0,world.width,world.height);paintRestoredBuildings(land,{width:world.width,height:world.height,completed:isRestored,progress});lastRestoration=key;}
   ctx.drawImage(landscape,0,0);}
   if(route.length){ctx.strokeStyle='#ffefae';ctx.setLineDash([3,13]);ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(p.x,p.y);route.forEach(q=>ctx.lineTo(q.x,q.y));ctx.stroke();ctx.setLineDash([]);}
-  const col=walk&&!reduced?Math.floor(time/140)%4:0;const actors=[{p:follower,row:direction+4,size:75},{p,row:direction,size:91}].sort((a,b)=>a.p.y-b.p.y);actors.forEach(a=>{ctx.fillStyle='rgba(17,59,48,.18)';ctx.beginPath();ctx.ellipse(a.p.x,a.p.y-3,a.size*.2,6,0,0,Math.PI*2);ctx.fill();sprite(a.p,a.row,col,a.size);});talk.style.left=`${follower.x/world.width*100}%`;talk.style.top=`${(follower.y-55)/world.height*100}%`;bubble.style.left=`${Math.max(120,Math.min(world.width-350,follower.x+35))/world.width*100}%`;bubble.style.top=`${Math.max(80,follower.y-150)/world.height*100}%`;}
+  const reactions=encounters.update({hero:p,ally:follower,project:q=>({x:q.x*camera.scale+camera.x,y:q.y*camera.scale+camera.y}),scale:camera.scale,now:time});
+  const col=walk&&!reduced?Math.floor(time/140)%4:0;const actors=[{p:follower,row:direction+4,size:75},{p,row:direction,size:91}].sort((a,b)=>a.p.y-b.p.y);actors.forEach(a=>{ctx.fillStyle='rgba(17,59,48,.18)';ctx.beginPath();ctx.ellipse(a.p.x,a.p.y-3,a.size*.2,6,0,0,Math.PI*2);ctx.fill();const ally=a.row>=4;if(!drawEncounterActor(ctx,ally?allyPose:heroPose,a.p,a.size,ally?reactions.ally:reactions.hero,{native:-1}))sprite(a.p,a.row,col,a.size);});talk.style.left=`${follower.x/world.width*100}%`;talk.style.top=`${(follower.y-55)/world.height*100}%`;bubble.style.left=`${Math.max(120,Math.min(world.width-350,follower.x+35))/world.width*100}%`;bubble.style.top=`${Math.max(80,follower.y-150)/world.height*100}%`;}
  function busy(active){
   if(active===nextButton.hasAttribute('aria-busy'))return;
   if(active){nextButton.setAttribute('aria-busy','true');nextButton.setAttribute('aria-disabled','true');nextButton.textContent='길을 따라 이동 중…';}
@@ -98,5 +109,5 @@ export function mountMap(host,{state,save,go,icon,announce,takeRestorations},[ma
  const f=trail[0],k=Math.min(1,dt*9);follower.x+=(f.x-follower.x)*k;follower.y+=(f.y-follower.y)*k;
  }else{cancelRoute();}if(!blocked())camera.update(p,dt);apply();draw(time);frame++;raf=requestAnimationFrame(tick);}
  resize();raf=requestAnimationFrame(tick);
- return()=>{disposed=true;cameraEvents.abort();directionPad.destroy();cancelAnimationFrame(raf);observer.disconnect();clear();document.removeEventListener('keydown',keydown);document.removeEventListener('keyup',keyup);window.removeEventListener('blur',cancelRoute);document.removeEventListener('visibilitychange',cancelRoute);state.position={...p};save();};
+ return()=>{disposed=true;encounters.destroy();cameraEvents.abort();directionPad.destroy();cancelAnimationFrame(raf);observer.disconnect();clear();document.removeEventListener('keydown',keydown);document.removeEventListener('keyup',keyup);window.removeEventListener('blur',cancelRoute);document.removeEventListener('visibilitychange',cancelRoute);state.position={...p};save();};
 }
