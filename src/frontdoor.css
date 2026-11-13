@@ -140,3 +140,16 @@
 .map-next-card{position:relative}
 .map-next-card .map-tools{position:absolute;right:0;bottom:calc(100% + 8px);flex-wrap:nowrap;margin:0}
 .map-node[data-map-label-covered]:not(:focus-visible){opacity:0;pointer-events:none}
+
+.play-mission-entry {
+ min-height:48px;padding:8px 20px;border:1px solid var(--line);border-radius:18px;
+ background:var(--glass-control);color:var(--forest-dark);font:inherit;font-weight:700;
+}
+
+/* Recovery uses only the first screen styles. */
+#map-host, #activity-host { min-width: 0; }
+.screen-load-card { width: min(100%, 520px); padding: clamp(16px, 4vw, 30px); border-radius: 22px; background: var(--paper); color: var(--forest-dark); }
+.screen-load-card h1 { margin: 0 0 8px; font-size: clamp(22px, 4vw, 34px); }
+.screen-load-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 16px; }
+.map-load-status.screen-load-status { inset: 0; display: grid; place-items: center; max-width: none; transform: none; padding: 70px 20px 24px; overflow: auto; border: 0; border-radius: 0; background: #174f47; }
+.screen-load-actions .button { margin-top: 0; }

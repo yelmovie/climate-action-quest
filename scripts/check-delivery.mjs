@@ -34,6 +34,10 @@ try{
   await online.close();
  }
  await page.goto(base+'/#facility/2',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!navigator.serviceWorker.controller,null,{timeout:180000});
+ await page.getByRole('button',{name:'설정',exact:true}).click();
+ await page.locator('#prepare-offline').click();
+ await page.getByText('자료 준비가 끝났어요. 연결이 끊겨도 탐구할 수 있어요.').waitFor({timeout:180000});
+ await page.locator('.dialog-close').click();
  await context.setOffline(true);await page.reload({waitUntil:'domcontentloaded'});await page.locator('[data-clip="4"]').click();await page.waitForFunction(()=>document.querySelector('video')?.readyState>=2);assert.equal(Math.round(await page.locator('video').evaluate(v=>v.duration)),CONCEPT_DURATION);await page.locator('.dialog-close').click();await page.locator('video').waitFor({state:'detached'});checks.push('offline reload + WebM concept');
  const cacheRange=await page.evaluate(async()=>{const r=await fetch('/assets/concepts/water.mp4',{headers:{Range:'bytes=0-1'}});return {status:r.status,size:(await r.arrayBuffer()).byteLength};});assert.deepEqual(cacheRange,{status:206,size:2});checks.push('offline cached MP4 byte ranges');
  await page.evaluate(()=>{const native=HTMLMediaElement.prototype.canPlayType;HTMLMediaElement.prototype.canPlayType=function(t){return t.includes('webm')?'':native.call(this,t);};});await page.locator('[data-clip="4"]').click();await page.waitForFunction(()=>document.querySelector('video')?.readyState>=2);assert.ok((await page.locator('video').getAttribute('src')).endsWith('.mp4'));await page.locator('video').evaluate(v=>v.currentTime=6.2);await page.waitForFunction(()=>document.querySelector('video').currentTime>=6);await page.locator('.dialog-close').click();await page.locator('video').waitFor({state:'detached'});checks.push('offline H.264 fallback + seeking');

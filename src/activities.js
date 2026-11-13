@@ -1,3 +1,4 @@
+import {sourceActivityRecord} from './activity-record.js';
 import {voiceControl} from './narration.js';
 import {voiceLines} from './voice-lines.js';
 import {npcPortrait} from './npc-conversation.js';
@@ -44,7 +45,7 @@ export function freshActivityRecord(record,example=false){
   }
   return next;
 }
-export const sourceActivityRecord=record=>record?.workComplete===false&&record?.earnedRecord?record.earnedRecord:record||{};
+export {sourceActivityRecord} from './activity-record.js';
 
 /** DOM activities are isolated from routing and storage. Every work step survives refresh. */
 export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=name=>`/assets/${name}.webp`,announce=()=>{},effect=()=>{},watchConcept=()=>{},continueActivity=()=>{},continueLabel=()=> '다음 연구 시작'}){

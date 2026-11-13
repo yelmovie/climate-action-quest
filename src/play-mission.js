@@ -97,14 +97,3 @@ export function openPlayMission(){
  dialog.addEventListener('close',()=>{dialog.remove();if(opener?.isConnected)opener.focus({preventScroll:true});},{once:true});
  render();dialog.showModal();dialog.querySelector('[data-close]').focus();
 }
-
-function install(){
- const host=document.querySelector('.hero-actions, .facility-copy');
- if(!host||host.querySelector('.play-mission-entry'))return;
- const button=document.createElement('button');
- button.className='play-mission-entry';button.textContent='도시 운영 미션';button.onclick=openPlayMission;
- host.append(button);
-}
-const observer=new MutationObserver(install);
-observer.observe(document.getElementById('app'),{childList:true,subtree:true});
-install();

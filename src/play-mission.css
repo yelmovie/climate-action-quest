@@ -1,8 +1,4 @@
 /* The mission keeps its goal and actions visible while the work area scrolls. */
-.play-mission-entry {
- min-height:48px;padding:8px 20px;border:1px solid var(--line);border-radius:18px;
- background:var(--glass-control);color:var(--forest-dark);font:inherit;font-weight:700;
-}
 dialog.play-mission {
  --pm-small:clamp(14px,1.1vw,18px);
  box-sizing:border-box;width:min(1240px,calc(100vw - 24px));height:min(840px,calc(100dvh - 24px));
