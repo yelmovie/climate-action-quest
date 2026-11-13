@@ -15,6 +15,7 @@ import {artImage,chapterArt} from './concept-art.js';
 const app=document.querySelector('#app'),live=document.querySelector('#announcer'),toast=document.querySelector('#toast');
 let storage;try{storage=window.localStorage;}catch{storage={getItem:()=>null,setItem:()=>{throw Error('unavailable');},removeItem:()=>{}};}
 const loaded=createSaveSession(storage);let studentState=null;let state=loaded.state,cleanup=()=>{},activeRoute='',toastTimer,saveWarning=false;
+const pendingRestoration=new Set();
 let resumeActivity=state.route.startsWith('activity/')?Number(state.route.split('/')[1]):null;
 const audio=createAudio(storage),asset=name=>`/assets/${name}.webp`,esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 configureNarration(audio);
@@ -76,7 +77,7 @@ function home(){
  app.querySelector('#start').onclick=()=>{if(!state.introSeen)story(()=>{state.introSeen=true;save();go('map');});else go(resumeRoute());};
  app.querySelector('#mission-story').onclick=()=>story();
 }
-function map(){app.innerHTML=`<section class="screen map-screen"><div id="map-host"></div>${hud()}</section>`;cleanup=mountMap(app.querySelector('#map-host'),{state,save,go,icon,announce});}
+function map(){app.innerHTML=`<section class="screen map-screen"><div id="map-host"></div>${hud()}</section>`;cleanup=mountMap(app.querySelector('#map-host'),{state,save,go,icon,announce,takeRestorations:()=>{if(studentState)return [];const ids=[...pendingRestoration];pendingRestoration.clear();return ids;}});}
 function facility(id){
  const s=stages[id];
  app.innerHTML=`<section class="screen facility-screen"><img class="facility-art" src="${asset(s.background)}" alt="${s.name}의 2D 연구 장면"><div class="facility-copy"><span class="eyebrow">${s.badge}의 연구 의뢰</span><h1>${s.name}</h1><p>${s.subtitle}</p><div class="facility-reward">${icon('book')}<span>모을 기록 <strong>${s.reward}</strong></span></div></div><div class="facility-activities">${s.activities.map((name,j)=>{const i=id*2+j,done=state.completed.includes(i),open=activityOpen(state,i);return `<button class="activity-card ${done?'done':''} ${open?'':'locked'}" data-activity="${i}" ${!open?'disabled':''}><span class="activity-card-visual">${artImage(chapterArt[id],'chapter-art',true)}<span class="activity-card-state">${icon(done?'check':open?j===0?s.icon:'book':'lock')}</span></span><span class="eyebrow">${j===0?'먼저 탐구해요':'기록을 이어 써요'} · ${s.counts[j]}</span><h2>${name}</h2><p>${done?'연구 완료 · 다시 탐구할 수 있어요':open?'눌러서 연구를 시작해요':'앞 활동의 기록을 먼저 모아 주세요'}</p><span class="card-go">${done?'다시 살펴보기':'연구하러 가기'} ${icon('arrow')}</span></button>`;}).join('')}</div><button class="guide-character" aria-label="${id===2||id===4?'물방울':'잎새'}의 도움말" aria-haspopup="dialog"><img src="${asset(id===2||id===4?'otter':'squirrel')}" alt=""><span>…</span></button>${hud()}</section>`;
@@ -93,13 +94,15 @@ function facility(id){
 function activity(index){
  const s=stages[Math.floor(index/2)];
  app.innerHTML=`<section class="screen activity-screen"><img class="scene-bg" src="${asset(s.background)}" alt=""><div id="activity-host"></div>${hud()}</section>`;
- const advance=()=>go(state.records[index]?.example?'facility/'+s.id:index%2===0?'activity/'+(index+1):index<9?'facility/'+(s.id+1):certificateEligible(state)?'ending':'map');
- const nextLabel=()=>state.records[index]?.example?'시설로 돌아가기':index%2===0?'다음 연구 시작':index<9?stages[s.id+1].name+'로 이동':certificateEligible(state)?'최종 보고 완성하기':'연구기지 돌아보기';
+ const advance=()=>go(state.records[index]?.example?'facility/'+s.id:index%2===0?'activity/'+(index+1):'map');
+ const nextLabel=()=>state.records[index]?.example?'시설로 돌아가기':index%2===0?'다음 연구 시작':'지도에서 변화 보기';
  const watch=reward=>openConcept({index,dialog,audio,icon,next:advance,label:nextLabel(),reward});
  cleanup=mountActivity(app.querySelector('#activity-host'),{index,state,save,icon,asset,announce:message=>{live.textContent=message;},effect:name=>audio.effect(name),watchConcept:()=>watch(),continueActivity:advance,continueLabel:nextLabel,complete:summary=>{
   const record=state.records[index]??={};record.done=true;state.summaries[index]=summary;
   const example=record.example===true;
+  const wasDone=chapterDone(state,s.id);
   if(!example&&!state.completed.includes(index))state.completed.push(index);
+  if(!wasDone&&chapterDone(state,s.id)&&!studentState)pendingRestoration.add(s.id);
   save();audio.effect();
   const chapter=chapterDone(state,s.id);
   watch(example?'교사용 예시 탐구':chapter?s.badge+' 배지 획득!':'탐구 기록 저장 완료');
@@ -130,7 +133,7 @@ function ending(){
  app.innerHTML=`<section class="screen ending-screen"><img class="scene-bg" src="${asset('home')}" alt="다시 연결된 기후 미래 작전실"><div class="ending-copy"><span class="eyebrow">${state.finalized?'연구 대원의 마지막 기록':'다섯 연구 기록, 하나의 대응안'}</span><h1>${state.finalized?'우리의 탐구는 계속돼요':'다섯 연구 기록이 모두 연결됐어요'}</h1><p>${state.finalized?'모형 속 답을 찾았다면, 이제 생활 속 작은 실천을 이어가요.':'모은 발견으로 작전실을 켜고 탐구를 마무리해요.'}</p><div class="report-records" role="list" aria-label="연결한 다섯 연구 기록">${stages.map(s=>`<div class="report-record button secondary connected" data-record="${s.id}" role="listitem">${icon(s.icon)}<span>${s.reward}</span>${icon('check')}</div>`).join('')}</div><div class="final-actions"><button class="button primary" id="finalize">${state.finalized?'탐구 인증서 받기':'작전실 켜고 인증서 받기'} ${icon('trophy')}</button><button class="button secondary" id="back-map">연구기지 돌아보기</button></div></div>${hud()}</section>`;
 
  voiceControl(app.querySelector('.ending-copy'),state.finalized?'ending-2':'ending-1');
- app.querySelector('#back-map').onclick=()=>go('map');app.querySelector('#finalize').onclick=()=>{if(!certificateEligible(state))return;state.finalized=true;save();audio.effect();certificate();};
+ app.querySelector('#back-map').onclick=()=>go('map');app.querySelector('#finalize').onclick=()=>{if(!certificateEligible(state))return;if(!state.finalized&&!studentState)pendingRestoration.add(5);state.finalized=true;save();audio.effect();certificate();};
 }
 function certificate(){if(state.adminUnlocked){announce("교사 미리보기에서는 인증서를 발급하지 않아요.");return;}if(!state.finalized||!certificateEligible(state))return;const d=dialog(`<div class="certificate"><div class="certificate-stamp">${icon('trophy')}</div><span class="eyebrow">기후 미래 작전실</span><h2>기후 미래 탐구 대원 인증서</h2><p>자료로 판단하고, 예상과 결과를 비교하며,<br>생활과 도시의 대응을 설계했어요.</p><div class="certificate-badges">${stages.map(s=>`<span>${icon(s.icon)} ${s.badge}</span>`).join('')}</div><p>내가 남긴 연구 기록</p><p class="certificate-summary">나의 실천: ${esc(researchHighlights()[0])}<br>${esc(researchHighlights()[1])}</p><p class="science-note">게임 속 탐구를 마친 기록이에요. 배운 것은 수업과 생활에서 계속 이어 가요.</p><strong>옐샘 & 아이스크림미디어</strong></div><button class="button primary" id="download-certificate">인증서 내려받기 ${icon('download')}</button>`,'certificate-dialog');d.querySelector('#download-certificate').onclick=downloadCertificate;}
 function download(filename,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
