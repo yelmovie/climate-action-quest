@@ -29,7 +29,7 @@ export function mountMap(host,{state,save,go,icon,announce,tone,takeRestorations
   const p=nodePoint(edge[0]===b.node?edge[1]:edge[0]),d=Math.hypot(p.x-anchor.x,p.y-anchor.y)||1;
   return chapterDone(state,s.id)?[encounterStage(s.id,s.id,s.name,{x:anchor.x+(p.x-anchor.x)*34/d,y:anchor.y+(p.y-anchor.y)*34/d})]:[];
  });
- const encounters=mountMapEncounters({host:viewport,stages:encounterStages,progress:state.mapHits,onSave:patch=>{state.mapHits={...state.mapHits,...patch};save();},blocked,reduced:()=>reduced,tone,reach:92,contact:23,...encounterLook});
+ const encounters=mountMapEncounters({requiredFoes:5,host:viewport,clearStage:()=>restoredIds.filter(id=>id!==5).at(-1),stages:encounterStages,progress:state.mapHits,onSave:patch=>{state.mapHits={...state.mapHits,...patch};save();},blocked,reduced:()=>reduced,tone,reach:92,contact:23,...encounterLook});
  const heroPose=encounterStages.length?loadEncounterActor('hero'):null,allyPose=encounterStages.length?loadEncounterActor('ally'):null;
  const guardLabels=mapLabelGuard(viewport,'.map-node','.screen-hud button,.map-bottom button,.map-repair summary');
  let lastScale=0,lastTransform='';
