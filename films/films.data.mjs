@@ -27,7 +27,7 @@ export const films = [
     const s = site('summer'), c = longChart('ob', s, { x: 610, base: 560, step: 52 });
     const tr = trend('ob-trend', c.top(0, s.past[0]), c.top(7, s.now[3]), 7.1);
     return {
-      id: 'observe', cast: 'squirrel', question: '하루 기록만 보면 알 수 있을까?', conclusion: '긴 기록에서 **경향**을 찾아요',
+      id: 'observe', cast: 'parrot', question: '하루 기록만 보면 알 수 있을까?', conclusion: '긴 기록에서 **경향**을 찾아요',
       body: img('ob-pic', 'scene-observe-v2', 0, 30, 520, 293) + `<div id="ob-panel" class="panel" style="left:560px;top:0;width:740px;height:640px"></div><i id="ob-axis" class="axis" style="left:590px;top:560px;width:690px"></i>` +
         `<i id="ob-day" class="bar new" style="left:900px;top:${560 - 5 * 52}px;height:${5 * 52}px;width:60px"></i>` + c.html + tr.html +
         `<p id="ob-note" class="note" style="left:600px;top:580px">${s.unit} · 탐구용 가상 기록</p>` +
@@ -57,7 +57,7 @@ export const films = [
     };
   })(),
   { // 2 도시 활동 스캐너 — 사선으로 겹친 세 장면(나란한 카드 아님)
-    id: 'resources', cast: 'squirrel', question: '생활 속 어디에 자원이 쓰일까?', conclusion: '생활 곳곳에서 **자원**을 아껴요',
+    id: 'resources', cast: 'parrot', question: '생활 속 어디에 자원이 쓰일까?', conclusion: '생활 곳곳에서 **자원**을 아껴요',
     body: img('rs-a', 'scene-classroom', 0, 0, 600, 338) + img('rs-b', 'scene-repair', 340, 175, 600, 338) + img('rs-c', 'scene-forest', 680, 350, 600, 338) +
       tag('rs-t1', 330, 140, '전기', { len: 60, small: '빈 교실의 조명' }) + tag('rs-t2', 640, 290, '자원과 에너지', { len: 60, small: '고쳐 쓰기' }) + tag('rs-t3', 990, 470, '숲', { len: 60, hot: true, small: '나무 지키기' }),
     js: show('#rs-a', 1.2, { opacity: 0, x: -60 }, .6) + tagIn('rs-t1', 2.6) +
@@ -84,7 +84,7 @@ export const films = [
     const steps = places.map((p, i) => `${i ? 'L' : 'M'}${p.x - 105} ${p.y + 22} L${p.x + 105} ${p.y + 22}`).join(' ');
     const level = l => ground(l) + 22;
     return {
-      id: 'water', cast: 'squirrel', question: '물이 높아지면 어디부터 닿을까?', conclusion: '**낮은 곳**부터 물이 닿아요',
+      id: 'water', cast: 'parrot', question: '물이 높아지면 어디부터 닿을까?', conclusion: '**낮은 곳**부터 물이 닿아요',
       body: `<div id="wt-box" class="panel" style="left:0;top:0;width:1300px;height:690px;overflow:hidden;background:#EEF6E8"><svg width="1300" height="690" style="position:absolute;left:0;top:0"><path d="${steps} L1300 ${places[5].y + 22} L1300 690 L0 690 L0 ${places[0].y + 22} Z" fill="#D9C38F" stroke="#A5B57A" stroke-width="5"/></svg>` +
         places.map((p, i) => `<div id="wt-p${i}" class="obj" style="left:${p.x - 115}px;top:${p.y - 150}px;width:230px"><img src="assets/img/${p.id}.webp" alt=""></div>`).join('') +
         `<div id="wt-water" class="water" style="left:0;top:0;width:1300px;height:690px"></div></div>` +
@@ -105,7 +105,7 @@ export const films = [
     js: show('#ef-scene', .8, { opacity: 0 }, .5) + tagIn('ef-t1', 2.0) + tagIn('ef-t2', 5.5) + tagIn('ef-t3', 8.0),
   },
   { // 6 오늘의 기후 선택 — 더운 날 쉬는 시간(dailyCases[4])
-    id: 'choices', cast: 'squirrel', question: '더운 날, 전기를 아끼려고 참을까?', conclusion: '**건강과** 안전을 먼저 지켜요',
+    id: 'choices', cast: 'parrot', question: '더운 날, 전기를 아끼려고 참을까?', conclusion: '**건강과** 안전을 먼저 지켜요',
     body: img('ch-pic', 'scene-heat', 0, 40, 740, 416) + `<div id="ch-a" class="chip" style="left:800px;top:110px">물과 그늘에서 쉬기</div><div id="ch-b" class="chip" style="left:800px;top:330px">더위를 계속 참기</div>` +
       `<i id="ch-x" data-layout-allow-occlusion class="strike" style="left:790px;top:372px;width:420px"></i><i id="ch-ok" class="check" style="left:1210px;top:98px"></i>` +
       tag('ch-t1', 1000, 430, '몸이 위험해요', { dir: 'down', len: 50 }) + tag('ch-t2', 1000, 110, '건강과 안전 먼저', { len: 50, hot: true }),
@@ -135,7 +135,7 @@ export const films = [
       `<div class="meter heat" style="left:24px;top:220px">더위 ${dots(4, d.heat)}</div><div class="meter rain" style="left:24px;top:258px">비 ${dots(4, d.rain)}</div>` +
       `<div id="ds-f${i}" class="obj" style="left:190px;top:60px;width:200px"><img src="assets/img/${good[i]}.webp" alt=""></div></div>`; };
     return {
-      id: 'design', cast: 'squirrel', question: '구역마다 어떤 시설이 맞을까?', conclusion: '**위험**에 맞는 시설을 골라요',
+      id: 'design', cast: 'parrot', question: '구역마다 어떤 시설이 맞을까?', conclusion: '**위험**에 맞는 시설을 골라요',
       body: cityDistricts.map(tile).join('') + `<p id="ds-n" class="note" style="left:960px;top:-40px">자원 ${18} 중 ${used} 사용</p>` +
         tag('ds-t1', 290, 90, `더위 → ${fac('shade').name}`, { len: 50, hot: true }) + tag('ds-t2', 740, 90, `빗물 → ${fac('pond').name}`, { len: 50 }),
       js: cityDistricts.map((_, i) => show(`#ds-d${i}`, 1.0 + i * .15, { opacity: 0, y: 30 })).join('') +

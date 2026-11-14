@@ -14,8 +14,8 @@ sharp.cache(false); sharp.concurrency(1);
 const here = dirname(fileURLToPath(import.meta.url)), root = join(here, '..');
 const css = await readFile(join(here, 'kit', 'kit.css'), 'utf8');
 const SHEET = join(root, 'references', 'characters', 'chatgpt_generated_22.png');
-// 자세 시트의 칸(px). 잎새는 무대 쪽(왼쪽)을 보도록 좌우를 뒤집는다.
-const POSES = { 'squirrel-think': [398, 582, 190, 222, true], 'squirrel-wow': [588, 582, 240, 222, true], 'otter-think': [1276, 580, 164, 222, false], 'otter-cheer': [1436, 580, 236, 222, false] };
+// 물방울 자세 시트의 칸(px).
+const POSES = { 'otter-think': [1276, 580, 164, 222, false], 'otter-cheer': [1436, 580, 236, 222, false] };
 const BG = [251, 248, 243];
 
 // 종이색 바탕을 가장자리에서부터만 지운다(눈의 흰자처럼 윤곽선 안의 밝은 곳은 남는다).
@@ -40,11 +40,23 @@ async function pose([left, top, width, height, flip], out) {
     .composite([{ input: cut, left: Math.round((240 - W) / 2), top: 0 }]).webp({ quality: 92, alphaQuality: 100 }).toFile(out);
 }
 
-for (const f of films) {
+async function parrotPose(out) {
+  // The art faces right by default; the companion stands to the right of the lesson board.
+  const file = join(root, 'assets', 'ipsae-parrot.webp');
+  await sharp(file).flop().resize(240, 222, {
+    fit: 'contain', position: 'south', background: { r: 0, g: 0, b: 0, alpha: 0 }
+  }).webp({ quality: 92, alphaQuality: 100 }).toFile(out);
+}
+
+const only = process.argv.slice(2);
+for (const f of films.filter(f => !only.length || only.includes(f.id))) {
   const dir = join(here, f.id), img = join(dir, 'assets', 'img'), fonts = join(dir, 'assets', 'fonts');
   await mkdir(img, { recursive: true }); await mkdir(fonts, { recursive: true });
   for (const font of ['jua-korean-400.woff2', 'jua-latin-400.woff2', 'OFL.txt']) await copyFile(join(root, 'assets', 'fonts', font), join(fonts, font));
-  for (const [name, box] of Object.entries(POSES)) if (name.startsWith(f.cast)) await pose(box, join(img, `${name}.webp`));
+  if(f.cast==='parrot'){
+    const ask=join(img,'parrot-think.webp');await parrotPose(ask);
+    await copyFile(ask,join(img,'parrot-react.webp'));
+  }else for (const [name, box] of Object.entries(POSES)) if (name.startsWith(f.cast)) await pose(box, join(img, `${name}.webp`));
   const used = new Set([...f.body.matchAll(/assets\/img\/([a-z0-9-]+)\.webp/g)].map(m => m[1]));
   for (const id of used) await copyFile(join(root, 'assets', 'concept-art', `${id}.webp`), join(img, `${id}.webp`));
   await writeFile(join(dir, 'index.html'), page(f, css));

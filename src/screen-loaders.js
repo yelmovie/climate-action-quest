@@ -52,7 +52,7 @@ export function waitForScreen(pending, signal, deadline = 10000) {
   });
 }
 
-export async function loadMapArt(signal) {
+export async function loadMapArt(parrot, walk, signal) {
   const request = new AbortController();
   const cancel = () => request.abort();
   if (signal.aborted) cancel();
@@ -69,7 +69,9 @@ export async function loadMapArt(signal) {
   };
   try {
     return await waitForScreen(Promise.all([
-      image('/assets/village.webp', 'high'), image('/assets/field-team.webp'),
+      image('/assets/village.webp', 'high'), image('/assets/field-team.webp'), image(parrot),
+      // The standing portrait is a usable fallback for the optional walking sheet.
+      waitForScreen(image(walk), request.signal, 2500).catch(() => null),
     ]), request.signal, 20000);
   } finally {
     signal.removeEventListener('abort', cancel);

@@ -137,8 +137,6 @@
   }
 }
 
-.map-next-card{position:relative}
-.map-next-card .map-tools{position:absolute;right:0;bottom:calc(100% + 8px);flex-wrap:nowrap;margin:0}
 .map-node[data-map-label-covered]:not(:focus-visible){opacity:0;pointer-events:none}
 
 .play-mission-entry {
