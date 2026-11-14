@@ -87,7 +87,7 @@ export const voiceLines = {
   },
   "hint-0": {
     "speaker": "ipsae",
-    "text": "연한 막대와 진한 막대 중 어느 쪽이 더 높은지 비교해 봐. 여러 해 기록 사이에 하루나 며칠만 적힌 날씨 기록도 섞여 있어!",
+    "text": "줄무늬 막대와 단색 막대 중 어느 쪽이 더 높은지 비교해 봐. 여러 해 기록 사이에 하루나 며칠만 적힌 날씨 기록도 섞여 있어!",
     "target": "assets/audio/voices/hint-0.mp3"
   },
   "hint-1": {
@@ -117,7 +117,7 @@ export const voiceLines = {
   },
   "hint-5": {
     "speaker": "mulbangul",
-    "text": "무엇이 먼저 바뀌었을까? 어떤 생활·환경의 영향이 생길까? 마지막에는 필요한 대응을 생각해 봐!",
+    "text": "순서대로 놓은 카드를 눌러 다시 읽어 봐. 앞 장면이 다음 장면을 어떻게 바꾸는지 두 장씩 비교해 봐!",
     "target": "assets/audio/voices/hint-5.mp3"
   },
   "hint-6": {
@@ -127,7 +127,7 @@ export const voiceLines = {
   },
   "hint-7": {
     "speaker": "ipsae",
-    "text": "같은 길이의 막대는 같은 단계를 뜻해. 생활 만족이 유지되는지도 확인해 봐!",
+    "text": "같은 길이의 막대는 같은 단계를 뜻해. 건강과 생활을 지키는지도 확인해 봐!",
     "target": "assets/audio/voices/hint-7.mp3"
   },
   "hint-8": {

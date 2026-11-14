@@ -60,7 +60,9 @@
   .activity-card .chapter-art { width: 88px; }
   .activity-card > h2 { font-size: 24px; }
   .activity-card > .eyebrow { font-size: 16px; }
-  .facility-screen .guide-character { display: none; }
+  .facility-screen .guide-character { display: inline-flex; position: relative; inset: auto; align-items: center; align-self: start; gap: 8px; width: auto; min-height: 44px; padding: 4px 12px 4px 7px; border: 1px solid #719f8a; border-radius: 12px; background: #f7fbeb; color: #174f47; }
+  .facility-screen .guide-character img { width: 34px; height: 34px; }
+  .facility-screen .guide-character span { position: static; width: auto; border: 0; border-radius: 0; background: none; font-size: 16px; }
   .facility-screen .teacher-dock { position: relative; inset: auto; flex-shrink: 0; }
   .teacher-badge, .teacher-keys { display: none; }
   .teacher-pad { min-width: 0; flex: 1; }

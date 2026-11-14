@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {activityLearning,activityStandards} from '../src/activity-data.js';
-import {activityAction} from '../src/activity-guide.js';
+import {activityAction, activityGuide} from '../src/activity-guide.js';
+import {voiceLines} from '../src/voice-lines.js';
 
 test('each activity has a short concept, a reasoning prompt and an explicit learning bridge',()=>{
   assert.equal(activityLearning.length,10);
@@ -30,4 +31,13 @@ test('next actions identify the missing step and exact touch target',()=>{
   assert.match(activityAction(8,{plan:['shade','pond','shade','pond','trees','trees']}),/설계 저장/);
   assert.match(activityAction(9,{phase:2,plan:[]}),/시설|구역/);
   assert.match(activityAction(7,{round:4,practice:0}),/실천 약속/);
+});
+
+test('each activity help recording reads the standalone deeper hint', () => {
+  for (let i=0; i<10; i++) {
+    for (const record of i===4 ? [{}, {ran:true}] : [{}]) {
+      const id=i===4 ? (record.ran ? 'hint-4b' : 'hint-4a') : 'hint-'+i;
+      assert.equal(voiceLines[id].text, activityGuide(i,record).deeper, id);
+    }
+  }
 });
