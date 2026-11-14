@@ -2,7 +2,7 @@
 // 시간표: 15초 = 앱 자막 세 칸(0·5·10초). src/concept-data.js의 CONCEPT_CUES와 테스트(tests/concept-films.test.mjs)가 함께 지킨다.
 export const DURATION = 15, FPS = 30, CUES = [0, 5, 10];
 export const CAST = {
-  squirrel: { name: '잎새', ask: 'squirrel-think', react: 'squirrel-wow' },
+  parrot: { name: '잎새', ask: 'parrot-think', react: 'parrot-react' },
   otter: { name: '물방울', ask: 'otter-think', react: 'otter-cheer' },
 };
 export const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));

@@ -9,7 +9,7 @@ export function activityAction(index,r){
   case 2:return r.collected?.length===10?'조사 마무리를 눌러요.':r.collected?.includes(r.open||0)?'다음 조사 지점을 눌러요.':'장면과 관련된 자원 버튼을 눌러요.';
   case 3:return r.checked?'연결을 읽고 다음 버튼을 눌러요.':'가운데 칸에 맞는 이유 카드를 눌러요.';
   case 4:return r.ran?'예상과 결과를 보고 다음 버튼을 눌러요.':r.prediction?.length?'실험 시작을 눌러요.':'물이 닿을 것 같은 구역을 모두 눌러요.';
-  case 5:return r.checked?'연결을 읽고 다음 버튼을 눌러요.':r.order?.length===3?'놓인 카드를 눌러 빼고 순서를 바꿔요.':`먼저 일어난 일부터 ${3-(r.order?.length||0)}장을 더 눌러요.`;
+  case 5:return r.checked?'연결을 읽고 다음 버튼을 눌러요.':r.order?.length===3?'놓인 카드를 눌러 빼고 순서를 바꿔요.':`현장 설명과 카드의 앞뒤 관계를 보고 ${3-(r.order?.length||0)}장을 더 눌러요.`;
   case 6:return r.picked===undefined?'생활 선택 카드 하나를 눌러요.':dailyCases[r.round||0]?.options[r.picked]?.[2]?'몸을 보호하는 다른 선택을 눌러요.':'선택 기록 · 다음을 눌러요.';
   case 7:return r.round>=4?(r.practice===undefined?'직접 실천할 행동 하나를 눌러요.':'실천 약속을 수첩에 담기를 눌러요.'):r.checked?'비교 기록 · 다음을 눌러요.':'두 선택을 비교하고 더 나은 쪽을 눌러요.';
   case 8:return r.plan?.filter(Boolean).length===6?'설계 저장 · 시험으로를 눌러요.':r.tool==='erase'?'시설을 뺄 구역을 눌러요.':r.tool?'고른 시설을 놓을 구역을 눌러요.':'시설 하나를 고른 뒤 빈 구역을 눌러요.';
@@ -39,12 +39,12 @@ export function activityGuide(index,r){
   '물건의 겉모습만 보지 말고, 작동하거나 만들어질 때 무엇을 쓰는지 생각해 봐!',
   '처음 활동과 마지막 설명 사이에 어떤 에너지·자원 사용이 있는지 찾아봐!',
   r.ran?'땅 높이와 실험 수위를 비교해 봐. 내 예상이 달라도 새로운 발견이야!':'여러 구역을 예상해도 돼. 예상은 점수가 아니니 실험으로 확인해 봐!',
-  '무엇이 먼저 바뀌었을까? 어떤 생활·환경의 영향이 생길까? 마지막에는 필요한 대응을 생각해 봐!',
+  '놓은 카드를 다시 눌러 읽어 봐. 두 장씩 보면서 앞 카드의 일이 뒤 카드에 어떤 영향을 주는지 비교해!',
   '건강과 안전을 포기하지 마. 생활을 지키면서 필요 없는 사용을 줄여 봐!',
   '같은 길이의 막대는 같은 단계를 뜻해. 건강과 생활을 지키는지도 확인해 봐!',
   '구역의 더위·빗물 막대와 시설의 도움을 비교해 봐. 자원이 모자라면 시설을 빼거나 바꿀 수 있어!',
   '처음과 같은 날씨 조건이어야 공정하게 비교할 수 있어. 좋은 설계는 바꾸지 않고 다시 확인해도 돼!'
  ];
  const water=[4,5,9].includes(index);
- return {name:water?'물방울':'잎새',character:water?'otter':'squirrel',basic:basic[index],deeper:deeper[index]};
+ return {name:water?'물방울':'잎새',character:water?'otter':'parrot',basic:basic[index],deeper:deeper[index]};
 }

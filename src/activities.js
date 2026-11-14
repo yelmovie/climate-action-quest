@@ -1,4 +1,5 @@
 import {sourceActivityRecord} from './activity-record.js';
+import {ipsaeArt} from './characters.js';
 import {voiceControl} from './narration.js';
 import {voiceLines} from './voice-lines.js';
 import {npcPortrait} from './npc-conversation.js';
@@ -74,7 +75,7 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
     const guide=activityGuide(index,rec),learning=activityLearning[index];
     const teacherTools=host.closest('.screen')?.querySelector('.teacher-dock');
     if(teacherTools&&host.contains(teacherTools))host.parentElement.append(teacherTools);
-    host.innerHTML=`<section class="activity-page activity-${index}" aria-label="${escapeText(activityTitles[index])}"><header class="activity-heading"><h1>${escapeText(title)}</h1><span class="round-progress">${escapeText(progress)}${example?' · 교사용 예시':''}</span><p class="learning-key" aria-label="기억할 개념">${escapeText(learning.lead)}<strong>${escapeText(learning.key)}</strong>${escapeText(learning.tail)}</p></header><div class="activity-workspace">${body}</div><footer class="activity-footer-wrap"><div class="activity-footer"><button class="guide-avatar" aria-label="${guide.name}의 힌트" aria-haspopup="dialog"><img src="${asset(guide.character)}" alt=""><span>도움</span></button><div class="guide-message"><p class="activity-feedback" role="status">${escapeText(rec.feedback||instruction())}</p><p class="learning-action" hidden></p></div>${playbackTools()}${action?`<div class="activity-next">${action}</div>`:''}</div></footer><dialog class="activity-help" aria-label="탐구 도움말"><button class="help-close icon-button" aria-label="도움말 닫기">${icon('close')}</button><h2>${guide.name}의 탐구 도움</h2><div class="npc-dialogue-grid">${npcPortrait(guide.character==='otter'?'mulbangul':'ipsae')}<div class="npc-dialogue-copy"><p>${escapeText(brief)}</p><p class="guide-deeper">${escapeText(guide.deeper)}</p></div></div>${[4,5].includes(index)?artImage(index===4||(rec.round||0)<4?'scene-coast-landscape':effectArt[Math.min(rec.round||0,7)],'learning-illustration'): ''}<h3>기억할 개념</h3><p>${escapeText(learning.detail)}</p><h3>내 말로 설명해 봐요</h3><p>${escapeText(learning.question)}</p><h3>다음 탐구와 연결해요</h3><p>${escapeText(learning.bridge)}</p><h3>자료 안내</h3><p>${escapeText(note)}</p>${example?'<p>교사용 예시이며 실제 완료 기록에는 반영되지 않아요.</p>':''}</dialog></section>`;
+    host.innerHTML=`<section class="activity-page activity-${index}" aria-label="${escapeText(activityTitles[index])}"><header class="activity-heading"><h1>${escapeText(title)}</h1><span class="round-progress">${escapeText(progress)}${example?' · 교사용 예시':''}</span><p class="learning-key" aria-label="기억할 개념">${index===5&&!rec.workComplete?'같은 장면의 카드에서 무엇이 달라졌는지 살펴봐요.':`${escapeText(learning.lead)}<strong>${escapeText(learning.key)}</strong>${escapeText(learning.tail)}`}</p></header><div class="activity-workspace">${body}</div><footer class="activity-footer-wrap"><div class="activity-footer"><button class="guide-avatar" aria-label="${guide.name}의 힌트" aria-haspopup="dialog"><img src="${guide.character==='parrot'?ipsaeArt:asset(guide.character)}" alt=""><span>도움</span></button><div class="guide-message"><p class="activity-feedback" role="status">${escapeText(rec.feedback||instruction())}</p><p class="learning-action" hidden></p></div>${playbackTools()}${action?`<div class="activity-next">${action}</div>`:''}</div></footer><dialog class="activity-help" aria-label="탐구 도움말"><button class="help-close icon-button" aria-label="도움말 닫기">${icon('close')}</button><h2>${guide.name}의 탐구 도움</h2><div class="npc-dialogue-grid">${npcPortrait(guide.character==='otter'?'mulbangul':'ipsae')}<div class="npc-dialogue-copy"><p>${escapeText(brief)}</p><p class="guide-deeper">${escapeText(guide.deeper)}</p></div></div>${[4,5].includes(index)?artImage(index===4||(rec.round||0)<4?'scene-coast-landscape':effectArt[Math.min(rec.round||0,7)],'learning-illustration'): ''}<h3>기억할 개념</h3><p>${escapeText(learning.detail)}</p><h3>내 말로 설명해 봐요</h3><p>${escapeText(learning.question)}</p><h3>다음 탐구와 연결해요</h3><p>${escapeText(learning.bridge)}</p><h3>자료 안내</h3><p>${escapeText(note)}</p>${example?'<p>교사용 예시이며 실제 완료 기록에는 반영되지 않아요.</p>':''}</dialog></section>`;
   }
   function draw(){
     if(disposed)return;
@@ -98,7 +99,7 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
     on('.guide-avatar','click',()=>{
       playback?.pause();const help=host.querySelector('.activity-help'),tools=host.closest('.screen')?.querySelector('.teacher-dock');
       if(tools&&!help.contains(tools)){const title=document.createElement('h3');title.textContent='교사 단계 이동';help.append(title,tools);}
-      help.showModal();effect('hint');help.querySelectorAll('.voice-replay,.voice-status').forEach(el=>el.remove());voiceControl(help.querySelector('.npc-dialogue-copy'),index===4?`hint-4${rec.ran?'b':'a'}`:`hint-${index}`,{autoplay:true});
+      help.showModal();effect('hint');help.querySelectorAll('.voice-replay,.voice-status').forEach(el=>el.remove());const voice=index===4?`hint-4${rec.ran?'b':'a'}`:`hint-${index}`;if([help.querySelector('.npc-dialogue-copy p')?.textContent,help.querySelector('.guide-deeper')?.textContent].includes(voiceLines[voice]?.text))voiceControl(help.querySelector('.npc-dialogue-copy'),voice,{autoplay:true});
     });
     on('.help-close','click',()=>host.querySelector('.activity-help').close());
     on('[data-playback]','click',()=>playback.toggle());
@@ -299,7 +300,7 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
   }
   function checkEffectOrder(){
     rec.checked=rec.order.length===3&&rec.order.every((n,i)=>n===i);
-    rec.feedback=rec.checked?'환경의 변화가 생활·환경에 주는 영향과 필요한 대응까지 연결했어요.':rec.order.length===3?'환경의 변화 → 생활·환경의 영향 → 필요한 대응 순서로 생각해 보세요. 카드를 끌어 순서를 바꿀 수 있어요.':'카드를 놓으면 연결이 완성돼요. 원인에서 결과 순서로 이어 보세요.';
+    rec.feedback=rec.checked?'환경의 변화가 생활·환경에 주는 영향과 필요한 대응까지 연결했어요.':rec.order.length===3?'놓은 두 카드를 비교해요. 뒤 카드의 일이 일어나려면 앞 카드에서 무엇이 달라져야 할까요? 카드를 누르면 빼고 다시 놓을 수 있어요.':'현장 설명과 카드의 내용을 다시 보고 다음 카드를 눌러요.';
     if(rec.order.length===3)effect(rec.checked?'success':'retry');
   }
   function dailyChoice(){

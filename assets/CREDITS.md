@@ -28,6 +28,9 @@
 | `assets/storm.webp` | `references/backgrounds/chatgpt_generated_20.png` | 기후 조건 시험 | WebP, 1672×941 |
 | `assets/logo.webp` | `references/branding/chatgpt_generated_23.png` | 브랜딩 | WebP, 1672×941, 원본 배경 유지 |
 | `assets/squirrel.webp` | `references/characters/chatgpt_generated_22.png` | 잎새 기록 포즈 | 원본 (0,320)~(220,579) 셀, 220×259 |
+| `assets/ipsae-parrot.webp` | Codex 이미지 생성 | 잎새 앵무새 원화 · 타이틀과 활동 가이드 | 투명 WebP, 768×702 |
+| `assets/ipsae-parrot-walk.webp` | Codex 이미지 생성 포즈 | 지도 동행의 옆·앞·뒤 움직임 | 투명 WebP, 224×150, 56×50 프레임 12개 |
+| `assets/ipsae-parrot-talk.webp` | Codex 이미지 생성 포즈 | 잎새 대화의 기본·말하기 표정 | 투명 WebP, 1024×512, 512×512 프레임 2개 |
 | `assets/otter.webp` | `references/characters/chatgpt_generated_22.png` | 물방울 안내 얼굴 | 원본 (838,805)~(986,938) 셀, 148×133 |
 
 상세 바이트·원본 SHA256·처리 정보는 `docs/reference-review/prepared-assets.json`에서 확인한다. 제공 이미지 안의 도시·장면은 생성형 AI로 만든 교육용 가상 표현이다. 실제 도시나 특정 시점의 미래 피해 지도가 아니다.
