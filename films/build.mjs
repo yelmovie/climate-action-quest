@@ -1,5 +1,5 @@
 // films.data.mjs + kit/ → films/<id>/ (HyperFrames 프로젝트: index.html + hyperframes.json + assets/).
-// 그림은 게임에 이미 있는 것만 쓴다: 잎새·물방울 자세 시트(references/characters), 개념 그림(assets/concept-art), Jua 글꼴(assets/fonts).
+// 그림은 게임에 이미 있는 것만 쓴다: 잎새·물방울 자세 시트(references/characters), 개념 그림(assets/concept-art), 나눔스퀘어 네오 글꼴(assets/fonts).
 // assets/는 저장소 원본에서 매번 다시 만든다(.gitignore). 실행: node films/build.mjs
 import { mkdir, copyFile, writeFile, readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -43,7 +43,7 @@ async function pose([left, top, width, height, flip], out) {
 for (const f of films) {
   const dir = join(here, f.id), img = join(dir, 'assets', 'img'), fonts = join(dir, 'assets', 'fonts');
   await mkdir(img, { recursive: true }); await mkdir(fonts, { recursive: true });
-  for (const font of ['jua-korean-400.woff2', 'jua-latin-400.woff2', 'OFL.txt']) await copyFile(join(root, 'assets', 'fonts', font), join(fonts, font));
+  for (const font of ['NanumSquareNeoTTF-bRg.woff2', 'NanumSquareNeoTTF-cBd.woff2', 'NanumSquareNeo-OFL.txt']) await copyFile(join(root, 'assets', 'fonts', font), join(fonts, font));
   for (const [name, box] of Object.entries(POSES)) if (name.startsWith(f.cast)) await pose(box, join(img, `${name}.webp`));
   const used = new Set([...f.body.matchAll(/assets\/img\/([a-z0-9-]+)\.webp/g)].map(m => m[1]));
   for (const id of used) await copyFile(join(root, 'assets', 'concept-art', `${id}.webp`), join(img, `${id}.webp`));

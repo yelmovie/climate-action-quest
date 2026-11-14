@@ -594,6 +594,6 @@ img { max-width: 100%; }
 /* The full font remains the default for the story, map and activities. */
 @font-face{font-family:"Climate Lab Title";src:url("/assets/fonts/title-400.woff2") format("woff2");font-style:normal;font-weight:400;font-display:swap;}
 @font-face{font-family:"Climate Lab Title";src:url("/assets/fonts/title-700.woff2") format("woff2");font-style:normal;font-weight:700;font-display:swap;}
-body.title-font{font-family:"Climate Lab Title","Apple SD Gothic Neo",system-ui,sans-serif}
+body.title-font{font-family:"Climate Lab Title","NanumSquareNeo","Apple SD Gothic Neo",system-ui,sans-serif}
 
 body.title-font .boot{font-family:inherit}

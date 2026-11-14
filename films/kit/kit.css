@@ -1,10 +1,10 @@
 /* 「잎새·물방울의 탐구 노트」 공통 모습 (films/SPEC.md). build.mjs가 각 편 index.html에 넣는다. */
-@font-face{font-family:'Jua';src:url('assets/fonts/jua-korean-400.woff2') format('woff2');font-weight:400}
-@font-face{font-family:'Jua';src:url('assets/fonts/jua-latin-400.woff2') format('woff2');font-weight:400;unicode-range:U+0000-00FF}
+@font-face{font-family:'NanumSquareNeo';src:url('assets/fonts/NanumSquareNeoTTF-bRg.woff2') format('woff2');font-style:normal;font-weight:400;font-display:block}
+@font-face{font-family:'NanumSquareNeo';src:url('assets/fonts/NanumSquareNeoTTF-cBd.woff2') format('woff2');font-style:normal;font-weight:700;font-display:block}
 :root{--paper:#FBF8F3;--grid:#D9E8DF;--ink:#173F42;--green:#1E665B;--mint:#BAD7B2;--amber:#C9821C;--amber-soft:#FFF3D6;--water:#61ADCA;--rust:#C2703F;--shadow:0 10px 18px rgba(23,63,66,.16)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:1920px;height:1080px;overflow:hidden;background:var(--paper)}
-#root{position:relative;width:1920px;height:1080px;overflow:hidden;font-family:'Jua',sans-serif;color:var(--ink);letter-spacing:0;background:var(--paper)}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden;font-family:'NanumSquareNeo',sans-serif;color:var(--ink);letter-spacing:0;background:var(--paper)}
 .paper{position:absolute;inset:0;background:var(--paper)}
 .paper::before{content:'';position:absolute;inset:0;opacity:.55;background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:60px 60px}
 .paper::after{content:'';position:absolute;top:0;bottom:0;left:72px;width:3px;background:#E9C9B5;opacity:.8}
