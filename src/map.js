@@ -25,9 +25,12 @@ export function mountMap(host,{state,save,go,icon,announce,tone,takeRestorations
  const blocked=()=>disposed||document.hidden||!!document.querySelector('dialog[open]')||!!host.querySelector('.map-repair[open]');
  const encounterStages=state.adminUnlocked?[]:stages.flatMap(s=>{
   const b=world.buildings.find(b=>b.stage===s.id),anchor=nodePoint(b.node);
-  const edge=world.edges.find(([from,to])=>from===b.node||to===b.node);
-  const p=nodePoint(edge[0]===b.node?edge[1]:edge[0]),d=Math.hypot(p.x-anchor.x,p.y-anchor.y)||1;
-  return chapterDone(state,s.id)?[encounterStage(s.id,s.id,s.name,{x:anchor.x+(p.x-anchor.x)*34/d,y:anchor.y+(p.y-anchor.y)*34/d})]:[];
+  const node=world.edges.find(([from,to])=>from===b.node||to===b.node).find(point=>point!==b.node);
+  const p=nodePoint(node),d=Math.hypot(p.x-anchor.x,p.y-anchor.y)||1;
+  const next=world.edges.find(edge=>edge.includes(node)&&!edge.includes(b.node))?.find(point=>point!==node);
+  const k=next===undefined?p:nodePoint(next),dl=Math.hypot(k.x-p.x,k.y-p.y)||1;
+  const depth=72,fromDoor=Math.min(1,depth/d),onNext=Math.min(1,Math.max(0,depth-d)/dl);
+  return chapterDone(state,s.id)?[encounterStage(s.id,s.id,s.name,{x:anchor.x+(p.x-anchor.x)*fromDoor+(k.x-p.x)*onNext,y:anchor.y+(p.y-anchor.y)*fromDoor+(k.y-p.y)*onNext})]:[];
  });
  const encounters=mountMapEncounters({requiredFoes:5,host:viewport,clearStage:()=>restoredIds.filter(id=>id!==5).at(-1),stages:encounterStages,progress:state.mapHits,onSave:patch=>{state.mapHits={...state.mapHits,...patch};save();},blocked,reduced:()=>reduced,tone,reach:92,contact:23,...encounterLook});
  const heroPose=encounterStages.length?loadEncounterActor('hero'):null,allyPose=encounterStages.length?loadEncounterActor('ally'):null;
