@@ -94,7 +94,7 @@ export function mountMap(host,{state,save,go,icon,announce,tone,takeRestorations
   onMove(){apply();tools();},onTap(e){if(camera.mode!=='hand'&&!e.target.closest('button'))walkTo(e);}
  });
  function clear(){held.clear();padKey=null;walk=false;}
- const keydown=e=>{if(blocked()){cancelRoute();return;}if(e.shiftKey||e.altKey||e.ctrlKey||e.metaKey||e.target.closest?.('input,textarea,select,[contenteditable]:not([contenteditable="false"])'))return;if(/^(Arrow(Up|Down|Left|Right)|Key[WASD])$/.test(e.code)){e.preventDefault();if(route.length||target!==null)cancelRoute();follow();held.add(e.code);}if(e.code==='Enter'||e.code==='Space'){if(e.target.closest('button'))return;e.preventDefault();const b=world.buildings.find(b=>Math.hypot(nodePoint(b.node).x-p.x,nodePoint(b.node).y-p.y)<48);if(b)enter(b.stage);}};
+ const keydown=e=>{if(e.defaultPrevented)return;if(blocked()){cancelRoute();return;}if(e.shiftKey||e.altKey||e.ctrlKey||e.metaKey||e.target.closest?.('input,textarea,select,[contenteditable]:not([contenteditable="false"])'))return;if(/^(Arrow(Up|Down|Left|Right)|Key[WASD])$/.test(e.code)){e.preventDefault();if(route.length||target!==null)cancelRoute();follow();held.add(e.code);}if(e.code==='Enter'||e.code==='Space'){if(e.target.closest('button'))return;e.preventDefault();const b=world.buildings.find(b=>Math.hypot(nodePoint(b.node).x-p.x,nodePoint(b.node).y-p.y)<48);if(b)enter(b.stage);}};
  const keyup=e=>held.delete(e.code);
  document.addEventListener('keydown',keydown);document.addEventListener('keyup',keyup);window.addEventListener('blur',cancelRoute);document.addEventListener('visibilitychange',cancelRoute);
  const directionPad=bindDirectionPad(host,'[data-key]',b=>b.dataset.key.slice(5).toLowerCase(),{blocked,
