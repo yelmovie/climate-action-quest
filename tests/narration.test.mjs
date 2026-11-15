@@ -14,6 +14,13 @@ test('single voice, stop/replay, ended and stale rejected play never stop newer 
  const a=voiceControl(host(),'story-1'),b=voiceControl(host(),'story-2');await a.onclick();assert.equal(duck.at(-1),true);const first=players.at(-1);await b.onclick();assert.equal(first.paused,true);assert.equal(players.filter(p=>!p.paused).length,1);players.at(-1).onended();assert.equal(duck.at(-1),false);assert.equal(b.attrs['aria-pressed'],'false');await b.onclick();assert.equal(b.attrs['aria-pressed'],'true');await b.onclick();assert.equal(players.at(-1).paused,true);
  let reject;pending=new Promise((_,r)=>reject=r);const old=a.onclick();pending=null;await b.onclick();reject(Error('stale'));await old;assert.equal(b.attrs['aria-pressed'],'true');stopNarration();
 });
+test('speaking mark follows audible playback and rests while the voice buffers or pauses',async()=>{
+ const a=voiceControl(host(),'story-1');await a.onclick();const first=players.at(-1);assert.equal(a.dataset.voicePlaying,'true');
+ first.onwaiting();assert.equal(a.dataset.voicePlaying,undefined);assert.equal(a.attrs['aria-pressed'],'true');
+ first.onplaying();assert.equal(a.dataset.voicePlaying,'true');
+ first.onpause();assert.equal(a.dataset.voicePlaying,undefined);
+ const b=voiceControl(host(),'story-2');await b.onclick();first.onplaying();assert.equal(a.dataset.voicePlaying,undefined);assert.equal(b.dataset.voicePlaying,'true');stopNarration();
+});
 test('mute, hidden page, route, dialog close, detached control and errors release music',async()=>{
  const h=host(),a=voiceControl(h,'hint-0');audio.settings.sfx=false;const count=players.length;await a.onclick();assert.equal(players.length,count);audio.settings.sfx=true;
  for(const event of ['pagehide','popstate','hashchange','close']){await a.onclick();emit(event);assert.equal(a.attrs['aria-pressed'],'false');assert.equal(duck.at(-1),false);}

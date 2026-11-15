@@ -18,6 +18,9 @@ export function voiceControl(host,id,{autoplay=false}={}){
   status.textContent='AI 생성 음성';const request=++serial;const current=new Audio('/'+voiceLines[id].target);player=current;owner=button;current.preload='none';button.textContent='음성 멈추기';button.setAttribute('aria-pressed','true');audio.duckVoice(true);
   const fail=()=>{if(request!==serial)return;stopNarration();status.textContent='음성을 불러오지 못했어요. 화면의 글을 읽고 계속할 수 있어요.';};
   current.onended=()=>{if(request===serial)stopNarration();};current.onerror=fail;
+  // The portrait speaks only while sound is audible; buffering and pauses rest it.
+  const speaking=on=>{if(request!==serial||owner!==button)return;if(on&&!document.hidden&&audio.settings.sfx)button.dataset.voicePlaying='true';else delete button.dataset.voicePlaying;};
+  current.onplaying=()=>speaking(true);current.onwaiting=current.onpause=()=>speaking(false);
   try{await current.play();if(request!==serial)return;if(document.hidden||!button.isConnected||!audio.settings.sfx){stopNarration();return;}button.dataset.voicePlaying='true';}catch{fail();}
  };
  if(autoplay)button.click();return button;
