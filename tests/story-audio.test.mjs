@@ -2,64 +2,69 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createAudio } from '../src/audio.js';
 
-test('story music stays under narration and respects modal, mute, hidden and close boundaries', () => {
- const original = { document: globalThis.document, AudioContext: globalThis.AudioContext, setInterval, clearInterval };
+test('Suno music starts on the first gesture, switches to the final theme and respects ducking, mute, hidden and close boundaries', () => {
+ const original = { document: globalThis.document, Audio: globalThis.Audio };
  const doc = new EventTarget();
- let modal = true, tick, cleared = false;
  doc.hidden = false;
- doc.querySelector = () => modal ? {} : null;
  globalThis.document = doc;
- globalThis.setInterval = callback => { tick = callback; return 1; };
- globalThis.clearInterval = () => { cleared = true; };
- const oscillators = [], gains = [];
- const param = () => ({ value: 0, setValueAtTime(){}, linearRampToValueAtTime(){}, exponentialRampToValueAtTime(){}, setTargetAtTime(value){ this.value = value; } });
- globalThis.AudioContext = class {
-  constructor(){ this.state = 'running'; this.currentTime = 0; this.destination = {}; }
-  createGain(){ const gain = { gain: param(), connect(){}, disconnect(){} }; gains.push(gain); return gain; }
-  createOscillator(){ const oscillator = { frequency: param(), connect(){}, disconnect(){}, start(){ this.started = true; }, stop(){ this.stopped = true; } }; oscillators.push(oscillator); return oscillator; }
-  resume(){ return Promise.resolve(); }
-  suspend(){ return Promise.resolve(); }
-  close(){ return Promise.resolve(); }
+ const players = [];
+ globalThis.Audio = class extends EventTarget {
+  constructor(src){ super(); this.src = src; this.paused = true; this.currentTime = 0; this.volume = 1; players.push(this); }
+  play(){ this.paused = false; return Promise.resolve(); }
+  pause(){ this.paused = true; }
  };
+ const track = name => players.find(p => p.src.endsWith(name));
  let audio;
  try {
   audio = createAudio({ getItem(){ return null; }, setItem(){} });
-  audio.duckVoice(true); // Safe before the first user gesture creates AudioContext.
+  audio.duckVoice(true); // Safe before the first user gesture.
+  assert.equal(players.length, 0);
   audio.unlock();
-  tick();
-  assert.equal(oscillators.length, 0);
-  audio.storyMusic(true);
-  tick();
-  assert.equal(oscillators.length, 1);
-  assert.equal(gains[0].gain.value, .25);
-  audio.storyMusic(false);
-  assert.equal(oscillators[0].stopped, true);
-  tick();
-  assert.equal(oscillators.length, 1);
-  audio.storyMusic(true);
+  const main = track('/assets/audio/bgm/main-theme.mp3');
+  assert.equal(main.paused, false);
+  assert.equal(main.loop, true);
+  assert.equal(main.volume, .25 * .25);
+  audio.duckVoice(false);
+  assert.equal(main.volume, .25);
+  audio.quiet(true);
+  assert.equal(main.paused, false);
+  assert.equal(main.volume, .25 * .25);
+  audio.quiet(false);
+
+  audio.music('final');
+  const final = track('/assets/audio/bgm/final-theme.mp3');
+  assert.equal(main.paused, true);
+  assert.equal(final.paused, false);
+  assert.equal(final.loop, false);
+  final.paused = true; final.dispatchEvent(new Event('ended'));
+  audio.save();
+  assert.equal(final.paused, true); // The final theme plays once, then rests.
+  audio.music('main');
+  assert.equal(main.paused, false);
+
+  audio.mapFinale(true);
+  assert.equal(main.paused, true);
+  assert.equal(final.paused, false);
+  assert.equal(final.currentTime, 0);
+  audio.mapFinale(false);
+  assert.equal(final.paused, true);
+  assert.equal(main.paused, false);
+
   audio.settings.bgm = false;
   audio.save();
-  tick();
-  assert.equal(oscillators.length, 1);
+  assert.equal(main.paused, true);
   audio.settings.bgm = true;
+  audio.save();
+  assert.equal(main.paused, false);
   doc.hidden = true;
   doc.dispatchEvent(new Event('visibilitychange'));
-  tick();
-  assert.equal(oscillators.length, 1);
+  assert.equal(main.paused, true);
   doc.hidden = false;
-  audio.quiet(true);
-  tick();
-  assert.equal(oscillators.length, 1);
-  audio.quiet(false);
-  audio.storyMusic(false);
-  audio.duckVoice(false);
-  modal = false;
-  tick();
-  assert.equal(oscillators.length, 2);
-  assert.equal(gains[0].gain.value, 1);
+  doc.dispatchEvent(new Event('visibilitychange'));
+  assert.equal(main.paused, false);
  } finally {
   audio?.dispose();
-  assert.equal(cleared, true);
+  assert.equal(players.every(p => p.paused), true);
   Object.assign(globalThis, original);
  }
 });

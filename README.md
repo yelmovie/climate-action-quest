@@ -29,6 +29,8 @@ http://localhost:4173 에서 연다. `npm test`로 학습 모형·진행·지도
 
 카드 끌어 판단하기·자원 분류·이유 연결·순서 바꾸기·시설 배치를 지원한다. 끌기 대신 누르기·키보드로도 진행할 수 있다. 시간 비교 그래프·수면·생활 지표·도시의 남은 위험이 조작에 반응한다. 잎새와 물방울이 현재 행동과 추가 힌트를 안내한다.
 
+배경음은 Suno로 만든 2곡(메인 테마·파이널, 사용자 제공)이다. 메인 테마는 첫 탭부터 홈·지도·활동 내내 반복하고, 파이널은 엔딩·인증서와 지도 파이널 영상 대화상자에서 한 번 재생한다(영상은 무음 유지). 인물 목소리·개념 영상 중에는 배경음을 1/4로 줄인다. 원본은 `references/suno`, 출처는 [CREDITS](assets/CREDITS.md).
+
 [영상 설계](docs/CONCEPT-CLIPS.md) · [화면·조작 검증](docs/reviews/EXPERIENCE-20261022.md)
 
 브라우저 검증 도구는 제작용이며 배포본에 포함하지 않는다. Playwright Core와 Chrome이 준비된 환경에서 개발 서버를 4175 포트로 실행한 뒤 `npm run check:layout`, `npm run check:interactions`를 사용한다. 배포본 서버(4275 포트)에서는 `npm run check:delivery`로 MP4 부분 요청·오프라인 영상·효과음 설정을 확인한다. 다른 포트는 `BASE_URL`, Chrome 경로는 `CHROME` 환경 변수로 지정한다.

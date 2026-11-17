@@ -29,6 +29,8 @@ function storageNotice(message){
 function save(){const result=loaded.save(state);if(!result.ok){saveWarning=true;storageNotice(result.reason==='conflict'?'다른 탭에서 기록이 바뀌어 자동 저장을 멈췄어요. 현재 기록을 내려받고 탭을 하나만 사용해 주세요.':'기존 기록 보호를 위해 자동 저장을 멈췄어요. 현재 기록을 내려받아 주세요. 기존 기록은 덮어쓰지 않아요.');}return result.ok;}
 
 document.addEventListener('pointerdown',()=>audio.unlock(),{once:true});document.addEventListener('keydown',()=>audio.unlock(),{once:true});
+// The map finale dialog borrows the final theme while it is open.
+document.addEventListener('mapfinale',e=>audio.mapFinale(e.detail?.open));
 function hud(home=false){return `<div class="screen-hud"><div class="hud-left">${home?'':`<button class="icon-button" data-nav="home" aria-label="홈">${icon('home')}</button><button class="icon-button" data-back aria-label="이전 화면">${icon('back')}</button>`}</div><div class="hud-right"><button class="icon-button" data-sound aria-label="${audio.settings.bgm||audio.settings.sfx?'전체 소리 끄기':'전체 소리 켜기'}">${icon(audio.settings.bgm||audio.settings.sfx?'sound':'mute')}</button><button class="icon-button" data-settings aria-label="설정">${icon('settings')}</button></div></div>`;}
 function wireHud(){app.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>go(b.dataset.nav));app.querySelector('[data-back]')?.addEventListener('click',back);app.querySelector('[data-settings]')?.addEventListener('click',settings);app.querySelector('[data-sound]')?.addEventListener('click',e=>{audio.toggle();e.currentTarget.innerHTML=icon(audio.settings.bgm||audio.settings.sfx?'sound':'mute');e.currentTarget.setAttribute('aria-label',audio.settings.bgm||audio.settings.sfx?'전체 소리 끄기':'전체 소리 켜기');announce(audio.settings.bgm||audio.settings.sfx?'소리를 켰어요.':'전체 소리를 껐어요.');});}
 function back(){if(document.querySelector('dialog[open]')){document.querySelector('dialog[open]').close();return;}if(activeRoute.startsWith('activity/'))go('facility/'+Math.floor(Number(activeRoute.split('/')[1])/2));else if(activeRoute.startsWith('facility/')||activeRoute==='ending')go('map');else go('home');}
@@ -39,7 +41,7 @@ function go(route){
  if(route.startsWith('activity/')&&!activityOpen(state,Number(route.split('/')[1]))){announce('앞 활동의 기록이 필요해요. 먼저 연구 기록을 모아 주세요.');route='map';}
  if(route==='ending'&&!certificateEligible(state)){announce('열 가지 활동의 실제 연구 기록이 모이면 최종 보고를 열 수 있어요.');route='map';}
  document.querySelectorAll('dialog[open]').forEach(d=>d.close());screenRequest.abort();screenRequest=new AbortController();cleanup();cleanup=()=>{};activeRoute=route;state.route=route;if(route.startsWith('activity/'))resumeActivity=Number(route.split('/')[1]);save();
- document.body.classList.toggle('title-font',route==='home');
+ document.body.classList.toggle('title-font',route==='home');audio.music(route==='ending'?'final':'main');
  if(location.hash.slice(1)!==route)history.pushState(null,'','#'+route);
  if(route==='home')home();else if(route==='map')map();else if(route.startsWith('facility/'))facility(Number(route.split('/')[1]));else if(route.startsWith('activity/'))activity(Number(route.split('/')[1]));else ending();
  teacherDock();wireHud();app.querySelector('h1')?.setAttribute('tabindex','-1');app.querySelector('h1')?.focus({preventScroll:true});
@@ -198,7 +200,7 @@ function dialog(html,classes=''){
 }
 function story(after){
  const pages=[['끊어진 연구기지를 다시 연결해요','도시를 살펴보던 연구 기록이 흩어졌어요. 무엇이 달라졌는지, 어떤 준비가 필요한지 확인할 단서가 필요해요.','home'],['대원은 생각하고, 잎새는 함께 걸어요','관측하고 → 관련성을 찾고 → 영향을 실험해요. 생활의 선택을 비교한 뒤, 직접 설계한 도시를 시험해요.','village'],['다섯 기록이 모이면, 나만의 최종 보고!','연구를 마칠 때마다 지도 속 시설에 불빛이 켜져요. 기록을 모아 탐구 인증서를 완성해요. 현실의 기후 문제는 우리 실천으로 계속 대응해야 해요.','design']];let n=0;
- const d=dialog('','story-dialog');audio.storyMusic(true);d.addEventListener('close',()=>audio.storyMusic(false),{once:true});const body=d.querySelector('.dialog-body');function draw(){stopNarration();const p=pages[n];body.innerHTML=`<img class="story-art" src="${asset(p[2])}" alt=""><span class="eyebrow">잎새가 보낸 연구 의뢰 · ${n+1} / 3</span><h2>${p[0]}</h2><p>${p[1]}</p><button class="button primary story-next">${n===2?'연구기지로 출발!':'다음 이야기'} ${icon('arrow')}</button>`;body.querySelector('button').onclick=()=>{if(n<2){n++;draw();}else{d.close();after?.();}};voiceControl(body,`story-${n+1}`,{autoplay:true});}draw();
+ const d=dialog('','story-dialog');const body=d.querySelector('.dialog-body');function draw(){stopNarration();const p=pages[n];body.innerHTML=`<img class="story-art" src="${asset(p[2])}" alt=""><span class="eyebrow">잎새가 보낸 연구 의뢰 · ${n+1} / 3</span><h2>${p[0]}</h2><p>${p[1]}</p><button class="button primary story-next">${n===2?'연구기지로 출발!':'다음 이야기'} ${icon('arrow')}</button>`;body.querySelector('button').onclick=()=>{if(n<2){n++;draw();}else{d.close();after?.();}};voiceControl(body,`story-${n+1}`,{autoplay:true});}draw();
 }
 async function settings(){
  const {signal}=screenRequest;let content;
