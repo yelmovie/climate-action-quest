@@ -41,6 +41,8 @@ function layoutSpeech(host, entries){
 }
 
 const REPEAT=380;
+// Villains announce themselves once per page visit, not on every approach or map re-entry.
+const greeted=new Set();
 const CUES={
   cap:'M9 10h14v12H9zm3-4h8v4h-8z', pane:'M6 7h20v18H6zm4 4v10h12V11z',
   file:'M7 5h12l6 6v16H7zm12 2v6h5M11 17h10m-10 4h8', label:'M5 10h15l7 6-7 6H5zm5 4h5m-5 4h7',
@@ -126,10 +128,12 @@ export function mountMapEncounters({
     const calm=still(),duration=calm?170:n===HITS?660:360;
     foe.poseUntil=time+duration;foe.hitAt=time;foe.hurtAt=undefined;
     pose.hero={kind:'attack',direction:-foe.facing,start:time,end:time+(calm?140:320)};
-    saved={...saved,[foe.s.id]:n};onSave({...saved});tone(n===HITS?'finish':'hit',n);
+    saved={...saved,[foe.s.id]:n};onSave({...saved});
+    const allCleared=n===HITS&&requiredFoes>0&&stages.length===requiredFoes&&stages.every(s=>(saved[s.id]??record[s.id])===HITS);
+    tone(n===HITS?(allCleared?'victory':'finish'):'hit',n);
     speak(foe, n===HITS?foe.s.finish??'앗, 물러날게!':foe.s.hit?.[n-1]??(n===1?'앗, 들켰네!':'이번 건 제법인데!'),time+(n===HITS?2750:1800));
     live.textContent+=n===HITS?' 세 번 명중! 악당이 물러나요.':` ${n}번 명중. ${HITS-n}번 남았어요.`;
-    if(n===HITS&&requiredFoes>0&&stages.length===requiredFoes&&stages.every(s=>(saved[s.id]??record[s.id])===HITS))finaleAt=time+2920;
+    if(allCleared)finaleAt=time+2920;
     update({...last,now:time});
   }
   attack.addEventListener('click',hit,{signal});
@@ -257,6 +261,7 @@ export function mountMapEncounters({
     if(current&&current!==lastNear&&current.saidUntil<=now&&now-lastHit>REPEAT&&now>=clearUntil){
       const message=current.say[current.sayIndex++%current.say.length]??'다가왔구나!';
       speak(current,message,now+2200);
+      if(!greeted.has(current.s.id)){greeted.add(current.s.id);tone('appear',current.hits);}
     }
     lastNear=current;
     const hasFocus=doc.activeElement===attack;

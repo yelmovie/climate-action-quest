@@ -98,7 +98,7 @@ Google Fonts 배포판 **Jua Regular**, weight 400, Version 1.001을 사용한�
 | 실험 | switch_004.mp3 | switch_004.ogg |
 | 다시 생각하기 | pluck_002.mp3 | pluck_002.ogg |
 
-배경음과 효과음은 독립적으로 끌 수 있다. (2026-11-17 갱신) 배경음은 Suno 2곡(위 표)이다. 개념 영상·인물 목소리가 나오는 동안 배경음은 멈추지 않고 1/4로 줄어들며, 설정·대화창 같은 대화상자 아래에서도 메인 테마가 계속 나온다. 탭이 숨겨지면 멈춘다. 효과음은 이후 코드 합성음으로 바뀌었고(아래), 지금은 배경 음악 크기 값이 효과음 음량에도 함께 적용된다.
+배경음과 효과음은 독립적으로 끌 수 있다. (2026-11-17 갱신) 배경음은 Suno 2곡(위 표)이다. 개념 영상·인물 목소리가 나오는 동안 배경음은 멈추지 않고 1/4로 줄어들며, 설정·대화창 같은 대화상자 아래에서도 메인 테마가 계속 나온다. 탭이 숨겨지면 멈춘다. 효과음은 이후 코드 합성음으로 바뀌었다(아래). (2026-11-17 갱신) 설정의 **배경 음악 크기**는 배경음에만, **효과음 크기**는 효과음(합성음·지도 효과음 파일)에만 적용된다. 효과음 크기를 저장한 적 없는 기존 설정은 그때의 배경 음악 크기 값으로 시작한다.
 
 ## 주요 개념 일러스트 추가 · 2026-10-28
 
@@ -143,3 +143,20 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 원본은 `references/generated/concept-art/`에 보존한다. 배포 파일은 960×540 WebP이며 세 장 합계 410,492바이트다. 생성 프롬프트·원본·이용 조건 확인 사항은 `docs/generated-prompts-learning-20261112.json`, 크기·해시는 `docs/concept-art-manifest.json`에 기록했다. 그림과 실제 활동 화면을 직접 확인했다.
 
 `evidence`·`effects` 영상의 장면 그림을 적용하고 `observe` 영상의 누락된 단위 문구를 복구해 기존 HyperFrames 제작 경로로 다시 렌더링했다. 모형 수면과 그래프는 계산된 자료로 표현한다. 생성 장면의 수위·날씨·배치는 수치 판정에 사용하지 않는다.
+
+## 지도 악당 효과음 · CC0 · 2026-11-17
+
+지도 악당 조우의 공격·타격·퇴장·등장·접촉·전체 격퇴 소리. 과학34 공통 효과음 라이브러리(`_shared/sfx-library-20261117`, `manifest.json`)에서 골랐고, 모두 원본 페이지에서 **CC0 1.0**을 다시 확인한 파일이다(라이브러리 처리: 앞뒤 무음 제거·짧은 페이드·음량 맞춤, 모노 44.1 kHz MP3 112 kbps, 피치·속도 변경 없음). 출처 표기 의무는 없지만 기록으로 남긴다. 기후 단원에 맞게 공격과 퇴장은 바람 휙 소리로 정했다. 일반 화면 효과음은 기존 코드 합성음 그대로다.
+
+| 동작 | `assets/audio/sfx/` 파일 | 원본 제목 | 제작자 | 원본 페이지 |
+|---|---|---|---|---|
+| 공격 시작(휙) | `wind-whoosh-02.mp3` | swosh windy 36.flac | qubodup | https://freesound.org/people/qubodup/sounds/60023 |
+| 1·2타 명중(재생 속도 1.08·0.9) | `hit-light-01.mp3` | TOONY pops.wav | mikala_oidua | https://freesound.org/people/mikala_oidua/sounds/321163 |
+| 3타 명중 | `hit-heavy-03.mp3` | body_hit.wav | insanity54 | https://freesound.org/people/insanity54/sounds/276600 |
+| 악당 퇴장(바람에 날아감) | `wind-whoosh-03.mp3` | Slow Swosh 40 | qubodup | https://freesound.org/people/qubodup/sounds/60027 |
+| 악당 등장(첫 접근 1회) | `villain-appear-03.mp3` | anime.wav | 1urker | https://freesound.org/people/1urker/sounds/457306 |
+| 접촉 피격 | `hurt-bump-01.mp3` | LowHit_01.wav | Faulkin | https://freesound.org/people/Faulkin/sounds/336495 |
+| 다섯 악당 모두 격퇴 | `victory-jingle-04.mp3` | game-win.mp3 | mickleness | https://freesound.org/people/mickleness/sounds/269198 |
+
+- 연결: `src/audio.js`의 `MAP_CUES`, 재생은 `src/theme-effects.js`(효과음 켜기·효과음 크기·음소거·숨긴 탭 정지·첫 터치 뒤 재생을 그대로 따른다). 파일을 아직 받지 못한 순간에는 기존 합성음으로 대신한다.
+- 공격 버튼을 누르면 휙, 80 ms 뒤 명중음. 3타는 명중음 뒤 퇴장 바람 소리. 마지막 악당일 때 승리 소리는 약 2.75초에 끝나 2.92초에 열리는 지도 피날레 배경음과 겹치지 않는다.
