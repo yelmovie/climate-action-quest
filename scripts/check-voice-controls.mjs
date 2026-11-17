@@ -4,12 +4,13 @@ import {mkdir,writeFile} from 'node:fs/promises';
 const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_modules/playwright-core');
 const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
 const page=await browser.newPage({viewport:{width:1280,height:800},serviceWorkers:'block'}),base=process.env.BASE_URL||'http://127.0.0.1:5357',checks=[];
-await page.addInitScript(()=>{const Native=window.Audio;window.voicePlayers=[];window.Audio=function(...args){const a=new Native(...args);window.voicePlayers.push(a);return a;};window.oscillatorStarts=0;const old=AudioContext.prototype.createOscillator;AudioContext.prototype.createOscillator=function(){const o=old.call(this),start=o.start.bind(o);o.start=(...args)=>{window.oscillatorStarts++;return start(...args);};return o;};});
+await page.addInitScript(()=>{const Native=window.Audio;window.voicePlayers=[];window.musicPlayers=[];window.Audio=function(...args){const a=new Native(...args);(String(args[0]).includes('/audio/bgm/')?window.musicPlayers:window.voicePlayers).push(a);return a;};});
 const playing=()=>page.evaluate(()=>window.voicePlayers.filter(a=>!a.paused).length);
+const music=()=>page.evaluate(()=>window.musicPlayers.find(a=>!a.paused)?.volume??0);
 const start=async()=>{await page.locator('[data-voice="welcome-1"]').click();await page.waitForFunction(()=>window.voicePlayers.some(a=>!a.paused&&a.currentTime>.05));};
 try{
- await page.goto(base+'/#home');await start();assert.equal(await playing(),1);const n=await page.evaluate(()=>oscillatorStarts);await page.waitForTimeout(1700);assert.equal(await page.evaluate(()=>oscillatorStarts),n);checks.push('BGM oscillator scheduling stays ducked during actual voice playback');
- await page.locator('[data-voice="welcome-1"]').click();assert.equal(await playing(),0);await page.waitForTimeout(1700);assert.ok(await page.evaluate(()=>oscillatorStarts)>n);checks.push('stop restores background music');
+ await page.goto(base+'/#home');await start();assert.equal(await playing(),1);const full=await page.evaluate(()=>JSON.parse(localStorage.getItem('climate-future:sound:v1')||'{}').volume??25)/100;assert.ok(Math.abs(await music()-full*.25)<1e-3);checks.push('background music ducks to a quarter during actual voice playback');
+ await page.locator('[data-voice="welcome-1"]').click();assert.equal(await playing(),0);assert.ok(Math.abs(await music()-full)<1e-3);checks.push('stop restores background music volume');
  await start();await page.locator('[data-voice="home-bubble-new"]').click();assert.ok(await playing()<=1);checks.push('switch to second voice leaves only one media player active');
  await page.locator('[data-sound]').click();assert.equal(await playing(),0);await page.locator('[data-voice="welcome-1"]').click();assert.equal(await playing(),0);assert.match(await page.locator('.npc-welcome-voice').innerText(),/소리를 켜면/);await page.locator('[data-sound]').click();checks.push('global mute stops and blocks voices');
  await start();await page.locator('#mission-story').click();await page.locator('.story-dialog').waitFor();assert.ok(await playing()<=1);await page.keyboard.press('Escape');assert.equal(await playing(),0);checks.push('story replacement and Escape clean up media');

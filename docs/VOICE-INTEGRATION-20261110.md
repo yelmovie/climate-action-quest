@@ -38,7 +38,7 @@ The five short badge lines use the existing narrator/preset-06 voice consistentl
 
 - Unit tests: 43/43 passed. Build: 156 deployable files, cache version `8a8dec32241d`.
 - All 40 distinct files reached native Chrome `ended` on their corresponding screens at normal speed. Total manifest duration is 295.73 seconds; this is technical playback, not human listening.
-- Eight voice-control checks passed, including actual BGM oscillator suppression and restoration; visibility loss was a simulated browser event.
+- Eight voice-control checks passed, including actual BGM oscillator suppression and restoration; visibility loss was a simulated browser event. (Since 2026-11-17 the music is the Suno mp3 pair; the script now checks that it ducks to a quarter and returns to full volume.)
 - 40/40 controls were actually clicked at both 390×844 and 844×390 without forced clicks.
 - Complete actual learning journey: 72 units, ten activities, certificate download with preserved embedded fonts, and refresh passed.
 - Existing interaction checks: 24 passed; resume checks: 7 passed; automatic activity playback checks: 5 passed.

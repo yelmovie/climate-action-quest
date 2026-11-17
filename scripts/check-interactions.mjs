@@ -20,7 +20,7 @@ async function load(index,record={},extra={},preview=false){
  s.records[index]=record;Object.assign(s.records,extra);
  await page.goto('about:blank');fixture=s;await page.goto(base+'/#activity/'+index);
  // Saved admin flags are ignored on load (5e780e5), so teacher preview is opened through settings like a teacher would.
- if(preview){await page.locator('[data-settings]').click();await page.locator('.settings-dialog details').evaluateAll(items=>items.forEach(e=>e.open=true));await page.locator('#admin-unlock').click();await page.locator('#close-settings').click();await page.evaluate(i=>{location.hash='#activity/'+i;},index);}
+ if(preview){await page.locator('[data-settings]').click();await page.locator('#admin-unlock').waitFor({state:'attached'});await page.locator('.settings-dialog details').evaluateAll(items=>items.forEach(e=>e.open=true));await page.locator('#admin-unlock').click();await page.locator('#close-settings').click();await page.evaluate(i=>{location.hash='#activity/'+i;},index);}
  await page.locator('.guide-avatar').waitFor();await page.evaluate(()=>document.fonts.ready);
 }
 const record=async i=>page.evaluate(i=>JSON.parse(localStorage.getItem('climate-future:v1')).records[i],i);
@@ -58,7 +58,7 @@ try{
   if(i===1)assert.equal(await page.locator('.check').evaluate(e=>e===document.activeElement),true,'keyboard focus follows the completed answer');
   await page.locator('.check').click();
  }
- await video(1);assert.equal((await record(1)).answers.length,8);await page.locator('.continue-activity').click();assert.equal(new URL(page.url()).hash,'#facility/1');checks.push('instant judgment, wrong answer, keyboard/touch and direct next chapter');
+ await video(1);assert.equal((await record(1)).answers.length,8);await page.locator('.continue-activity').click();assert.equal(new URL(page.url()).hash,'#map','a finished chapter returns to the map to show the restored building (e83c991)');checks.push('instant judgment, wrong answer, keyboard/touch and chapter end back to the map');
  await load(2);
  for(let i=0;i<10;i++){
   assert.equal((await record(2)).open??0,i);
@@ -87,7 +87,7 @@ try{
  await page.locator('.retest').click();assert.ok((await record(9)).after.heat);await page.locator('.run').click();assert.ok((await record(9)).after.rain);await page.locator('.run').click();assert.equal((await record(9)).phase,2,'unsuitable plan returns to editing');assert.equal(!!(await record(9)).verified,false);
  for(let i=0;i<6;i++)await drag(`[data-tool="${good[i]}"]`,`[data-district="${i}"]`);
  await page.locator('.retest').click();assert.ok((await record(9)).after.heat);await page.reload();assert.equal((await record(9)).phase,3);for(let i=0;i<2;i++)await page.locator('.run').click();await video(9);assert.equal((await record(9)).verified,true);assert.deepEqual(Object.keys((await record(9)).after).sort(),['heat','rain']);checks.push('combined test actions preserve both hazards, failed design retry and saved retest');
- await page.locator('.continue-activity').click();assert.equal(new URL(page.url()).hash,'#ending');assert.equal(await page.locator('.report-record.connected').count(),5);assert.equal(await page.locator('#finalize').isEnabled(),true);await page.locator('#finalize').click();await page.waitForTimeout(220);await page.screenshot({path:out+'/certificate.png'});assert.equal(await page.locator('.certificate-dialog').count(),1);await page.locator('.dialog-close').click();checks.push('earned records connect without five extra clicks and issue certificate');
+ await page.locator('.continue-activity').click();assert.equal(new URL(page.url()).hash,'#map','the last chapter also returns to the map first (e83c991)');await page.evaluate(()=>{location.hash='#ending';});await page.locator('.ending-screen').waitFor();assert.equal(new URL(page.url()).hash,'#ending','earned records open the final report');assert.equal(await page.locator('.report-record.connected').count(),5);assert.equal(await page.locator('#finalize').isEnabled(),true);await page.locator('#finalize').click();await page.waitForTimeout(220);await page.screenshot({path:out+'/certificate.png'});assert.equal(await page.locator('.certificate-dialog').count(),1);await page.locator('.dialog-close').click();checks.push('earned records connect without five extra clicks and issue certificate');
  await load(1,{round:7,answers:[]},{},true);await page.locator('[data-answer="1"]').click();await page.locator('.check').click();await video(1,true);assert.notEqual((await record(1))?.done,true,'teacher preview is never saved');assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('climate-future:v1')).completed),[]);await page.locator('.continue-activity').click();assert.equal(new URL(page.url()).hash,'#facility/0');await page.goto(base+'/#ending');await page.waitForURL('**/#map');checks.push('preview completion returns to facility and never earns a certificate');
  }
  // Failure and reduced-motion paths are tested in isolated contexts.

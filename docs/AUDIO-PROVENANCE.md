@@ -7,7 +7,12 @@
 
 ## Preserved existing assets
 - Existing Kenney Interface Sounds retained, with CC0 text available in project source/cache license files. The license expressly permits personal, educational, and commercial use. https://kenney.nl/assets/interface-sounds / https://creativecommons.org/publicdomain/zero/1.0/
-- Runtime effects now use procedural synthesis without download/decode latency. Existing procedural music retained.
+- Runtime effects now use procedural synthesis without download/decode latency.
+
+## Background music (2026-11-17)
+- The earlier procedural music loop was replaced by two user-provided Suno tracks: `assets/audio/bgm/main-theme.mp3` (loops from the first tap through home, map and activities) and `assets/audio/bgm/final-theme.mp3` (once on the ending/certificate and while the map finale dialog is open; the finale video stays muted). Originals: `references/suno/`.
+- Music ducks to a quarter under character voices and concept films, keeps playing under other dialogs, and stops for the music switch, global mute and hidden tabs.
+- Commercial-use basis (the Suno plan at generation time) still needs to be recorded.
 
 ## NPC narration
 Existing Korean F1 narration preserved. No new generation or microphone input. Source metadata `67f4022b-f0f2-407d-93e7-8fce205a2764.json` identifies momo-voice / Supertonic 3 / OpenRAIL-M, generated 2026-11-07T22:03:14.529Z. Original script exactly matches the runtime caption. Matching script and duration support conversion lineage; lossy AAC does not share WAV hash.
