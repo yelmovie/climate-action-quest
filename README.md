@@ -59,6 +59,15 @@ http://localhost:4173 에서 연다. `npm test`로 학습 모형·진행·지도
 
 교사용 전체 해금을 켜면 오른쪽 아래 "다음 단계 바로 가기"로 문제를 풀지 않고 다음 활동으로 넘어간다. 왼쪽 아래 이전/다음 화살표와 `Shift + ←/→`·`PageUp/PageDown`도 쓸 수 있다. 첫 화면 그림은 `node scripts/prepare-home-assets.mjs`로 다시 만든다. [개선 내용과 검증 기록](docs/reviews/FRONTDOOR-20261030.md)
 
+## 성취 카드 · 2026-11-18
+
+지도 악당을 세 번 맞혀 물리치면 퇴장 뒤 화면 가운데로 카드가 돌며 나타나고, 「카드 보관함에 넣기」를 누르면 지도 오른쪽 위 소리 버튼 앞 5칸으로 들어간다. 시설 순서대로 별 1~5개(브론즈·실버·골드·홀로·레전드)이고 5장을 모으면 「컬렉션 완성!」, 칸을 누르면 보관함이 열린다. 칸은 지도 화면 헤더에만 둔다.
+
+- 보유 여부는 기존 격퇴 기록(`mapHits`의 3)에서 계산해 저장 필드는 그대로다. 이미 물리친 악당의 카드는 처음부터 채워져 보이고 연출은 다시 나오지 않는다.
+- 카드가 열린 동안 `#app`이 inert라 지도·악당·방향키 이동이 멈추고, 다섯 악당 파이널 영상은 카드(와 완성 축하)를 닫은 뒤에 기존 조건 그대로 열린다. 3타 직후 설정창을 열어도 카드가 파이널보다 먼저 나온다(`rewardCardDue`가 악당 모듈을 붙잡는다). 마지막 악당의 격퇴 징글은 카드의 컬렉션 완성 징글이 대신하고, 파이널 음악이 시작되면 징글이 멈춘다.
+- 설정·연결은 `src/map-reward-cards.js`(카드 5장·보유 계산·띄우는 시점), 이 앱 전용 보정은 `src/map-reward-cards.css`다. 공통 모듈 `src/reward-cards.js`·`src/reward-cards.css`는 `_shared/reward-cards`의 복사본이라 고치지 않는다(지침 `_shared/reward-cards/INTEGRATION.md`). `src/map.js`는 타격 저장 알림(`onMapHits`)과 멈춤 조건만 더했고 `src/map-encounters.js`는 그대로다.
+- 카드 그림 5장은 GPT 이미지로 생성했고, 효과음 5종은 공통 CC0 라이브러리 파일이다(출처 `assets/CREDITS.md`). 소리는 기존 효과음 경로를 타서 효과음 스위치·효과음 크기·전체 소리 끄기를 따른다.
+
 ## 설계 자료
 
 - [PRD](docs/PRD.md) · [TRD](docs/TRD.md) · [디자인 시스템](docs/DESIGN-SYSTEM.md)

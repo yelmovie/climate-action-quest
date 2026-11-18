@@ -156,7 +156,7 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 | 악당 퇴장(바람에 날아감) | `wind-whoosh-03.mp3` | Slow Swosh 40 | qubodup | https://freesound.org/people/qubodup/sounds/60027 |
 | 악당 등장(첫 접근 1회) | `villain-appear-03.mp3` | anime.wav | 1urker | https://freesound.org/people/1urker/sounds/457306 |
 | 접촉 피격 | `hurt-bump-01.mp3` | LowHit_01.wav | Faulkin | https://freesound.org/people/Faulkin/sounds/336495 |
-| 다섯 악당 모두 격퇴 | `victory-jingle-04.mp3` | game-win.mp3 | mickleness | https://freesound.org/people/mickleness/sounds/269198 |
+| 다섯 악당 모두 격퇴(2026-11-18부터 마지막 악당은 성취 카드의 컬렉션 완성 징글이 대신하고, 카드가 뜨지 않을 때만 난다) | `victory-jingle-04.mp3` | game-win.mp3 | mickleness | https://freesound.org/people/mickleness/sounds/269198 |
 
 - 연결: `src/audio.js`의 `MAP_CUES`, 재생은 `src/theme-effects.js`(효과음 켜기·효과음 크기·음소거·숨긴 탭 정지·첫 터치 뒤 재생을 그대로 따른다). 파일을 아직 받지 못한 순간에는 기존 합성음으로 대신한다.
 - 공격 버튼을 누르면 휙, 80 ms 뒤 명중음. 3타는 명중음 뒤 퇴장 바람 소리. 마지막 악당일 때 승리 소리는 약 2.75초에 끝나 2.92초에 열리는 지도 피날레 배경음과 겹치지 않는다.
@@ -167,3 +167,20 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 ## 2026-11-18 캐릭터 목소리 통일·팝업 음성
 
 잎새·물방울의 나머지 지도 안내·힌트·다시 생각하기 대사, 이야기·배지·엔딩·인증서 내레이션, 개념 영상 자막, 도움말 개념·안내, 악당 말풍선 음성(`audio/voices/el-*.mp3`, 109줄)을 ElevenLabs 공식 API(유료 Creator 요금제, 상업 이용 가능) `eleven_v4`로 만들었다. 캐릭터마다 한 목소리만 쓴다(잎새 Bee, 물방울 SK, 내레이터 Haemi, 날씨 바꿔치기 악당 Harry). 실제 사람의 목소리를 복제하지 않았다. 요청 ID·받아쓰기·SHA-256은 `docs/VOICE-FILL-20261118.json`과 `audio/voices/manifest.json`에 있다.
+
+## 2026-11-18 성취 카드
+
+지도 악당(날씨 바꿔치기 악당)을 세 번 맞혀 물리치면 받는 성취 카드 5장의 그림과 소리.
+
+- 그림 `reward-cards/card-{1..5}-{0..4}.webp`(640×960), `reward-cards/thumb-{1..5}-{0..4}.webp`(96×144): 2026-11-18 ChatGPT 앱의 Codex 내장 이미지 도구(GPT 이미지)로 이 프로젝트를 위해 생성했다. 학생 대원(`field-team.webp` 위쪽 걷기 그림)과 앵무새 잎새(`ipsae-parrot.webp`, `ipsae-parrot-talk.webp`), 각 시설의 배경 그림을 화풍 참고로 붙였다. 글자 없이 생성했고 테두리·별·이름은 코드(`src/reward-cards.js`, `src/reward-cards.css`)로 올린다. 원본 PNG는 `_scratch/reward-cards-20261118/gen/16/`에 있다(Git 제외). 학습용 장면 그림이며 수치·판정에 쓰지 않는다. 생성 계정의 요금제·약관에 따른 이용 권리는 위 「도구·라이선스 검토」의 생성 이미지와 같은 조건으로 확인한다.
+- 소리: 과학34 공통 효과음 라이브러리(`_shared/sfx-library-20261117`, `manifest.json`)에서 그대로 복사했다(가공은 라이브러리에서 한 무음 제거·짧은 페이드·음량 맞춤뿐). 모두 **CC0 1.0**이며 라이브러리 작성 때(2026-11-17) 원본 페이지에서 라이선스를 다시 확인했다.
+
+| 쓰는 곳 | `assets/audio/sfx/` 파일 | 원본 제목 | 제작자 | 원본 페이지 |
+|---|---|---|---|---|
+| 카드가 날아올 때·보관함 칸으로 날아갈 때(휙) | `wind-whoosh-03.mp3`(악당 퇴장과 같은 파일) | Slow Swosh 40 | qubodup | https://freesound.org/people/qubodup/sounds/60027 |
+| 카드 공개(브론즈·실버·골드) | `reward-01.mp3` | Fantasy_ui_Button_3.wav | ZenithInfinitiveStudios | https://freesound.org/people/ZenithInfinitiveStudios/sounds/376745 |
+| 카드 공개(홀로·레전드, 긴 징글) | `reward-03.mp3` | Achievement Happy Beeps Jingle | CogFireStudios | https://freesound.org/people/CogFireStudios/sounds/619838 |
+| 카드가 보관함 칸에 들어갈 때 | `pickup-01.mp3` | item-pickup-v1.wav | DeltaCode | https://freesound.org/people/DeltaCode/sounds/678384 |
+| 다섯 장을 모두 모았을 때(지도 파이널 영상이 열리면 멈춤) | `victory-jingle-01.mp3` | Game Success Fanfare Short | el_boss | https://freesound.org/people/el_boss/sounds/677858 |
+
+- 연결: `src/audio.js`의 `CARD_CUES`, 재생은 지도 악당 효과음과 같은 경로(`src/theme-effects.js`)라 효과음 켜기·효과음 크기·전체 소리 끄기·숨긴 탭 정지를 그대로 따른다. 효과음은 한 번에 하나만 난다.

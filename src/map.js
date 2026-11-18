@@ -13,7 +13,7 @@ import {stages,chapterDone,stageOpen,certificateEligible} from './state.js';
 // Exploration fills the screen; overview contains the entire world. The camera follows the walker at FOLLOW
 // times the cover scale; dragging, or hand mode, frees the camera until the walker moves again.
 const FOLLOW=1.4;
-export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,takeRestorations},[mapArt,sheet,parrot,parrotWalk]){
+export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,takeRestorations,onMapHits=()=>{},hold=()=>false},[mapArt,sheet,parrot,parrotWalk]){
  const point=projectPath(state.position),p={x:point.x,y:point.y},follower={x:p.x-42,y:p.y+12};let route=[],target=null,frame=0,last=0,raf=0,direction=0,birdDirection=0,birdDistance=0,birdMoving=false,disposed=false,walk=false,lastSave=0;
  let padKey=null;const held=new Set(),trail=[{...follower},{...p}],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const next=stages.find(s=>!chapterDone(state,s.id));
@@ -25,7 +25,11 @@ export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,take
  const restoredIds=takeRestorations?.()??[],reveal=buildingReveal(reduced,restoredIds);
  let lastRestoration=null;
  const camera=createMapCamera({width:world.width,height:world.height,baseZoom:FOLLOW,focusY:.46,reduced:()=>matchMedia('(prefers-reduced-motion: reduce)').matches});
- const blocked=()=>disposed||document.hidden||!!document.querySelector('dialog[open]')||!!host.querySelector('.map-repair[open]');
+ // Achievement cards (main.js): onMapHits(before, after) reports every villain hit save. An open card makes #app inert,
+ // and hold() is true while a won card waits for its turn: walking, the camera and the villains (with their
+ // all-villains finale) rest until the card is put away.
+ const frozen=()=>!!host.closest('[inert]');
+ const blocked=()=>disposed||document.hidden||!!document.querySelector('dialog[open]')||!!host.querySelector('.map-repair[open]')||frozen()||hold();
  const encounterStages=state.adminUnlocked?[]:stages.flatMap(s=>{
   const b=world.buildings.find(b=>b.stage===s.id),anchor=nodePoint(b.node);
   const node=world.edges.find(([from,to])=>from===b.node||to===b.node).find(point=>point!==b.node);
@@ -35,7 +39,7 @@ export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,take
   const depth=72,fromDoor=Math.min(1,depth/d),onNext=Math.min(1,Math.max(0,depth-d)/dl);
   return chapterDone(state,s.id)?[encounterStage(s.id,s.id,s.name,{x:anchor.x+(p.x-anchor.x)*fromDoor+(k.x-p.x)*onNext,y:anchor.y+(p.y-anchor.y)*fromDoor+(k.y-p.y)*onNext})]:[];
  });
- const encounters=mountMapEncounters({requiredFoes:5,host:viewport,clearStage:()=>restoredIds.filter(id=>id!==5).at(-1),stages:encounterStages,progress:state.mapHits,onSave:patch=>{state.mapHits={...state.mapHits,...patch};save();},blocked,reduced:()=>reduced,tone,voice:text=>{const id=Object.keys(voiceLines).find(k=>voiceLines[k].text===text);if(id)playVoice(id);},reach:92,contact:23,...encounterLook});
+ const encounters=mountMapEncounters({requiredFoes:5,host:viewport,clearStage:()=>restoredIds.filter(id=>id!==5).at(-1),stages:encounterStages,progress:state.mapHits,onSave:patch=>{const before=state.mapHits;state.mapHits={...before,...patch};save();onMapHits(before,state.mapHits);},blocked,reduced:()=>reduced,tone,voice:text=>{const id=Object.keys(voiceLines).find(k=>voiceLines[k].text===text);if(id)playVoice(id);},reach:92,contact:23,...encounterLook});
  const heroPose=encounterStages.length?loadEncounterActor('hero'):null,allyPose=encounterStages.length?loadEncounterActor('ally'):null;
  const guardLabels=mapLabelGuard(viewport,'.map-node','.screen-hud button,.map-bottom button,.map-repair summary');
  let lastScale=0,lastTransform='';
@@ -120,7 +124,7 @@ export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,take
   tap:d=>{cancelRoute();follow();const v=MAP_VECTORS[d],next=assistMapStep(p,{x:v.x*10,y:v.y*10},isWalkable);p.x=next.x;p.y=next.y;}
  });
  const resize=()=>{camera.resize(viewport.clientWidth,viewport.clientHeight,p);apply();guardLabels();};const observer=new ResizeObserver(resize);observer.observe(viewport);
- function tick(time){if(disposed)return;const dt=Math.min(.04,(time-last)/1000||0);last=time;walk=false;birdMoving=false;if(!document.hidden&&!document.querySelector('dialog[open]')&&!host.querySelector('.map-repair[open]')){let v=inputVector(new Set([...held,...(padKey?[padKey]:[])]));if(!v.x&&!v.y&&route.length){const q=route[0],d=Math.hypot(q.x-p.x,q.y-p.y);if(d<5){route.shift();if(!route.length&&target!==null){const t=target;enter(t);if(disposed)return;}}else{v={x:(q.x-p.x)/d,y:(q.y-p.y)/d};}}
+ function tick(time){if(disposed)return;const dt=Math.min(.04,(time-last)/1000||0);last=time;walk=false;birdMoving=false;if(!document.hidden&&!document.querySelector('dialog[open]')&&!host.querySelector('.map-repair[open]')&&!frozen()){let v=inputVector(new Set([...held,...(padKey?[padKey]:[])]));if(!v.x&&!v.y&&route.length){const q=route[0],d=Math.hypot(q.x-p.x,q.y-p.y);if(d<5){route.shift();if(!route.length&&target!==null){const t=target;enter(t);if(disposed)return;}}else{v={x:(q.x-p.x)/d,y:(q.y-p.y)/d};}}
  if(v.x||v.y){const speed=200*dt,q=assistMapStep(p,{x:v.x*speed,y:v.y*speed},isWalkable);walk=Math.hypot(q.x-p.x,q.y-p.y)>.01;p.x=q.x;p.y=q.y;direction=Math.abs(v.x)>Math.abs(v.y)?v.x>0?2:1:v.y>0?0:3;
  if(!trail.length||Math.hypot(p.x-trail.at(-1).x,p.y-trail.at(-1).y)>7)trail.push({...p});while(trail.length>8)trail.shift();
  if(time-lastSave>1200){state.position={...p};save();lastSave=time;}}

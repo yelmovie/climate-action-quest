@@ -23,6 +23,9 @@ test('로딩·저장 보호 안내와 동적 스타일의 font 축약도 나눔�
   assert.match(styles, /#save-protection\{[^}]*font:600 18px\/1\.5 "NanumSquareNeo",sans-serif/);
   for (const file of readdirSync(new URL('src/', root))) {
     if (file.startsWith('._') || !/\.(css|js)$/.test(file)) continue;
+    // The shared achievement-card stylesheet is copied as shipped. Its font shorthands end in `inherit`, which browsers
+    // drop as invalid, so the family stays the inherited NanumSquareNeo; map-reward-cards.css restores size and weight.
+    if (file === 'reward-cards.css') continue;
     const source = readFileSync(new URL('src/' + file, root), 'utf8');
     for (const match of source.matchAll(/(?<![\w-])font\s*:\s*([^;{}<>\n]+)/g)) {
       assert.match(match[1], /NanumSquareNeo|var\(|^inherit\b/, `${file}: ${match[0]}`);

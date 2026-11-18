@@ -1,0 +1,6 @@
+/* Achievement cards in this app. reward-cards.css is the shared module copied as shipped and stays untouched.
+   Its font shorthands end in `inherit`, which is not valid inside the shorthand, so browsers drop them and the
+   button and the rarity label come out thin. Size and weight are restored here, and the button reads like the
+   app's other gold buttons: dark ink on gold instead of white on gold. */
+.rc-layer .rc-take, .rc-layer .rc-take:hover, .rc-layer .rc-take:focus { font-weight: 900; font-size: 22px; line-height: 1; color: var(--rc-ink); text-shadow: none; }
+.rc-layer .rc-rarity { font-weight: 900; font-size: max(18px, calc(var(--h) * .036)); line-height: 1; }

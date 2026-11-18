@@ -10,6 +10,7 @@ import {sourceActivityRecord} from './activity-record.js';
 import {loadActivity,loadMapArt,loadStyle,waitForScreen} from './screen-loaders.js';
 import {registerOffline,prepareOffline} from './offline.js';
 import {createAudio} from './audio.js';
+import {bindRewardSound,rewardSlotsHtml,awardRewardCards,rewardCardPending,rewardCardDue} from './map-reward-cards.js';
 import {artImage,chapterArt} from './concept-art.js';
 const app=document.querySelector('#app'),live=document.querySelector('#announcer'),toast=document.querySelector('#toast');
 let storage;try{storage=window.localStorage;}catch{storage={getItem:()=>null,setItem:()=>{throw Error('unavailable');},removeItem:()=>{}};}
@@ -20,6 +21,8 @@ const mapCodeFailure = Symbol('map code failure');
 let resumeActivity=state.route.startsWith('activity/')?Number(state.route.split('/')[1]):null;
 const audio=createAudio(storage),asset=name=>`/assets/${name}.webp`,esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 configureNarration(audio);
+// 성취 카드(map-reward-cards.js)의 소리도 효과음 경로를 탄다: 소리 버튼·효과음 스위치·효과음 크기를 그대로 따른다.
+bindRewardSound(name=>audio.effect(name));
 function announce(message){live.textContent='';requestAnimationFrame(()=>live.textContent=message);toast.textContent=message;toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.hidden=true,5500);}
 function storageNotice(message){
  let notice=document.querySelector('#save-protection');
@@ -31,7 +34,7 @@ function save(){const result=loaded.save(state);if(!result.ok){saveWarning=true;
 document.addEventListener('pointerdown',()=>audio.unlock(),{once:true});document.addEventListener('keydown',()=>audio.unlock(),{once:true});
 // The map finale dialog borrows the final theme while it is open.
 document.addEventListener('mapfinale',e=>audio.mapFinale(e.detail?.open));
-function hud(home=false){return `<div class="screen-hud"><div class="hud-left">${home?'':`<button class="icon-button" data-nav="home" aria-label="홈">${icon('home')}</button><button class="icon-button" data-back aria-label="이전 화면">${icon('back')}</button>`}</div><div class="hud-right"><button class="icon-button" data-sound aria-label="${audio.settings.bgm||audio.settings.sfx?'전체 소리 끄기':'전체 소리 켜기'}">${icon(audio.settings.bgm||audio.settings.sfx?'sound':'mute')}</button><button class="icon-button" data-settings aria-label="설정">${icon('settings')}</button></div></div>`;}
+function hud(home=false){return `<div class="screen-hud"><div class="hud-left">${home?'':`<button class="icon-button" data-nav="home" aria-label="홈">${icon('home')}</button><button class="icon-button" data-back aria-label="이전 화면">${icon('back')}</button>`}</div><div class="hud-right">${activeRoute==='map'?rewardSlotsHtml(state.mapHits):''}<button class="icon-button" data-sound aria-label="${audio.settings.bgm||audio.settings.sfx?'전체 소리 끄기':'전체 소리 켜기'}">${icon(audio.settings.bgm||audio.settings.sfx?'sound':'mute')}</button><button class="icon-button" data-settings aria-label="설정">${icon('settings')}</button></div></div>`;}
 function wireHud(){app.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>go(b.dataset.nav));app.querySelector('[data-back]')?.addEventListener('click',back);app.querySelector('[data-settings]')?.addEventListener('click',settings);app.querySelector('[data-sound]')?.addEventListener('click',e=>{audio.toggle();e.currentTarget.innerHTML=icon(audio.settings.bgm||audio.settings.sfx?'sound':'mute');e.currentTarget.setAttribute('aria-label',audio.settings.bgm||audio.settings.sfx?'전체 소리 끄기':'전체 소리 켜기');announce(audio.settings.bgm||audio.settings.sfx?'소리를 켰어요.':'전체 소리를 껐어요.');});}
 function back(){if(document.querySelector('dialog[open]')){document.querySelector('dialog[open]').close();return;}if(activeRoute.startsWith('activity/'))go('facility/'+Math.floor(Number(activeRoute.split('/')[1])/2));else if(activeRoute.startsWith('facility/')||activeRoute==='ending')go('map');else go('home');}
 function go(route){
@@ -64,7 +67,7 @@ function teacherDock(){
  app.querySelectorAll('[data-teacher]').forEach(b=>b.onclick=()=>teacherMove(Number(b.dataset.teacher)));
 }
 function teacherMove(dir){const route=teacherStep(dir);if(!route)return;go(route);const name=teacherName(route),last=(name.charCodeAt(name.length-1)-0xAC00)%28;announce(`교사 미리보기 · ${name}${last>0&&last!==8?'으로':'로'} 이동했어요.`);}
-document.addEventListener('keydown',e=>{if(!state.adminUnlocked||document.querySelector('dialog[open]')||e.target.closest?.('input,textarea,select,[contenteditable="true"]')||!/^(map|facility|activity)/.test(activeRoute))return;const dir=e.key==='PageDown'||(e.shiftKey&&e.key==='ArrowRight')?1:e.key==='PageUp'||(e.shiftKey&&e.key==='ArrowLeft')?-1:0;if(!dir)return;e.preventDefault();teacherMove(dir);});
+document.addEventListener('keydown',e=>{if(!state.adminUnlocked||document.querySelector('dialog[open]')||app.inert||e.target.closest?.('input,textarea,select,[contenteditable="true"]')||!/^(map|facility|activity)/.test(activeRoute))return;const dir=e.key==='PageDown'||(e.shiftKey&&e.key==='ArrowRight')?1:e.key==='PageUp'||(e.shiftKey&&e.key==='ArrowLeft')?-1:0;if(!dir)return;e.preventDefault();teacherMove(dir);});
 function resumeRoute(){
  const current=state.records[resumeActivity];
  if(Number.isInteger(resumeActivity)&&activityOpen(state,resumeActivity)&&current&&!current.example&&current.workComplete!==true&&(!current.done||current.workComplete===false))return 'activity/'+resumeActivity;
@@ -131,7 +134,10 @@ async function map(){
  try{
  const [module,art]=await Promise.all([code,mapArt||loadMapArt(ipsaeArt,ipsaeWalkArt,request.signal)]);
  if(signal.aborted)return;
- audio.prepareEffects();cleanup=module.mountMap(host,{state,save,go,icon,announce,tone:(kind,hits)=>audio.effect(kind==='hit'?'map-hit-'+hits:kind==='finish'?'map-hit-3':'map-'+kind),takeRestorations:()=>{if(studentState)return [];const ids=[...pendingRestoration];pendingRestoration.clear();return ids;},talkToIpsae(stage){
+ // 성취 카드: 악당의 세 번째 타격이 저장되면(onMapHits, 기록 2→3) 퇴장 뒤 카드를 띄운다. 카드가 열린 동안 #app이 inert라 지도·악당이 쉬고,
+ // 카드 차례(hold)에는 악당 모듈도 멈춰 다섯 악당 파이널이 카드를 닫은 뒤에 열린다.
+ // 효과음은 한 번에 하나만 난다. 마지막 악당의 격퇴 징글은 곧 뜨는 카드 소리에 끊기므로 3타 소리만 내고, 축하는 카드의 컬렉션 완성 징글이 맡는다.
+ audio.prepareEffects();cleanup=module.mountMap(host,{state,save,go,icon,announce,onMapHits:(before,after)=>awardRewardCards(before,after,()=>state.mapHits,()=>activeRoute==='map'&&host.isConnected),hold:rewardCardDue,tone:(kind,hits)=>audio.effect(kind==='hit'?'map-hit-'+hits:kind==='finish'||kind==='victory'&&rewardCardPending()?'map-hit-3':'map-'+kind),takeRestorations:()=>{if(studentState)return [];const ids=[...pendingRestoration];pendingRestoration.clear();return ids;},talkToIpsae(stage){
   const voiceId=`map-${stage}`,line=voiceLines[voiceId];
   const d=dialog(`<h2 id="map-npc-name">앵무새 잎새</h2><div class="npc-dialogue-grid">${npcPortrait(line.speaker)}<div class="npc-dialogue-copy"><p>${esc(line.text)}</p></div></div>`,'npc-facility-dialog');
   d.setAttribute('aria-labelledby','map-npc-name');
