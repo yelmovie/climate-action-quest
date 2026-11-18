@@ -33,7 +33,7 @@ export const voiceLines = {
   "map-0": {
     "speaker": "ipsae",
     "text": "이번 목적지는 언덕 관측소! 오래 모은 자료에서 단서를 찾아요. 건물 이름을 누르면 같이 걸어가요!",
-    "target": "assets/audio/voices/map-0.mp3"
+    "target": "assets/audio/voices/el-map-0.mp3"
   },
   "map-1": {
     "speaker": "ipsae",
