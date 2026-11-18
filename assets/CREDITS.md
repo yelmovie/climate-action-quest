@@ -163,4 +163,7 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 
 ## 2026-11-18 잎새 지도 안내 음성
 
-지도 안내 `audio/voices/el-map-0.mp3`(이번 목적지는 언덕 관측소!…)를 잎새의 기존 ElevenLabs 목소리(Bee, `eleven_v4`, 유료 요금제 상업 이용 가능)로 다시 만들었다. 실제 사람의 목소리를 복제하지 않았다. 생성 ID·받아쓰기·SHA-256은 `docs/VOICE-FILL-20261118.json`과 `audio/voices/manifest.json`에 있다. 나머지 Momo·Seed Audio 줄은 ElevenLabs 일일 생성 한도로 아직 바꾸지 못했다.
+지도 안내 `audio/voices/el-map-0.mp3`(이번 목적지는 언덕 관측소!…)를 잎새의 기존 ElevenLabs 목소리(Bee, `eleven_v4`, 유료 요금제 상업 이용 가능)로 다시 만들었다. 실제 사람의 목소리를 복제하지 않았다. 생성 ID·받아쓰기·SHA-256은 `docs/VOICE-FILL-20261118.json`과 `audio/voices/manifest.json`에 있다. 
+## 2026-11-18 캐릭터 목소리 통일·팝업 음성
+
+잎새·물방울의 나머지 지도 안내·힌트·다시 생각하기 대사, 이야기·배지·엔딩·인증서 내레이션, 개념 영상 자막, 도움말 개념·안내, 악당 말풍선 음성(`audio/voices/el-*.mp3`, 109줄)을 ElevenLabs 공식 API(유료 Creator 요금제, 상업 이용 가능) `eleven_v4`로 만들었다. 캐릭터마다 한 목소리만 쓴다(잎새 Bee, 물방울 SK, 내레이터 Haemi, 날씨 바꿔치기 악당 Harry). 실제 사람의 목소리를 복제하지 않았다. 요청 ID·받아쓰기·SHA-256은 `docs/VOICE-FILL-20261118.json`과 `audio/voices/manifest.json`에 있다.

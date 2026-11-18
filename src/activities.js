@@ -102,6 +102,8 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
       // The hint is a speech bubble above the avatar: the activity stays visible and usable.
       if(help.open){help.close();return;}
       help.show();effect('hint');help.querySelectorAll('.voice-replay,.voice-status').forEach(el=>el.remove());const voice=index===4?`hint-4${rec.ran?'b':'a'}`:`hint-${index}`;if([help.querySelector('.npc-dialogue-copy p')?.textContent,help.querySelector('.guide-spoken')?.textContent].includes(voiceLines[voice]?.text))voiceControl(help.querySelector('.npc-dialogue-copy'),voice,{autoplay:true});
+      // Key concept, first guide line and the concept note get their own replay buttons when the screen shows exactly that text.
+      for(const [el,id] of [[help.querySelector('.learning-key'),`learn-${index}`],[help.querySelector('.npc-dialogue-copy p'),`brief-${index}`],[help.querySelector('.help-more p'),`learn-detail-${index}`]])if(el&&voiceLines[id]?.text===el.textContent)voiceControl(el,id);
     });
     on('.help-close','click',()=>{host.querySelector('.activity-help').close();host.querySelector('.guide-avatar')?.focus({preventScroll:true});});
     // A tap outside the bubble closes it, so the HUD and the activity never meet an "open dialog" guard.

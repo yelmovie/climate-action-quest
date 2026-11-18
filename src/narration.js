@@ -1,10 +1,24 @@
 import {voiceLines} from './voice-lines.js';
 let audio, player, owner, serial=0;
+const idle=new Set();
 export function configureNarration(value){audio=value;}
 export function stopNarration(){
  serial++;if(player){player.pause();try{player.currentTime=0;}catch{}player.removeAttribute('src');player.load();player=null;}
  if(owner){delete owner.dataset.voicePlaying;owner.textContent='음성 다시 듣기';owner.setAttribute('aria-pressed','false');owner=null;}
  audio?.duckVoice(false);
+ const waiting=[...idle];idle.clear();waiting.forEach(fn=>fn());
+}
+export const isNarrating=()=>!!player;
+// One-shot callback for the next time no voice is playing.
+export function onNarrationIdle(fn){idle.add(fn);return()=>idle.delete(fn);}
+// Lines spoken by the scene itself (concept captions, villain bubbles) without a replay button.
+export function playVoice(id){
+ stopNarration();
+ if(!voiceLines[id]||document.hidden||!audio?.settings.sfx)return false;
+ const request=++serial,current=new Audio('/'+voiceLines[id].target);player=current;audio.duckVoice(true);
+ current.onended=current.onerror=()=>{if(request===serial)stopNarration();};
+ current.play().catch(()=>{if(request===serial)stopNarration();});
+ return true;
 }
 export function voiceControl(host,id,{autoplay=false}={}){
  if(!host||!voiceLines[id])return;

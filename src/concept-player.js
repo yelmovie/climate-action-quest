@@ -1,4 +1,4 @@
-import {voiceControl} from './narration.js';
+import {voiceControl,playVoice,isNarrating,onNarrationIdle,stopNarration} from './narration.js';
 import {bindConceptFocus} from './concept-focus.js';
 import {concepts,CONCEPT_DURATION,CONCEPT_CUES} from './concept-data.js';
 
@@ -9,21 +9,26 @@ export function openConcept({index,dialog,audio,icon,next,label,reward=''}){
  if(index%2===1&&reward.endsWith('배지 획득!'))voiceControl(d.querySelector('.concept-heading'),`badge-${Math.floor(index/2)}`,{autoplay:true});
  const video=d.querySelector('video'),play=d.querySelector('.concept-play'),pause=d.querySelector('.concept-pause'),still=d.querySelector('.concept-end'),caption=d.querySelector('.concept-caption');
  let closed=false,failed=false,current=-1,formatFallback=false;let releaseFocus=()=>{};
+ // Each caption is read once; the muted clip waits while the badge or the previous caption is still speaking.
+ const voiced=new Set();let unhold=()=>{};
+ function speak(n){if(closed||failed||n<0||voiced.has(n))return;voiced.add(n);playVoice(`concept-${clip.id}-${n+1}`);}
+ function hold(){unhold();video.pause();unhold=onNarrationIdle(()=>{unhold=()=>{};if(!closed&&!failed)start();});}
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  audio.quiet(true);
  function cue(n){if(n===current)return;current=n;caption.textContent=clip.cues[n];d.querySelectorAll('.concept-timeline i').forEach((el,i)=>el.classList.toggle('on',i<=n));}
  function fallback(){if(closed||failed)return;failed=true;releaseFocus();clearTimeout(timer);video.pause();video.removeAttribute('src');video.load();video.hidden=true;still.hidden=false;play.hidden=true;pause.hidden=true;caption.hidden=true;d.querySelector('.concept-fallback').hidden=false;}
  function start(){if(closed||failed)return;still.hidden=true;video.hidden=false;if(video.ended)video.currentTime=0;video.play().then(()=>{if(closed)return;play.hidden=true;pause.hidden=false;pause.textContent='잠깐 멈춤';}).catch(()=>{if(!closed&&!failed)play.hidden=false;});}
- video.addEventListener('timeupdate',()=>cue(CONCEPT_CUES.reduce((n,at,i)=>video.currentTime>=at?i:n,0)));
+ video.addEventListener('timeupdate',()=>{const n=CONCEPT_CUES.reduce((n,at,i)=>video.currentTime>=at?i:n,0);if(n>current&&!video.paused&&isNarrating()){hold();return;}cue(n);if(!video.paused)speak(n);});
+ video.addEventListener('playing',()=>{if(!voiced.has(current)&&isNarrating()){hold();return;}speak(current);});
  video.addEventListener('ended',()=>{still.hidden=false;play.textContent='다시 보기';play.hidden=false;pause.hidden=true;cue(2);});
  video.addEventListener('loadedmetadata',()=>{clearTimeout(timer);if(!reduced)start();});
  video.addEventListener('error',()=>{if(closed||failed)return;if(!formatFallback){formatFallback=true;video.src=base+'.mp4';video.load();}else fallback();});
- play.onclick=start;
- pause.onclick=()=>{if(video.paused){start();}else{video.pause();pause.textContent='이어서 보기';}};
+ play.onclick=()=>{if(video.ended){voiced.clear();current=-1;}start();};
+ pause.onclick=()=>{if(video.paused){start();}else{unhold();unhold=()=>{};stopNarration();voiced.delete(current);video.pause();pause.textContent='이어서 보기';}};
  d.querySelector('.concept-next').onclick=()=>{d.close();next();};
  const onVisibility=()=>{if(document.hidden&&!video.paused){video.pause();pause.textContent='이어서 보기';}};
  document.addEventListener('visibilitychange',onVisibility);
- d.addEventListener('close',()=>{releaseFocus();closed=true;clearTimeout(timer);document.removeEventListener('visibilitychange',onVisibility);video.pause();video.removeAttribute('src');video.load();audio.quiet(false);},{once:true});
+ d.addEventListener('close',()=>{releaseFocus();closed=true;unhold();clearTimeout(timer);document.removeEventListener('visibilitychange',onVisibility);video.pause();video.removeAttribute('src');video.load();audio.quiet(false);},{once:true});
  const timer=setTimeout(()=>{if(video.readyState<1)fallback();},6000);
  cue(0);
  video.src=base+(video.canPlayType('video/webm; codecs="vp9"')?'.webm':'.mp4');video.load();

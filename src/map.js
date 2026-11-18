@@ -1,5 +1,7 @@
 import { createMapCamera, bindMapCameraPointer, mapLabelGuard } from './map-camera.js';
 import { mountMapEncounters } from './map-encounters.js';
+import { voiceLines } from './voice-lines.js';
+import { playVoice } from './narration.js';
 import { encounterLook,encounterStage,loadEncounterActor,drawEncounterActor } from './map-encounter-theme.js';
 import { buildingReveal, paintRestoredBuildings } from './building-restoration.js';
 import {ipsaeWalkFrame} from './characters.js';
@@ -33,7 +35,7 @@ export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,take
   const depth=72,fromDoor=Math.min(1,depth/d),onNext=Math.min(1,Math.max(0,depth-d)/dl);
   return chapterDone(state,s.id)?[encounterStage(s.id,s.id,s.name,{x:anchor.x+(p.x-anchor.x)*fromDoor+(k.x-p.x)*onNext,y:anchor.y+(p.y-anchor.y)*fromDoor+(k.y-p.y)*onNext})]:[];
  });
- const encounters=mountMapEncounters({requiredFoes:5,host:viewport,clearStage:()=>restoredIds.filter(id=>id!==5).at(-1),stages:encounterStages,progress:state.mapHits,onSave:patch=>{state.mapHits={...state.mapHits,...patch};save();},blocked,reduced:()=>reduced,tone,reach:92,contact:23,...encounterLook});
+ const encounters=mountMapEncounters({requiredFoes:5,host:viewport,clearStage:()=>restoredIds.filter(id=>id!==5).at(-1),stages:encounterStages,progress:state.mapHits,onSave:patch=>{state.mapHits={...state.mapHits,...patch};save();},blocked,reduced:()=>reduced,tone,voice:text=>{const id=Object.keys(voiceLines).find(k=>voiceLines[k].text===text);if(id)playVoice(id);},reach:92,contact:23,...encounterLook});
  const heroPose=encounterStages.length?loadEncounterActor('hero'):null,allyPose=encounterStages.length?loadEncounterActor('ally'):null;
  const guardLabels=mapLabelGuard(viewport,'.map-node','.screen-hud button,.map-bottom button,.map-repair summary');
  let lastScale=0,lastTransform='';
