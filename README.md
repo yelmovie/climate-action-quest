@@ -67,6 +67,7 @@ http://localhost:4173 에서 연다. `npm test`로 학습 모형·진행·지도
 - 카드가 열린 동안 `#app`이 inert라 지도·악당·방향키 이동이 멈추고, 다섯 악당 파이널 영상은 카드(와 완성 축하)를 닫은 뒤에 기존 조건 그대로 열린다. 3타 직후 설정창을 열어도 카드가 파이널보다 먼저 나온다(`rewardCardDue`가 악당 모듈을 붙잡는다). 마지막 악당의 격퇴 징글은 카드의 컬렉션 완성 징글이 대신하고, 파이널 음악이 시작되면 징글이 멈춘다.
 - 설정·연결은 `src/map-reward-cards.js`(카드 5장·보유 계산·띄우는 시점), 이 앱 전용 보정은 `src/map-reward-cards.css`다. 공통 모듈 `src/reward-cards.js`·`src/reward-cards.css`는 `_shared/reward-cards`의 복사본이라 고치지 않는다(지침 `_shared/reward-cards/INTEGRATION.md`). `src/map.js`는 타격 저장 알림(`onMapHits`)과 멈춤 조건만 더했고 `src/map-encounters.js`는 그대로다.
 - 카드 그림 5장은 GPT 이미지로 생성했고, 효과음 5종은 공통 CC0 라이브러리 파일이다(출처 `assets/CREDITS.md`). 소리는 기존 효과음 경로를 타서 효과음 스위치·효과음 크기·전체 소리 끄기를 따른다.
+- 검증·운영 반영(2026-11-18): `npm test` 69개 통과, `npm run build` 성공(331 files). 헤드리스 Chrome으로 실제 공격 버튼 격퇴 → 카드 → 칸 → 새로고침 유지, 1·2타와 접촉 피격, 5장 완성 축하 뒤 파이널, 3타 직후 설정창을 열었다 닫는 경우, 소리 끄기·움직임 줄이기, 1024×768·1280×800·844×390 헤더까지 20항목을 배포본(dist)과 운영 주소에서 모두 통과했다(검사 스크립트와 화면은 `.tmp/reward-cards/`, Git 미포함). 커밋 `71a2294`를 main에 푸시하고 `_scratch/deploy-20261118/deploy.sh 16 "16 weatherchange" worker-cfg climate-action-quest`로 배포했다. 운영 주소 https://climate-action-quest.yelsam.workers.dev/ 의 활성 버전은 `296831d8-b352-4390-b193-9164b0ce7022`(100%)이고, index.html·`src/main.js`·`sw.js`·카드 그림 10장·카드 효과음 5개의 SHA-256이 빌드와 같다. 실제 태블릿의 소리 크기와 터치감은 기기로 확인해야 한다.
 
 ## 설계 자료
 
