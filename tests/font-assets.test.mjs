@@ -20,7 +20,7 @@ test('로딩·저장 보호 안내와 동적 스타일의 font 축약도 나눔�
   const shell = readFileSync(new URL('src/shell.css', root), 'utf8');
   const styles = readFileSync(new URL('src/styles.css', root), 'utf8');
   assert.match(shell, /\.boot\{[^}]*font:600 24px "NanumSquareNeo",sans-serif/);
-  assert.match(styles, /#save-protection\{[^}]*font:600 15px\/1\.5 "NanumSquareNeo",sans-serif/);
+  assert.match(styles, /#save-protection\{[^}]*font:600 18px\/1\.5 "NanumSquareNeo",sans-serif/);
   for (const file of readdirSync(new URL('src/', root))) {
     if (file.startsWith('._') || !/\.(css|js)$/.test(file)) continue;
     const source = readFileSync(new URL('src/' + file, root), 'utf8');

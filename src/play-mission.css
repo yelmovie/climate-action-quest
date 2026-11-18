@@ -1,10 +1,10 @@
 /* The mission keeps its goal and actions visible while the work area scrolls. */
 dialog.play-mission {
- --pm-small:clamp(14px,1.1vw,18px);
+ --pm-small:clamp(18px,1.1vw,18px);
  box-sizing:border-box;width:min(1240px,calc(100vw - 24px));height:min(840px,calc(100dvh - 24px));
  max-width:none;max-height:none;padding:0;overflow:hidden;border:2px solid var(--line);
  border-radius:24px;color:var(--ink);background:var(--mint-light);font:inherit;
- font-size:clamp(16px,1.3vw,22px);line-height:1.4;
+ font-size:clamp(18px,1.3vw,22px);line-height:1.4;
 }
 dialog.play-mission::backdrop {background:var(--scrim);backdrop-filter:blur(4px);}
 .pm-shell {
@@ -77,14 +77,14 @@ dialog.play-mission::backdrop {background:var(--scrim);backdrop-filter:blur(4px)
  .pm-head h2 {font-size:22px;}
  .pm-content {grid-template-columns:minmax(0,1fr) 280px;gap:12px;}
  .pm-palette {grid-template-columns:repeat(3,minmax(0,1fr));}
- .pm-tool {min-height:88px;padding:4px;font-size:14px;}
+ .pm-tool {min-height:88px;padding:4px;font-size:18px;}
  .pm-tool img,.pm-tool > .icon {height:28px;}
- .pm-tool small {font-size:14px;}
+ .pm-tool small {font-size:18px;}
  .pm-grid {padding:8px;}
  .pm-cell {min-height:72px;padding:4px;}
  .pm-cell img,.pm-cell > .icon {width:36px;height:36px;}
  .pm-feedback {min-height:40px;padding:8px;}
- .pm-goal {font-size:16px;}
+ .pm-goal {font-size:18px;}
 }
 @media (max-width:700px) {
  dialog.play-mission {width:calc(100vw - 16px);height:calc(100dvh - 16px);border-radius:20px;}
@@ -95,23 +95,23 @@ dialog.play-mission::backdrop {background:var(--scrim);backdrop-filter:blur(4px)
  .pm-head button {min-width:48px;padding:8px;}
  .pm-head button .icon {display:none;}
  .pm-levels {gap:4px;}
- .pm-levels button {font-size:14px;padding:8px 4px;}
- .pm-goal {align-items:flex-start;font-size:16px;gap:8px;}
- .pm-budget {font-size:14px;padding:4px 8px;}
+ .pm-levels button {font-size:18px;padding:8px 4px;}
+ .pm-goal {align-items:flex-start;font-size:18px;gap:8px;}
+ .pm-budget {font-size:18px;padding:4px 8px;}
  .pm-content {grid-template-columns:1fr;gap:12px;}
  .pm-palette {grid-template-columns:repeat(3,minmax(0,1fr));grid-row:1;}
- .pm-tool {min-height:92px;padding:4px;font-size:14px;}
+ .pm-tool {min-height:92px;padding:4px;font-size:18px;}
  .pm-tool img,.pm-tool > .icon {height:32px;}
  .pm-grid {padding:8px;}
  .pm-cell {min-height:88px;padding:4px;}
  .pm-cell img,.pm-cell > .icon {width:44px;height:44px;}
  .pm-metrics span {flex-direction:column;gap:4px;padding:8px 4px;}
  .pm-actions {gap:4px;}
- .pm-actions button {padding:8px;font-size:14px;}
+ .pm-actions button {padding:8px;font-size:18px;}
  .pm-actions button .icon {display:none;}
  .pm-actions .pm-reset-button {margin-left:0;}
- .pm-feedback {font-size:16px;padding:8px;}
- .pm-note,.pm-compare {font-size:14px;}
+ .pm-feedback {font-size:18px;padding:8px;}
+ .pm-note,.pm-compare {font-size:18px;}
 }
 @media (prefers-reduced-motion:reduce) {
  .play-mission button {transition:none;}

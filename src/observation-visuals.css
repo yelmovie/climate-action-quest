@@ -59,7 +59,7 @@
   left: 50%;
   transform: translateX(-50%);
   color: var(--ink);
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.15;
   font-variant-numeric: tabular-nums;
   font-style: normal;
@@ -67,9 +67,9 @@
 }
 .activity-0 .ov-now { opacity: var(--ov-reveal,0); }
 .activity-0 .ov-group-label,
-.activity-1 .ov-group-label { font-size: 16px; color: var(--ink); line-height: 1.25; white-space: nowrap; }
+.activity-1 .ov-group-label { font-size: 18px; color: var(--ink); line-height: 1.25; white-space: nowrap; }
 .activity-0 .ov-legend,
-.activity-1 .ov-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-size: 16px; line-height: 1.25; }
+.activity-1 .ov-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-size: 18px; line-height: 1.25; }
 .activity-0 .ov-legend > span,
 .activity-1 .ov-legend > span { display: inline-flex; align-items: center; gap: 6px; }
 .activity-0 .ov-legend > span::before,
@@ -93,7 +93,7 @@
 .activity-2 .ov-resource-question > span { min-width: 0; }
 .activity-3 .ov-cause-chain { display: grid; grid-template-columns: minmax(0,1fr) 32px minmax(0,1fr) 32px minmax(0,1fr); width: 100%; align-items: stretch; }
 .activity-3 .ov-chain-step { width: 100%; min-width: 0; max-width: none; align-content: start; grid-template-rows: auto 1fr; border-radius: 18px; }
-.activity-3 .ov-chain-step > .eyebrow { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 7px; margin-bottom: 8px; font-size: 16px; }
+.activity-3 .ov-chain-step > .eyebrow { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 7px; margin-bottom: 8px; font-size: 18px; }
 .activity-3 .ov-step-number { display: inline-grid; place-items: center; flex: 0 0 28px; width: 28px; height: 28px; color: var(--paper); background: var(--forest); border-radius: 50%; font-size: 18px; line-height: 1; }
 .activity-3 .ov-cause-chain > .chain-arrow { display: grid; place-items: center; align-self: center; justify-self: center; width: 32px; height: 32px; margin: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--forest); background: var(--cream); }
 .activity-3 .ov-cause-chain > .chain-arrow > .icon { width: 24px; height: 24px; }

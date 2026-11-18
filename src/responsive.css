@@ -18,9 +18,9 @@
 .activity-page .facility-button.can-drag { padding-right: 24px; }
 .activity-page .metric-direction,
 .activity-page .coast-profile-names span,
-.activity-page .coast-profile .coast-profile-key { font-size: clamp(16px,1vw,18px); }
+.activity-page .coast-profile .coast-profile-key { font-size: clamp(18px,1vw,18px); }
 .activity-page .facility-button > .city-tool-stats,
-.activity-page .city-tool-stats > span { font-size: clamp(16px,1.05vw,19px); }
+.activity-page .city-tool-stats > span { font-size: clamp(18px,1.05vw,19px); }
 .choice-card > .choice-indicator { flex-shrink: 0; }
 .activity-screen.teacher-on { display: grid; grid-template-rows: minmax(0,1fr) auto; }
 .activity-screen .teacher-dock { position: relative; inset: auto; margin: 0 3vw 8px; gap: 8px; }
@@ -59,10 +59,10 @@
   .activity-card > .activity-card-visual { width: 88px; }
   .activity-card .chapter-art { width: 88px; }
   .activity-card > h2 { font-size: 24px; }
-  .activity-card > .eyebrow { font-size: 16px; }
+  .activity-card > .eyebrow { font-size: 18px; }
   .facility-screen .guide-character { display: inline-flex; position: relative; inset: auto; align-items: center; align-self: start; gap: 8px; width: auto; min-height: 44px; padding: 4px 12px 4px 7px; border: 1px solid #719f8a; border-radius: 12px; background: #f7fbeb; color: #174f47; }
   .facility-screen .guide-character img { width: 34px; height: 34px; }
-  .facility-screen .guide-character span { position: static; width: auto; border: 0; border-radius: 0; background: none; font-size: 16px; }
+  .facility-screen .guide-character span { position: static; width: auto; border: 0; border-radius: 0; background: none; font-size: 18px; }
   .facility-screen .teacher-dock { position: relative; inset: auto; flex-shrink: 0; }
   .teacher-badge, .teacher-keys { display: none; }
   .teacher-pad { min-width: 0; flex: 1; }
@@ -74,7 +74,7 @@
   .activity-page { padding: 80px 12px 8px; gap: 12px; }
   .activity-heading { width: 100%; max-width: 100%; padding: 8px 12px; }
   .activity-heading h1 { font-size: 26px; line-height: 1.25; }
-  .activity-heading .eyebrow { font-size: 16px; gap: 4px 8px; }
+  .activity-heading .eyebrow { font-size: 18px; gap: 4px 8px; }
   .activity-workspace { display: flex; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; }
   .activity-0 .activity-workspace > .scan-layout, .activity-2 .activity-workspace > .scan-layout { flex: 0 0 auto; min-height: 0; }
   .scan-layout, .experiment-layout, .daily-layout, .city-design-layout, .stress-result-layout { grid-template-columns: minmax(0,1fr); }
@@ -86,7 +86,7 @@
   .activity-next { grid-column: 1 / -1; width: 100%; max-width: none; }
   .activity-next .button { min-height: 48px; padding: 8px 12px; font-size: 18px; }
   .guide-name { display: none; }
-  .model-note { font-size: 16px; }
+  .model-note { font-size: 18px; }
   .activity-screen .teacher-dock { margin: 0 12px 8px; }
   .link-chain { display: grid; grid-template-columns: minmax(0,1fr); }
   .chain-slot { min-width: 0; }

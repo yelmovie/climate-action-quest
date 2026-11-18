@@ -28,7 +28,7 @@
 :is(.activity-8,.activity-9) .district-risks > span {
   grid-template-columns: auto minmax(0,1fr);
   gap: 3px 6px;
-  font-size: clamp(16px,1.05vw,20px);
+  font-size: clamp(18px,1.05vw,20px);
   color: var(--ink);
   text-align: left;
 }
@@ -45,12 +45,12 @@
 :is(.activity-8,.activity-9) .city-budget-track > i,
 :is(.activity-8,.activity-9) .city-total-track > i { display: block; width: var(--used); height: 100%; background: var(--forest); border-radius: inherit; }
 :is(.activity-8,.activity-9) .city-design-layout .facility-button { min-width: 0; min-height: 64px; padding: 8px 12px; }
-:is(.activity-8,.activity-9) .facility-button > .city-tool-stats { display: flex; flex-wrap: wrap; gap: 3px 8px; width: 100%; min-width: 0; font-size: clamp(15px,1.05vw,19px); }
+:is(.activity-8,.activity-9) .facility-button > .city-tool-stats { display: flex; flex-wrap: wrap; gap: 3px 8px; width: 100%; min-width: 0; font-size: clamp(18px,1.05vw,19px); }
 :is(.activity-8,.activity-9) .city-tool-stats > span { display: inline-flex; gap: 3px; white-space: nowrap; font-size: inherit; font-weight: 400; }
 :is(.activity-8,.activity-9) .city-tool-stats b { font-weight: 400; }
 :is(.activity-8,.activity-9) .city-heat { color: var(--gold-dark); }
 :is(.activity-8,.activity-9) .city-rain { color: var(--forest-dark); }
-:is(.activity-8,.activity-9) .city-design-layout .city-risk-legend { display: block; margin-top: 10px; font-size: 16px; line-height: 1.4; color: var(--ink-soft); }
+:is(.activity-8,.activity-9) .city-design-layout .city-risk-legend { display: block; margin-top: 10px; font-size: 18px; line-height: 1.4; color: var(--ink-soft); }
 .activity-9 .city-weather-summary { position: relative; padding-left: 70px; }
 .activity-9 .city-weather-symbol { position: absolute; left: 16px; top: 18px; color: var(--gold-dark); }
 .activity-9 .weather-rain + .stress-results .city-weather-symbol { color: var(--forest); }
@@ -75,7 +75,7 @@
   :is(.activity-8,.activity-9) .city-board { grid-template-columns: repeat(2,minmax(0,1fr)); }
   :is(.activity-8,.activity-9) .city-design-layout .facility-palette { grid-template-columns: repeat(2,minmax(0,1fr)); }
   :is(.activity-8,.activity-9) .city-design-layout .facility-button { padding: 8px; }
-  :is(.activity-8,.activity-9) .city-tool-stats > span { font-size: 15px; }
+  :is(.activity-8,.activity-9) .city-tool-stats > span { font-size: 18px; }
 }
 @media (max-height:520px) and (min-width:701px) {
   :is(.activity-8,.activity-9) .city-board .district-tile { grid-template-rows: auto 42px auto auto; padding: 8px; }
