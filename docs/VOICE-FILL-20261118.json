@@ -412,7 +412,8 @@
    "duration": 2.48,
    "sha256": "3da8ef9340c0088955013be48ee73dc8193842db1976b5485782514641c0ba4d",
    "file": "assets/audio/voices/el-badge-2.mp3",
-   "review": "ASR heard 실업연구원 for 실험 연구원 (h weakening in 실험); a second API take (requestId 8CASPuXlx4ffA8PNHzbP, 20 chars) heard the same, so the first take is used."
+   "review": "ASR heard 실업연구원 for 실험 연구원 (h weakening in 실험); a second API take (requestId 8CASPuXlx4ffA8PNHzbP, 20 chars) heard the same, so the first take is used.",
+   "userListening": "사용자 청취 확인(2026-11-18)"
   },
   {
    "key": "badge-3",
