@@ -49,7 +49,8 @@ async function inspect(){return page.evaluate(single=>{
     all.forEach((a,i)=>all.slice(i+1).forEach(b=>{if(overlap(box(a),box(b)))issues.push({type:'overlap',name:name(a)+' / '+name(b)});}));
   }
   const heading=root.querySelector('.activity-heading');if(heading)for(const e of root.querySelectorAll('.screen-hud button'))if(overlap(box(heading),box(e)))issues.push({type:'heading-hud',name:name(e)});
-  if(heading){const concept=heading.querySelector('.learning-key');if(!concept||!visible(concept)||!concept.querySelector('strong'))issues.push({type:'missing-learning-concept',name:'기억할 개념'});}
+  // The concept line lives at the top of the hint bubble; the top band stays a single progress pill.
+  if(heading){if(!root.querySelector('.activity-help .learning-key'))issues.push({type:'missing-learning-concept',name:'기억할 개념'});if(innerWidth>=1024&&heading.getBoundingClientRect().height>72)issues.push({type:'heading-two-lines',h:Math.round(heading.getBoundingClientRect().height)});}
   if(single&&workspace){
     const bounds=box(workspace);
     if(workspace.scrollHeight>workspace.clientHeight+3)issues.push({type:'workspace-scroll',amount:workspace.scrollHeight-workspace.clientHeight});

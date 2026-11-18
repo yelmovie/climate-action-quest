@@ -66,11 +66,14 @@ try{
 
  for(let index=0;index<10;index++){
   await fixture(index);
-  const concept=page.locator('.learning-key');
-  assert.ok(await concept.isVisible(),'visible scientific concept on activity '+index);
-  assert.ok((await concept.locator('strong').textContent()).trim(),'emphasized concept on activity '+index);
+  // 3-second layout (2026-11-17): the concept line opens at the top of the hint bubble; longer notes fold under "개념 더 보기".
   await page.locator('.guide-avatar').click();
   const help=page.locator('.activity-help');
+  const concept=help.locator('.learning-key');
+  assert.ok(await concept.isVisible(),'visible scientific concept on activity '+index);
+  // Activity 5 deliberately shows a plain "compare the cards" line until its work is complete.
+  if(index!==5)assert.ok((await concept.locator('strong').textContent()).trim(),'emphasized concept on activity '+index);
+  await help.locator('.help-more > summary').click();
   for(const heading of ['기억할 개념','내 말로 설명해 봐요','다음 탐구와 연결해요'])assert.ok(await help.getByRole('heading',{name:heading,exact:true}).isVisible(),heading+' '+index);
   if(index===4){await rendered('scene-coast-landscape',help);assert.match(await help.textContent(),/밀물·파도·둑/);}
   await page.locator('.help-close').click();

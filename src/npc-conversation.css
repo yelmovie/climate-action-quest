@@ -47,6 +47,5 @@ html:is(.reduced-motion,.reduce-motion) .npc-art-frame { animation: none !import
 }
 .game-dialog.npc-facility-dialog .dialog-body { padding: clamp(15px,3vw,28px); }
 .game-dialog.npc-facility-dialog .dialog-body > h2 { padding-right: 40px; margin-bottom: 9px; }
-.activity-help .npc-dialogue-copy p { margin: 0 0 8px; font-size: clamp(15px,1.8vw,19px); }
-body:has(.npc-facility-dialog[open]) .guide-character,
-body:has(.activity-help[open]) .guide-avatar { visibility: hidden; }
+.activity-help .npc-dialogue-copy p { margin: 0 0 8px; font-size: clamp(18px,1.6vw,20px); }
+body:has(.npc-facility-dialog[open]) .guide-character { visibility: hidden; }

@@ -22,8 +22,10 @@
   --shadow: 0 8px 26px #193e3525;
   --hard-shadow: 0 5px 0 #174a4330;
   --radius: 22px;
+  /* One dim layer for every result/confirm popup: the scene stays visible. */
+  --scrim: rgba(12,52,56,.26);
   --font-body: clamp(20px, 1.55vw, 24px);
-  --font-small: clamp(16px, 1.2vw, 18px);
+  --font-small: clamp(18px, 1.2vw, 20px);
   --font-title: clamp(30px, 2.8vw, 46px);
   --hud-size: 56px;
   --hud-gap: 12px;
@@ -291,7 +293,7 @@ img { max-width: 100%; }
 .activity-workspace > h2 { text-align: center; margin-bottom: 12px; font-size: clamp(24px,2vw,32px); }
 
 .game-dialog { width: min(800px,calc(100vw - 36px)); max-height: min(90dvh,900px); padding: 0; color: var(--ink); border: 2px solid #668675; border-radius: 28px; background: var(--paper); box-shadow: 0 30px 100px #0b2f3550,0 6px 0 #31523e44; overflow: hidden; }
-.game-dialog::backdrop { background: #0c3438a8; }
+.game-dialog::backdrop { background: var(--scrim); }
 .game-dialog[open] { display: flex; flex-direction: column; animation: dialog-in 180ms ease-out; }
 .dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 26px 16px; background: #eef6e5; border-bottom: 1px solid #ccdac7; flex: 0 0 auto; }
 .dialog-header h2 { font-size: clamp(27px,2.5vw,36px); }

@@ -166,14 +166,17 @@ h1,h2,h3 { text-wrap: balance; }
 .settings-section p { font-size: var(--learning-text); }
 .settings-row { min-height: 56px; }
 .settings-dialog .settings-wide { min-height: 52px; margin-top: 10px; }
-.story-dialog { width: min(980px,calc(100vw - 40px)); }
-.story-dialog .dialog-body { display: grid; grid-template-columns: .9fr 1.1fr; gap: 14px 24px; text-align: left; align-items: center; }
-.story-art { grid-column: 1; grid-row: 1 / 5; height: 100%; min-height: 250px; max-height: 400px; object-fit: cover; margin: 0; }
-.story-dialog .eyebrow,.story-dialog h2,.story-dialog p,.story-dialog .story-next { grid-column: 2; }
-.story-dialog .eyebrow { padding-right: 35px; }
-.story-dialog h2 { margin: 0; padding-right: 20px; }
-.story-dialog p { margin: 0; }
-.story-dialog .story-next { justify-self: end; }
+/* The story is a translucent panel over the title art (about half the width), not a covering modal. */
+.story-dialog { width: min(50vw,620px); max-height: calc(100dvh - 32px); margin: auto auto auto clamp(16px,5vw,96px); background-color: rgba(252,255,248,.88) !important; box-shadow: 0 18px 48px #0b2f3540; }
+.story-dialog::backdrop { background: transparent; }
+.story-dialog .dialog-body { display: flex; flex-direction: column; gap: 10px; text-align: left; padding: 16px 20px 18px; background: transparent; }
+.story-art { display: block; flex: none; width: 100%; height: clamp(120px,26dvh,240px); min-height: 0; max-height: none; object-fit: cover; margin: 0; border-radius: 14px; background: #cfe3d2; }
+.story-dialog .eyebrow { padding-right: 44px; }
+.story-dialog h2 { margin: 0; padding-right: 20px; font-size: clamp(24px,2.2vw,32px); line-height: 1.25; }
+.story-dialog p { margin: 0; font-size: clamp(20px,1.5vw,24px); line-height: 1.5; }
+.story-dialog .story-next { align-self: flex-end; }
+.story-dialog .dialog-close { z-index: 2; }
+body:has(.story-dialog[open]) .home-copy { visibility: hidden; }
 .concept-dialog { width: min(1080px,calc(100vw - 40px)); }
 .concept-dialog .dialog-body { display: flex; flex-direction: column; align-items: stretch; gap: 12px; padding: 22px 24px; overflow: auto; max-height: calc(100dvh - 40px); }
 .concept-heading { padding-right: 52px; }
@@ -203,7 +206,10 @@ h1,h2,h3 { text-wrap: balance; }
 .ending-copy { justify-content: safe center; inset: 90px 9% 28px; }
 .ending-copy > :not(.report-records) { flex: 0 0 auto; }
 .ending-copy .report-records { flex: 0 1 auto; min-height: 0; overflow: auto; padding: 3px 5px 7px; }
-.certificate-dialog .dialog-body { display: flex; flex-direction: column; max-height: calc(100dvh - 40px); overflow: hidden; }
+.certificate-dialog .dialog-body { display: flex; flex-direction: column; max-height: calc(100dvh - 40px); overflow: hidden; padding: 16px; }
+/* Reward popups stay under half the screen so the finished operations room shows around them. */
+.game-dialog.certificate-dialog { width: min(720px,calc(100vw - 36px)); }
+.certificate-dialog .certificate { padding: 18px 28px; }
 .certificate-dialog .certificate { min-height: 0; overflow: auto; }
 .certificate-dialog #download-certificate { flex-shrink: 0; margin: 16px auto 0; }
 .certificate-summary { font-size: var(--learning-text) !important; }
@@ -286,8 +292,8 @@ h1,h2,h3 { text-wrap: balance; }
   .guide-name { display: none; }
   #app .facility-copy { top: auto; transform: none; padding: 90px 6% 16px; }
   #app .facility-activities { top: auto; transform: none; max-height: none; }
-  .story-dialog .dialog-body { display: flex; flex-direction: column; }
-  .story-art { min-height: 0; height: 150px; width: 100%; }
+  .story-dialog { width: calc(100vw - 32px); margin: auto; }
+  .story-art { height: 150px; }
   .concept-dialog .dialog-body { padding: 18px 16px; }
   .concept-caption { font-size: 22px !important; }
   .concept-heading h2 { font-size: 26px; }
@@ -355,7 +361,7 @@ h1,h2,h3 { text-wrap: balance; }
   .concept-dialog .dialog-body { gap: 8px; padding: 14px 20px; }
   .concept-caption { min-height: 1.5em; font-size: 22px !important; }
   .concept-heading h2 { font-size: 28px; }
-  .story-art { min-height: 220px; }
+  .story-art { height: clamp(100px,22dvh,160px); }
 }
 /* Immediate, local feedback keeps the next action clear without timed advances. */
 .observation-status { margin: 0; padding: 10px 14px; border-radius: 14px; background: #edf0df; color: #466355; }

@@ -9,10 +9,11 @@
   display: grid; grid-template-rows: auto minmax(0,1fr) auto;
   height: 100%; min-height: 0; padding: 8px 12px 12px; gap: 8px; overflow: hidden;
 }
-.activity-heading { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; min-height: 60px; width: fit-content; max-width: calc(100% - 248px); margin: 0 auto; padding: 4px 16px; }
-.activity-heading h1 { margin: 0; font-size: clamp(22px,min(2.25vw,3.7dvh),40px); line-height: 1.2; }
-.activity-heading .round-progress { flex: none; margin: 0; padding: 1px 8px; font-size: clamp(14px,1vw,18px); line-height: 1.25; }
-.activity-heading .learning-key { display: block; margin: 2px 0 0; font-size: clamp(16px,1.1vw,20px); line-height: 1.3; color: var(--ink); }
+/* Top band = one progress pill: the question and the round count on a single line. */
+.activity-heading { display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; gap: 10px; min-height: 48px; width: fit-content; max-width: calc(100% - 248px); margin: 0 auto; padding: 4px 8px 4px 18px; border-radius: 999px; }
+.activity-heading h1 { margin: 0; font-size: clamp(20px,min(1.9vw,3.2dvh),32px); line-height: 1.2; text-align: center; }
+.activity-heading .round-progress { flex: none; margin: 0; padding: 4px 12px; border-radius: 999px; font-size: clamp(18px,1.2vw,20px); line-height: 1.25; white-space: nowrap; }
+.activity-help .learning-key { margin: 0 48px 8px 0; font-size: 20px; line-height: 1.4; color: var(--ink); }
 .learning-key strong { color: var(--forest-dark); background: var(--mint); padding: 1px 4px; border-radius: 4px; }
 .activity-page .learning-action { margin: 4px 0 0; color: var(--forest-dark); font-size: clamp(14px,1.1vw,20px); font-weight: 700; line-height: 1.3; }
 .activity-help .learning-illustration { display: block; width: 100%; height: auto; max-height: 260px; object-fit: contain; margin: 12px 0; border-radius: 12px; }
@@ -25,6 +26,9 @@
 .activity-page .activity-workspace > :only-child { flex: 1; }
 .activity-page :is(.scan-layout,.experiment-layout,.daily-layout,.city-design-layout,.stress-result-layout) { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); min-height: 0; height: 100%; max-height: none; gap: 8px; align-items: stretch; }
 .activity-page :is(.scan-layout,.experiment-layout,.city-design-layout) > .evidence-card { max-height: none; height: 100%; min-height: 0; overflow: visible; }
+/* Side panels hug their content instead of keeping empty bands above and below. */
+.activity-page:is(.activity-0,.activity-2) .scan-layout > .evidence-card,
+.activity-page.activity-4 .experiment-layout > .evidence-card { height: auto; max-height: 100%; align-self: center; }
 .activity-page :is(.evidence-card,.comparison-card) { min-width: 0; padding: 12px; border-radius: 16px; }
 .activity-page :is(.evidence-card,.comparison-card) p { font-size: var(--activity-read); line-height: 1.3; }
 .activity-page :is(.evidence-card,.comparison-card) h2 { margin: 0 0 6px; font-size: clamp(19px,min(1.8vw,3.2dvh),32px); line-height: 1.2; }
@@ -178,10 +182,20 @@
 .activity-page .next-action { outline: 2px solid var(--gold); outline-offset: 2px; }
 .activity-page .action-ready { border-color: var(--forest); }
 .activity-page input.action-ready { outline: 2px solid var(--gold); outline-offset: -4px; border-radius: 10px; }
-.activity-help { position: fixed; inset: 0; margin: auto; width: min(680px,calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 56px 24px 24px; overflow: auto; border: 2px solid var(--forest); border-radius: 20px; color: var(--ink); background: var(--paper); }
-.activity-help::backdrop { background: #153c3c66; }
-.activity-help h2 { font-size: 26px; margin-bottom: 16px; }
-.activity-help h3 { margin-top: 16px; font-size: 20px; }
+/* The hint is a speech bubble rising from the avatar, not a modal: the activity stays in view. */
+.activity-help { position: absolute; z-index: 30; left: 0; right: auto; top: auto; bottom: calc(100% + 12px); margin: 0; width: min(560px,calc(100vw - 24px)); max-height: min(62dvh,560px); padding: 16px 20px 16px; overflow: visible; border: 2px solid var(--forest); border-radius: 20px; color: var(--ink); background: var(--paper); box-shadow: 0 10px 28px #193e3533; }
+.activity-help[open] { display: flex; flex-direction: column; }
+.activity-help::after { content: ""; position: absolute; left: 18px; bottom: -11px; width: 18px; height: 18px; border: 2px solid var(--forest); border-width: 0 2px 2px 0; background: inherit; transform: rotate(45deg); }
+.activity-help > :not(.help-close) { flex: none; }
+.activity-help .help-more { min-height: 0; flex: 0 1 auto; overflow: auto; margin-top: 8px; border-top: 1px solid var(--line); padding-top: 4px; }
+.activity-help .help-more summary { display: flex; align-items: center; min-height: 44px; font-size: 18px; font-weight: 700; color: var(--forest-dark); cursor: pointer; }
+.activity-help > .teacher-dock { flex: none; }
+.activity-help .npc-dialogue-grid { grid-template-columns: 96px minmax(0,1fr); gap: 12px; align-items: center; }
+.activity-help .npc-dialogue-grid > .npc-art-frame { max-width: 96px; }
+.activity-help .npc-dialogue-copy { padding: 12px 14px; }
+.activity-help::backdrop { background: var(--scrim); }
+.activity-help h2 { font-size: 22px; margin: 0 48px 8px 0; }
+.activity-help h3 { margin-top: 12px; font-size: 20px; }
 .activity-help p { font-size: 18px; line-height: 1.5; margin-top: 8px; }
 .activity-help .help-close { position: absolute; right: 8px; top: 8px; }
 .activity-help .guide-deeper { border: 0; padding: 0; }
@@ -197,9 +211,12 @@
 
 @media (max-height:600px) and (min-width:601px) {
   .activity-page { padding: 4px 8px 8px; gap: 6px; }
-  .activity-heading { display: grid; grid-template-columns: auto auto; min-height: 56px; gap: 2px 8px; }
-  .activity-heading h1 { grid-column: 1 / -1; }
-  .activity-heading .learning-key { margin: 0; font-size: 14px; }
+  .activity-heading { min-height: 44px; }
+  /* 18px labels on phone-landscape: the legend stays compact; the scale note stays in the chart label and the hint. */
+  .activity-0 .ov-legend { gap: 0 10px; line-height: 1.2; }
+  .activity-0 .ov-legend > small { display: none; }
+  .activity-0 .scan-layout > .evidence-card > .water-control { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: 8px; }
+  .activity-0 .evidence-data.ov-data { flex-shrink: 0; }
   .activity-screen .screen-hud { --edge: 8px; }
   #app .activity-page .scan-layout .scan-scene { grid-template-columns: repeat(3,minmax(0,1fr)); padding: 6px; gap: 6px; }
   .activity-page :is(.evidence-card,.comparison-card) { padding: 8px; }
@@ -214,7 +231,7 @@
   .activity-page .tool-art { width: 28px; height: 28px; }
   .activity-page .activity-footer { padding: 6px; gap: 6px; }
   .activity-page .playback-speed > span { display: none; }
-  .activity-0 .ov-chart,.activity-1 .ov-chart { --ov-unit: 7px; }
+  .activity-0 .ov-chart,.activity-1 .ov-chart { --ov-unit: 4px; padding-top: 12px; }
   .activity-1 .judgment-heading .observation-art { display: none; }
   .activity-1 .judgment-heading .eyebrow { font-size: 14px; }
   .activity-1 .ov-chart { --ov-unit: 5px; padding-top: 16px; }

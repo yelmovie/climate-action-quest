@@ -6,7 +6,7 @@ dialog.play-mission {
  border-radius:24px;color:var(--ink);background:var(--mint-light);font:inherit;
  font-size:clamp(16px,1.3vw,22px);line-height:1.4;
 }
-dialog.play-mission::backdrop {background:#102c39b8;backdrop-filter:blur(4px);}
+dialog.play-mission::backdrop {background:var(--scrim);backdrop-filter:blur(4px);}
 .pm-shell {
  height:100%;min-height:0;display:flex;flex-direction:column;gap:8px;padding:16px;
  background:linear-gradient(#eff9efc9,#eff9efdc),var(--pm-bg) center/cover;
