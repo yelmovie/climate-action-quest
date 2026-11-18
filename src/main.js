@@ -63,7 +63,7 @@ function teacherDock(){
  else{screen.classList.add('teacher-on');screen.insertAdjacentHTML('beforeend',`<nav class="teacher-dock" aria-label="교사용 빠른 이동">${pad}${skip}</nav>`);}
  app.querySelectorAll('[data-teacher]').forEach(b=>b.onclick=()=>teacherMove(Number(b.dataset.teacher)));
 }
-function teacherMove(dir){const route=teacherStep(dir);if(!route)return;go(route);announce(`교사 미리보기 · ${teacherName(route)}로 이동했어요.`);}
+function teacherMove(dir){const route=teacherStep(dir);if(!route)return;go(route);const name=teacherName(route),last=(name.charCodeAt(name.length-1)-0xAC00)%28;announce(`교사 미리보기 · ${name}${last>0&&last!==8?'으로':'로'} 이동했어요.`);}
 document.addEventListener('keydown',e=>{if(!state.adminUnlocked||document.querySelector('dialog[open]')||e.target.closest?.('input,textarea,select,[contenteditable="true"]')||!/^(map|facility|activity)/.test(activeRoute))return;const dir=e.key==='PageDown'||(e.shiftKey&&e.key==='ArrowRight')?1:e.key==='PageUp'||(e.shiftKey&&e.key==='ArrowLeft')?-1:0;if(!dir)return;e.preventDefault();teacherMove(dir);});
 function resumeRoute(){
  const current=state.records[resumeActivity];

@@ -332,13 +332,13 @@ export function mountActivity(host,{index,state,save,complete,icon=()=>'',asset=
   }
   function bindDesign(plan,savePlan){
     on('[data-tool]','click',e=>{rec.tool=e.currentTarget.dataset.tool;rec.feedback=rec.tool==='erase'?'비울 구역을 누르세요. 여러 구역을 연속으로 비울 수 있어요.':facilities.find(f=>f.id===rec.tool).reason;commit();draw();});
-    on('[data-district]','click',e=>{const district=+e.currentTarget.dataset.district;rec.selected=district;if(rec.tool){const value=rec.tool==='erase'?null:rec.tool;if(plan[district]===value){rec.feedback=value?'이미 같은 시설이 있어요. 다른 구역에 이어 놓아 보세요.':'이미 비어 있는 구역이에요.';}else{const next=[...plan];next[district]=value;if(planCost(next)>CITY_BUDGET){rec.feedback='자원이 부족해요. 비용이 낮은 시설로 바꾸거나 다른 시설을 빼 보세요.';effect('retry');}else{plan=next;savePlan(next);rec.feedback=cityDistricts[district].name+(value?'에 '+facilities.find(f=>f.id===value).name+'을 놓았어요.':'의 시설을 비웠어요.');effect('place');}}}else rec.feedback='먼저 시설 버튼을 골라요. 이 구역은 '+cityDistricts[district].clue;commit();draw();});
+    on('[data-district]','click',e=>{const district=+e.currentTarget.dataset.district;rec.selected=district;if(rec.tool){const value=rec.tool==='erase'?null:rec.tool;if(plan[district]===value){rec.feedback=value?'이미 같은 시설이 있어요. 다른 구역에 이어 놓아 보세요.':'이미 비어 있는 구역이에요.';}else{const next=[...plan];next[district]=value;if(planCost(next)>CITY_BUDGET){rec.feedback='자원이 부족해요. 비용이 낮은 시설로 바꾸거나 다른 시설을 빼 보세요.';effect('retry');}else{plan=next;savePlan(next);const placed=value?facilities.find(f=>f.id===value).name:'';rec.feedback=cityDistricts[district].name+(value?'에 '+placed+((placed.charCodeAt(placed.length-1)-0xAC00)%28>0?'을':'를')+' 놓았어요.':'의 시설을 비웠어요.');effect('place');}}}else rec.feedback='먼저 시설 버튼을 골라요. 이 구역은 '+cityDistricts[district].clue;commit();draw();});
   }
   function designCity(){
     rec.plan=normalizePlan(rec.plan);const plan=rec.plan,count=plan.filter(Boolean).length;
     frame('우리 도시의 위험에 맞춰 설계해요','더위와 빗물 위험을 살펴보고 여섯 구역에 시설을 놓아요.',designBody(plan,rec.selected),`설계 구역 ${count} / 6`,b('설계 저장 · 시험으로','primary submit',count<6||planCost(plan)>CITY_BUDGET),'모든 시설이 모든 위험을 해결하지는 않아요. 도움 단계는 이 게임에서만 쓰는 가상 비교값이에요.');
     bindDesign(plan,next=>{rec.plan=next;rec.version=(rec.version||0)+1;});
-    on('.submit','click',()=>{if(rec.plan.filter(Boolean).length<6||planCost(rec.plan)>CITY_BUDGET)return;rec.initialPlan=[...rec.plan];rec.reason='구역별 위험에 맞춰 시설을 배치했어요.';finish(`여섯 구역에 자원 ${planCost(rec.plan)}을 사용해 대응 시설을 설계했어요. 더위·빗물 시험으로 확인할 준비가 됐어요.`);});
+    on('.submit','click',()=>{if(rec.plan.filter(Boolean).length<6||planCost(rec.plan)>CITY_BUDGET)return;rec.initialPlan=[...rec.plan];rec.reason='구역별 위험에 맞춰 시설을 배치했어요.';const cost=planCost(rec.plan);finish(`여섯 구역에 자원 ${cost}${[2,4,5,9].includes(cost%10)?'를':'을'} 사용해 대응 시설을 설계했어요. 더위·빗물 시험으로 확인할 준비가 됐어요.`);});
   }
   function stressTest(){
     const source=normalizePlan(sourceActivityRecord(state.records[8]).plan);const sample=['shade','pond','shade','pond','trees','trees'];
