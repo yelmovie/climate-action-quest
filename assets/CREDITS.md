@@ -155,12 +155,12 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 | 1·2타 명중(재생 속도 1.08·0.9) | `hit-light-01.mp3` | TOONY pops.wav | mikala_oidua | https://freesound.org/people/mikala_oidua/sounds/321163 |
 | 3타 명중 | `hit-heavy-03.mp3` | body_hit.wav | insanity54 | https://freesound.org/people/insanity54/sounds/276600 |
 | 악당 퇴장(바람에 날아감) | `wind-whoosh-03.mp3` | Slow Swosh 40 | qubodup | https://freesound.org/people/qubodup/sounds/60027 |
-| 악당 등장(첫 접근 1회) | `villain-appear-03.mp3` | anime.wav | 1urker | https://freesound.org/people/1urker/sounds/457306 |
+| 악당 등장(지도 화면에 처음 보일 때 1회. 2026-11-19까지는 첫 접근 때) | `villain-appear-03.mp3` | anime.wav | 1urker | https://freesound.org/people/1urker/sounds/457306 |
 | 접촉 피격 | `hurt-bump-01.mp3` | LowHit_01.wav | Faulkin | https://freesound.org/people/Faulkin/sounds/336495 |
 | 다섯 악당 모두 격퇴(2026-11-18부터 마지막 악당은 성취 카드의 컬렉션 완성 징글이 대신하고, 카드가 뜨지 않을 때만 난다) | `victory-jingle-04.mp3` | game-win.mp3 | mickleness | https://freesound.org/people/mickleness/sounds/269198 |
 
 - 연결: `src/audio.js`의 `MAP_CUES`, 재생은 `src/theme-effects.js`(효과음 켜기·효과음 크기·음소거·숨긴 탭 정지·첫 터치 뒤 재생을 그대로 따른다). 파일을 아직 받지 못한 순간에는 기존 합성음으로 대신한다.
-- 공격 버튼을 누르면 휙, 80 ms 뒤 명중음. 3타는 명중음 뒤 퇴장 바람 소리. 마지막 악당일 때 승리 소리는 약 2.75초에 끝나 2.92초에 열리는 지도 피날레 배경음과 겹치지 않는다.
+- 공격 버튼을 누르면 휙, 80 ms 뒤 명중음. 3타는 명중음 뒤 퇴장 바람 소리. 마지막 악당일 때 승리 소리는 약 2.75초에 끝나 2.92초에 열리는 지도 피날레 배경음과 겹치지 않는다. (2026-11-19) 지도 피날레는 축하 징글이 끝난 뒤에 열린다.
 
 ## 2026-11-18 잎새 지도 안내 음성
 
@@ -182,6 +182,22 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 | 카드 공개(브론즈·실버·골드) | `reward-01.mp3` | Fantasy_ui_Button_3.wav | ZenithInfinitiveStudios | https://freesound.org/people/ZenithInfinitiveStudios/sounds/376745 |
 | 카드 공개(홀로·레전드, 긴 징글) | `reward-03.mp3` | Achievement Happy Beeps Jingle | CogFireStudios | https://freesound.org/people/CogFireStudios/sounds/619838 |
 | 카드가 보관함 칸에 들어갈 때 | `pickup-01.mp3` | item-pickup-v1.wav | DeltaCode | https://freesound.org/people/DeltaCode/sounds/678384 |
-| 다섯 장을 모두 모았을 때(지도 파이널 영상이 열리면 멈춤) | `victory-jingle-01.mp3` | Game Success Fanfare Short | el_boss | https://freesound.org/people/el_boss/sounds/677858 |
+| 다섯 장을 모두 모았을 때(2026-11-19부터 끝까지 나고, 지도 파이널 영상과 파이널 곡은 이 징글이 끝난 뒤 열린다) | `victory-jingle-01.mp3` | Game Success Fanfare Short | el_boss | https://freesound.org/people/el_boss/sounds/677858 |
 
-- 연결: `src/audio.js`의 `CARD_CUES`, 재생은 지도 악당 효과음과 같은 경로(`src/theme-effects.js`)라 효과음 켜기·효과음 크기·전체 소리 끄기·숨긴 탭 정지를 그대로 따른다. 효과음은 한 번에 하나만 난다.
+- 연결: `src/audio.js`의 `CARD_CUES`, 재생은 지도 악당 효과음과 같은 경로(`src/theme-effects.js`)라 효과음 켜기·효과음 크기·전체 소리 끄기·숨긴 탭 정지를 그대로 따른다. 효과음은 한 번에 하나만 난다(2026-11-19부터는 아래 「지도 발자국·스테이지 열림 소리」의 세 갈래 규칙).
+
+## 지도 발자국·스테이지 열림 소리 · CC0 · 2026-11-19
+
+지도에서 대원이 걷는 발자국과, 지도의 새 시설(또는 중앙 작전실)이 처음 열릴 때 나는 소리. 과학34 공통 효과음 라이브러리(`_shared/sfx-library-20261117`, `manifest.json`·`CREDITS.md`)에서 그대로 복사했다(가공은 라이브러리에서 한 앞뒤 무음 제거·짧은 페이드·음량 맞춤뿐, 모노 44.1 kHz MP3 112 kbps). 모두 **CC0 1.0**이며 라이브러리 작성 때(2026-11-17) 원본 페이지에서 라이선스를 다시 확인한 파일이다. 출처 표기 의무는 없지만 기록으로 남긴다.
+
+| 쓰는 곳 | `assets/audio/sfx/` 파일 | 원본 제목 | 제작자 | 원본 페이지 |
+|---|---|---|---|---|
+| 지도 발자국(번갈아) | `step-01.mp3` | Footstep on Stone | sgossner | https://freesound.org/people/sgossner/sounds/197778 |
+| 지도 발자국(번갈아) | `step-02.mp3` | concrete footstep 4 | Yoyodaman234 | https://freesound.org/people/Yoyodaman234/sounds/166506 |
+| 스테이지 열림(바람 같은 짧은 스와이프) | `open-03.mp3` | maximize_003 | Kenney (Interface Sounds 1.0) | https://kenney.nl/assets/interface-sounds |
+| 스테이지 열림(0.12초 뒤 작은 종소리) | `twinkle-03.mp3` | Fantasy_ui_Button_2.wav | ZenithInfinitiveStudios | https://freesound.org/people/ZenithInfinitiveStudios/sounds/376746 |
+
+- 연결: `src/audio.js`의 `STEP_CUES`·`MAP_CUES['map-open']`, 재생은 `src/theme-effects.js`. 효과음 켜기·효과음 크기·전체 소리 끄기·숨긴 탭 정지를 그대로 따른다.
+- 발자국: 대원이 실제로 움직이는 동안 300 ms마다 한 번(벽에 막히거나 대화창·카드·영상·파이널 창이 떠 있으면 나지 않는다), 두 파일을 번갈아 재생 속도 ±6% 안에서 바꿔 낸다. 크기는 효과음 크기의 0.6배(기본 25에서 0.15), 대사 중에는 절반. 멈추면 마지막 소리를 0.06초에 줄여 끝낸다.
+- 스테이지 열림: 지도를 열었을 때 직전에 보여 준 지도보다 새로 열린 곳이 있으면 한 번. 새로고침·재방문 때는 다시 나지 않고, 교사 미리보기(모든 단계 한 번에 열기)에서는 나지 않는다. 악당의 등장음과 인사 대사는 이 소리 뒤(0.8초)에 시작한다.
+- 소리 갈래(2026-11-19): 화면 조작 합성음은 한 번에 하나(새 조작음이 이전 조작음만 끊는다), 지도 전투·카드·열림 소리는 서로 겹쳐 최대 네 개, 발자국은 따로 하나. 조작음과 발자국은 전투·카드 소리를 끊지 않는다. 화면 조작 합성음의 크기 계수는 0.045에서 0.28로 올렸다(효과음 크기 25에서 약 0.011 → 0.07).

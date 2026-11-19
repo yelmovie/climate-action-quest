@@ -37,18 +37,28 @@ test('Suno music starts on the first gesture, switches to the final theme and re
   assert.equal(final.paused, false);
   assert.equal(final.loop, false);
   final.paused = true; final.dispatchEvent(new Event('ended'));
+  assert.equal(final.paused, true); // The final theme plays once;
+  assert.equal(main.paused, false); // the main theme then carries on underneath instead of silence.
+  assert.equal(main.volume, .25 * 1 * .45);
+  audio.duckVoice(true);
+  assert.equal(main.volume, .25 * .25 * .45);
+  audio.duckVoice(false);
   audio.save();
-  assert.equal(final.paused, true); // The final theme plays once, then rests.
+  assert.deepEqual([final.paused, main.paused, main.volume], [true, false, .25 * 1 * .45]);
   audio.music('main');
   assert.equal(main.paused, false);
+  assert.equal(main.volume, .25); // Leaving the ending restores the usual size.
 
   audio.mapFinale(true);
   assert.equal(main.paused, true);
   assert.equal(final.paused, false);
   assert.equal(final.currentTime, 0);
+  final.paused = true; final.dispatchEvent(new Event('ended'));
+  assert.deepEqual([main.paused, main.volume], [false, .25 * 1 * .45]); // Staying in the map finale past the theme.
   audio.mapFinale(false);
   assert.equal(final.paused, true);
   assert.equal(main.paused, false);
+  assert.equal(main.volume, .25);
 
   audio.settings.bgm = false;
   audio.save();

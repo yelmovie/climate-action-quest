@@ -1,6 +1,6 @@
 import {ipsaeArt,ipsaeWalkArt} from './characters.js';
 import {mountWelcomeVoice} from './welcome-voice.js';
-import {configureNarration,voiceControl,stopNarration} from './narration.js';
+import {configureNarration,voiceControl,stopNarration,yieldNarration} from './narration.js';
 import {voiceLines} from './voice-lines.js';
 import {npcName,npcPortrait} from './npc-conversation.js';
 let welcomeCleanup = () => {};
@@ -32,6 +32,12 @@ function storageNotice(message){
 function save(){const result=loaded.save(state);if(!result.ok){saveWarning=true;storageNotice(result.reason==='conflict'?'다른 탭에서 기록이 바뀌어 자동 저장을 멈췄어요. 현재 기록을 내려받고 탭을 하나만 사용해 주세요.':'기존 기록 보호를 위해 자동 저장을 멈췄어요. 현재 기록을 내려받아 주세요. 기존 기록은 덮어쓰지 않아요.');}return result.ok;}
 
 document.addEventListener('pointerdown',()=>audio.unlock(),{once:true});document.addEventListener('keydown',()=>audio.unlock(),{once:true});
+// 스테이지 열림 소리: 지도에 마지막으로 열린 것으로 보여 준 노드(시설 0~4, 중앙 작전실 5)를 메모리에만 들고 있다가, 지도를 열 때
+// 새로 열린 노드가 있으면 한 번 알린다. 새로고침하면 저장된 기록에서 다시 시작하므로 이미 본 열림은 다시 울리지 않는다.
+// 교사 미리보기(모든 단계 한 번에 열기)는 소리 없이 지나가고 학생 기록의 비교 기준도 건드리지 않는다.
+const openNodes=()=>[...stages.filter(s=>stageOpen(state,s.id)).map(s=>s.id),...(certificateEligible(state)?[5]:[])];
+let shownOpen=new Set(openNodes());
+function takeOpened(){if(state.adminUnlocked||studentState)return false;const open=openNodes(),fresh=open.some(id=>!shownOpen.has(id));shownOpen=new Set(open);return fresh;}
 // The map finale dialog borrows the final theme while it is open.
 document.addEventListener('mapfinale',e=>audio.mapFinale(e.detail?.open));
 function hud(home=false){return `<div class="screen-hud"><div class="hud-left">${home?'':`<button class="icon-button" data-nav="home" aria-label="홈">${icon('home')}</button><button class="icon-button" data-back aria-label="이전 화면">${icon('back')}</button>`}</div><div class="hud-right">${activeRoute==='map'?rewardSlotsHtml(state.mapHits):''}<button class="icon-button" data-sound aria-label="${audio.settings.bgm||audio.settings.sfx?'전체 소리 끄기':'전체 소리 켜기'}">${icon(audio.settings.bgm||audio.settings.sfx?'sound':'mute')}</button><button class="icon-button" data-settings aria-label="설정">${icon('settings')}</button></div></div>`;}
@@ -136,8 +142,9 @@ async function map(){
  if(signal.aborted)return;
  // 성취 카드: 악당의 세 번째 타격이 저장되면(onMapHits, 기록 2→3) 퇴장 뒤 카드를 띄운다. 카드가 열린 동안 #app이 inert라 지도·악당이 쉬고,
  // 카드 차례(hold)에는 악당 모듈도 멈춰 다섯 악당 파이널이 카드를 닫은 뒤에 열린다.
- // 효과음은 한 번에 하나만 난다. 마지막 악당의 격퇴 징글은 곧 뜨는 카드 소리에 끊기므로 3타 소리만 내고, 축하는 카드의 컬렉션 완성 징글이 맡는다.
- audio.prepareEffects();cleanup=module.mountMap(host,{state,save,go,icon,announce,onMapHits:(before,after)=>awardRewardCards(before,after,()=>state.mapHits,()=>activeRoute==='map'&&host.isConnected),hold:rewardCardDue,tone:(kind,hits)=>audio.effect(kind==='hit'?'map-hit-'+hits:kind==='finish'||kind==='victory'&&rewardCardPending()?'map-hit-3':'map-'+kind),takeRestorations:()=>{if(studentState)return [];const ids=[...pendingRestoration];pendingRestoration.clear();return ids;},talkToIpsae(stage){
+ // 전투·보상 소리는 서로 겹쳐 나고 화면 조작음·발자국에 끊기지 않는다. 마지막 악당은 축하가 두 번 울리지 않게 3타 소리만 내고,
+ // 축하는 카드의 컬렉션 완성 징글이 맡는다. 지도 파이널 창과 파이널 곡은 그 징글이 끝난 뒤에 열린다(celebrating).
+ audio.prepareEffects();cleanup=module.mountMap(host,{state,save,go,icon,announce,opened:takeOpened(),footstep:on=>on?audio.step():audio.stopSteps(),celebrating:()=>audio.celebrating(),onMapHits:(before,after)=>awardRewardCards(before,after,()=>state.mapHits,()=>activeRoute==='map'&&host.isConnected),hold:rewardCardDue,tone:(kind,hits)=>audio.effect(kind==='hit'?'map-hit-'+hits:kind==='finish'||kind==='victory'&&rewardCardPending()?'map-hit-3':'map-'+kind),takeRestorations:()=>{if(studentState)return [];const ids=[...pendingRestoration];pendingRestoration.clear();return ids;},talkToIpsae(stage){
   const voiceId=`map-${stage}`,line=voiceLines[voiceId];
   const d=dialog(`<h2 id="map-npc-name">앵무새 잎새</h2><div class="npc-dialogue-grid">${npcPortrait(line.speaker)}<div class="npc-dialogue-copy"><p>${esc(line.text)}</p></div></div>`,'npc-facility-dialog');
   d.setAttribute('aria-labelledby','map-npc-name');
@@ -201,7 +208,8 @@ async function activity(index){
  if(focus&&!document.querySelector('dialog[open]')){const heading=host.querySelector('h1');heading?.setAttribute('tabindex','-1');heading?.focus({preventScroll:true});}
 }
 function dialog(html,classes=''){
- stopNarration();
+ // 이미 시작된 악당의 짧은 대사는 바로 끊지 않는다(최대 2초). 창 안의 안내 음성은 그 뒤에 시작한다(narration.js).
+ yieldNarration();
  const opener=document.activeElement,d=document.createElement('dialog');d.className='game-dialog '+classes;d.innerHTML=`<button class="dialog-close icon-button" aria-label="닫기">${icon('close')}</button><div class="dialog-body">${html}</div>`;document.body.append(d);d.querySelector('.dialog-close').onclick=()=>d.close();d.addEventListener('close',()=>{stopNarration();d.remove();if(opener?.isConnected)opener.focus({preventScroll:true});},{once:true});d.showModal();return d;
 }
 function story(after){

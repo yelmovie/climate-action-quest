@@ -41,7 +41,7 @@ function layoutSpeech(host, entries){
 }
 
 const REPEAT=380;
-// Villains announce themselves once per page visit, not on every approach or map re-entry.
+// Villains announce themselves once per page visit, the first time they are in view: not on every approach or map re-entry.
 const greeted=new Set();
 const CUES={
   cap:'M9 10h14v12H9zm3-4h8v4h-8z', pane:'M6 7h20v18H6zm4 4v10h12V11z',
@@ -63,12 +63,12 @@ const CUES={
  */
 export function mountMapEncounters({
   host,controls=host,stages,progress={},onSave=()=>{},blocked=()=>false,reduced=()=>false,
-  clearStage=()=>null,requiredFoes=0,art,tone=()=>{},voice=()=>{},palette='#a855f7',reach=90,contact=22,effect='ring',
+  clearStage=()=>null,requiredFoes=0,art,tone=()=>{},voice=()=>{},celebrating=()=>false,palette='#a855f7',reach=90,contact=22,effect='ring',
 }) {
   const handles=new AbortController(),{signal}=handles;
   const doc=host.ownerDocument,view=doc.defaultView;
   const record=normalizeMapHits(progress,stages.map(stage=>stage.id));
-  let finaleAt=0;
+  let finaleAt=0,appearRetry=0;
   if(!stages.some(s=>(record[s.id]||0)<HITS))return {update:()=>({hero:null,ally:null}),destroy(){}};
   const layer=doc.createElement('div');
   layer.className='map-encounter-layer';layer.dataset.encounterEffect=effect;
@@ -175,7 +175,7 @@ export function mountMapEncounters({
     last=input;
     const {hero,ally,project,scale=1,now=view?.performance.now()??performance.now()}=input;
     const calm=still(),stop=paused(),size=Math.max(29,Math.min(90,57*scale));
-    let nearest=null,best=Infinity;
+    let nearest=null,best=Infinity,arrived=null;
     const width=host.clientWidth,height=host.clientHeight;
     for(const foe of foes){
       if(foe.hits>=HITS&&now>=Math.max(foe.poseUntil,foe.saidUntil)){foe.el.hidden=true;continue;}
@@ -199,8 +199,9 @@ export function mountMapEncounters({
       const {el,actor}=foe;
       el.style.transform=`translate(${point.x.toFixed(1)}px,${point.y.toFixed(1)}px)`;
       el.style.setProperty('--encounter-size',size.toFixed(1)+'px');
-      const d=distance(hero,foe.point);
-      if(!stop&&foe.hits<HITS&&point.x>=0&&point.x<=width&&point.y>=0&&point.y<=height&&d<=reach&&d<best){nearest=foe;best=d;}
+      const d=distance(hero,foe.point),inView=!stop&&foe.hits<HITS&&point.x>=0&&point.x<=width&&point.y>=0&&point.y<=height;
+      if(inView&&!greeted.has(foe.s.id))(arrived??=[]).push(foe);
+      if(inView&&d<=reach&&d<best){nearest=foe;best=d;}
       if(now>=foe.poseUntil){
         if(animate&&d>reach)foe.facing=patrol.direction;
         else if(hero&&Math.abs(hero.x-foe.point.x)>4)foe.facing=hero.x<foe.point.x?-1:1;
@@ -256,13 +257,19 @@ export function mountMapEncounters({
       }
       callback.hidden=now>=clearUntil;
     }
-    if(finaleAt&&now>=finaleAt&&!stop){finaleAt=0;openMapFinale(host,"/assets/map-encounters/map-finale.mp4");}
+    // One arrival cue for the villains that just came into view. tone() answers false while sound is not possible yet
+    // (no gesture so far): those villains keep their cue for the next try.
+    if(arrived&&now>=appearRetry){
+      if(tone('appear',arrived[0].hits)===false)appearRetry=now+250;
+      else for(const foe of arrived)greeted.add(foe.s.id);
+    }
+    // The finale waits for a celebration jingle (the last card's set jingle) to finish.
+    if(finaleAt&&now>=finaleAt&&!stop&&!celebrating()){finaleAt=0;openMapFinale(host,"/assets/map-encounters/map-finale.mp4");}
     const changed=nearest!==current;
     current=nearest;
     if(current&&current!==lastNear&&current.saidUntil<=now&&now-lastHit>REPEAT&&now>=clearUntil){
       const message=current.say[current.sayIndex++%current.say.length]??'다가왔구나!';
       speak(current,message,now+2200);
-      if(!greeted.has(current.s.id)){greeted.add(current.s.id);tone('appear',current.hits);}
     }
     lastNear=current;
     const hasFocus=doc.activeElement===attack;

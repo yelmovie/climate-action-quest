@@ -1,7 +1,7 @@
 import { createMapCamera, bindMapCameraPointer, mapLabelGuard } from './map-camera.js';
 import { mountMapEncounters } from './map-encounters.js';
 import { voiceLines } from './voice-lines.js';
-import { playVoice } from './narration.js';
+import { playVillainVoice } from './narration.js';
 import { encounterLook,encounterStage,loadEncounterActor,drawEncounterActor } from './map-encounter-theme.js';
 import { buildingReveal, paintRestoredBuildings } from './building-restoration.js';
 import {ipsaeWalkFrame} from './characters.js';
@@ -13,9 +13,11 @@ import {stages,chapterDone,stageOpen,certificateEligible} from './state.js';
 // Exploration fills the screen; overview contains the entire world. The camera follows the walker at FOLLOW
 // times the cover scale; dragging, or hand mode, frees the camera until the walker moves again.
 const FOLLOW=1.4;
-export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,takeRestorations,onMapHits=()=>{},hold=()=>false},[mapArt,sheet,parrot,parrotWalk]){
+// One footstep every STEP_MS while the walker really moves.
+const STEP_MS=300;
+export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,takeRestorations,onMapHits=()=>{},hold=()=>false,footstep=()=>{},celebrating=()=>false,opened=false},[mapArt,sheet,parrot,parrotWalk]){
  const point=projectPath(state.position),p={x:point.x,y:point.y},follower={x:p.x-42,y:p.y+12};let route=[],target=null,frame=0,last=0,raf=0,direction=0,birdDirection=0,birdDistance=0,birdMoving=false,disposed=false,walk=false,lastSave=0;
- let padKey=null;const held=new Set(),trail=[{...follower},{...p}],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ let padKey=null,lastStep=-Infinity,stepping=false;const held=new Set(),trail=[{...follower},{...p}],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const next=stages.find(s=>!chapterDone(state,s.id));
  host.innerHTML=`<div id="map-viewport" tabindex="0" aria-label="연구기지 지도. 방향키 또는 WASD로 걸어요. 길이나 건물 이름을 누르면 길을 따라 이동해요. 지도를 끌면 주변을 둘러볼 수 있어요."><div class="map-world"><canvas class="map-actors" width="1672" height="941" aria-hidden="true"></canvas><div class="map-light-layer" aria-hidden="true"></div>${world.buildings.map(b=>{const s=stages[b.stage],open=s?stageOpen(state,b.stage):certificateEligible(state),completed=s?chapterDone(state,b.stage):state.finalized;return `<button class="map-node ${completed?'restored':!open?'locked':next?.id===b.stage?'current':''}" data-building="${b.stage}" style="left:${b.label.x/world.width*100}%;top:${b.label.y/world.height*100}%" aria-label="${s?`${b.stage+1}번 ${s.name}`:'중앙 작전실'}${completed?', 복구 완료':!open?', 먼저 앞 연구를 마쳐요':''}"><span class="map-label"><svg class="map-lock-icon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="${open?'M8 11V7a4 4 0 0 1 7.5-2':'M8 11V7a4 4 0 0 1 8 0v4'}"/></svg>${s?.name||'중앙 작전실'}</span><span class="map-pin" aria-hidden="true"></span></button>`;}).join('')}<button class="companion-talk" aria-label="앵무새 잎새에게 다음 할 일 물어보기" aria-haspopup="dialog"><span>…</span></button></div></div><div class="map-bottom"><div class="map-stack map-stack-left"><div class="map-navigation"><div class="dpad" role="group" aria-label="이동 방향판"><button data-key="ArrowUp" aria-label="위로 이동">${icon('chevron')}</button><button data-key="ArrowLeft" aria-label="왼쪽 이동">${icon('back')}</button><button data-key="ArrowDown" aria-label="아래로 이동">${icon('chevron')}</button><button data-key="ArrowRight" aria-label="오른쪽 이동">${icon('arrow')}</button></div></div></div><div class="map-stack map-stack-right"><section class="map-next-card" aria-label="다음 목적지"><div class="map-tools"><button class="map-tool" data-map-overview aria-pressed="false"></button><button class="map-tool" data-map-hand aria-label="손으로 지도 이동" title="손으로 지도 이동" aria-pressed="false">${icon('hand')}</button></div><button class="button gold map-action${state.finalized?'':' map-next-cue'}">${next?`${next.name}로 가기`:state.finalized?'작전실 가기':'보고하러 가기'} ${icon('arrow')}</button></section></div></div>`;
  if(state.adminUnlocked||stages.some(s=>chapterDone(state,s.id)))mountRepair(host,{state,save,kind:'city',preview:state.adminUnlocked,available:stages.filter(s=>chapterDone(state,s.id)).map(s=>({id:s.id,label:s.name}))});
@@ -30,6 +32,10 @@ export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,take
  // all-villains finale) rest until the card is put away.
  const frozen=()=>!!host.closest('[inert]');
  const blocked=()=>disposed||document.hidden||!!document.querySelector('dialog[open]')||!!host.querySelector('.map-repair[open]')||frozen()||hold();
+ // A node that opened since the map was last shown (main.js) gets its cue first; the villains hold their
+ // arrival cue and greeting until it has rung, so the greeting voice never starts on top of it.
+ const openHold=opened?performance.now()+800:0;
+ if(opened)setTimeout(()=>{if(!blocked())tone('open',0);},150);
  const encounterStages=state.adminUnlocked?[]:stages.flatMap(s=>{
   const b=world.buildings.find(b=>b.stage===s.id),anchor=nodePoint(b.node);
   const node=world.edges.find(([from,to])=>from===b.node||to===b.node).find(point=>point!==b.node);
@@ -39,7 +45,7 @@ export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,take
   const depth=72,fromDoor=Math.min(1,depth/d),onNext=Math.min(1,Math.max(0,depth-d)/dl);
   return chapterDone(state,s.id)?[encounterStage(s.id,s.id,s.name,{x:anchor.x+(p.x-anchor.x)*fromDoor+(k.x-p.x)*onNext,y:anchor.y+(p.y-anchor.y)*fromDoor+(k.y-p.y)*onNext})]:[];
  });
- const encounters=mountMapEncounters({requiredFoes:5,host:viewport,clearStage:()=>restoredIds.filter(id=>id!==5).at(-1),stages:encounterStages,progress:state.mapHits,onSave:patch=>{const before=state.mapHits;state.mapHits={...before,...patch};save();onMapHits(before,state.mapHits);},blocked,reduced:()=>reduced,tone,voice:text=>{const id=Object.keys(voiceLines).find(k=>voiceLines[k].text===text);if(id)playVoice(id);},reach:92,contact:23,...encounterLook});
+ const encounters=mountMapEncounters({requiredFoes:5,host:viewport,clearStage:()=>restoredIds.filter(id=>id!==5).at(-1),stages:encounterStages,progress:state.mapHits,onSave:patch=>{const before=state.mapHits;state.mapHits={...before,...patch};save();onMapHits(before,state.mapHits);},blocked:()=>blocked()||performance.now()<openHold,celebrating,reduced:()=>reduced,tone,voice:text=>{const id=Object.keys(voiceLines).find(k=>voiceLines[k].text===text);if(id)playVillainVoice(id,()=>!blocked());},reach:92,contact:23,...encounterLook});
  const heroPose=encounterStages.length?loadEncounterActor('hero'):null,allyPose=encounterStages.length?loadEncounterActor('ally'):null;
  const guardLabels=mapLabelGuard(viewport,'.map-node','.screen-hud button,.map-bottom button,.map-repair summary');
  let lastScale=0,lastTransform='';
@@ -131,7 +137,11 @@ export function mountMap(host,{state,save,go,icon,announce,tone,talkToIpsae,take
  const f=trail[0],dx=f.x-follower.x,dy=f.y-follower.y,k=Math.min(1,dt*9),step=Math.hypot(dx,dy)*k;
  if(step>.16)birdDirection=Math.abs(dx)>Math.abs(dy)?dx>0?2:1:dy>0?0:3;
  follower.x+=dx*k;follower.y+=dy*k;birdMoving=step>.16;birdDistance=(birdDistance+step)%48;
- }else{cancelRoute();}if(!blocked())camera.update(p,dt);apply();draw(time);frame++;raf=requestAnimationFrame(tick);}
+ }else{cancelRoute();}
+ // Footsteps: none against a wall, under a dialog or during a card; the last one fades as the walker stops.
+ if(walk){if(time-lastStep>=STEP_MS-8){lastStep=time-lastStep<STEP_MS+40?lastStep+STEP_MS:time;footstep(true);}}else if(stepping)footstep(false);
+ stepping=walk;
+ if(!blocked())camera.update(p,dt);apply();draw(time);frame++;raf=requestAnimationFrame(tick);}
  resize();raf=requestAnimationFrame(tick);
- return()=>{disposed=true;encounters.destroy();cameraEvents.abort();directionPad.destroy();cancelAnimationFrame(raf);observer.disconnect();clear();document.removeEventListener('keydown',keydown);document.removeEventListener('keyup',keyup);window.removeEventListener('blur',cancelRoute);document.removeEventListener('visibilitychange',cancelRoute);state.position={...p};save();};
+ return()=>{disposed=true;footstep(false);encounters.destroy();cameraEvents.abort();directionPad.destroy();cancelAnimationFrame(raf);observer.disconnect();clear();document.removeEventListener('keydown',keydown);document.removeEventListener('keyup',keyup);window.removeEventListener('blur',cancelRoute);document.removeEventListener('visibilitychange',cancelRoute);state.position={...p};save();};
 }
