@@ -8,7 +8,7 @@ globalThis.MutationObserver=class{constructor(fn){listeners.mutation=[fn];}obser
 let players=[],pending;
 globalThis.Audio=class{constructor(src){this.src=src;this.paused=true;players.push(this);}play(){this.paused=false;return pending||Promise.resolve();}pause(){this.paused=true;}removeAttribute(){this.src='';}load(){}};
 const {configureNarration,voiceControl,stopNarration,playVillainVoice,isVillainSpeaking,yieldNarration}=await import('../src/narration.js');
-const duck=[],audio={settings:{sfx:true},duckVoice:v=>duck.push(v)};configureNarration(audio);
+const duck=[],audio={settings:{sfx:true,voice:true},ready:()=>true,duckVoice:v=>duck.push(v)};configureNarration(audio);
 const host=()=>new Element();const emit=(event,e={})=>listeners[event]?.forEach(fn=>fn(e));
 test('single voice, stop/replay, ended and stale rejected play never stop newer voice',async()=>{
  const a=voiceControl(host(),'story-1'),b=voiceControl(host(),'story-2');await a.onclick();assert.equal(duck.at(-1),true);const first=players.at(-1);await b.onclick();assert.equal(first.paused,true);assert.equal(players.filter(p=>!p.paused).length,1);players.at(-1).onended();assert.equal(duck.at(-1),false);assert.equal(b.attrs['aria-pressed'],'false');await b.onclick();assert.equal(b.attrs['aria-pressed'],'true');await b.onclick();assert.equal(players.at(-1).paused,true);
@@ -22,7 +22,7 @@ test('speaking mark follows audible playback and rests while the voice buffers o
  const b=voiceControl(host(),'story-2');await b.onclick();first.onplaying();assert.equal(a.dataset.voicePlaying,undefined);assert.equal(b.dataset.voicePlaying,'true');stopNarration();
 });
 test('mute, hidden page, route, dialog close, detached control and errors release music',async()=>{
- const h=host(),a=voiceControl(h,'hint-0');audio.settings.sfx=false;const count=players.length;await a.onclick();assert.equal(players.length,count);audio.settings.sfx=true;
+ const h=host(),a=voiceControl(h,'hint-0');audio.settings.voice=false;const count=players.length;await a.onclick();assert.equal(players.length,count);audio.settings.voice=true;
  for(const event of ['pagehide','popstate','hashchange','close']){await a.onclick();emit(event);assert.equal(a.attrs['aria-pressed'],'false');assert.equal(duck.at(-1),false);}
  await a.onclick();document.hidden=true;emit('visibilitychange');assert.equal(a.attrs['aria-pressed'],'false');document.hidden=false;
  await a.onclick();a.isConnected=false;emit('mutation');assert.equal(a.attrs['aria-pressed'],'false');a.isConnected=true;
@@ -64,4 +64,11 @@ test('a guide voice waits for a villain line that already started, two seconds a
  // A newer line is not cut by an older dialog's timer.
  playVillainVoice('villain-1-3');yieldNarration();t.mock.timers.tick(1000);playVillainVoice('villain-1-1');const newer=players.at(-1);t.mock.timers.tick(1000);assert.equal(newer.paused,false);
  t.mock.timers.reset();stopNarration();
+});
+test('voices follow their own switch, not the effect switch, and nothing is tried before the first gesture',async()=>{
+ const{playVoice}=await import('../src/narration.js');
+ audio.settings.sfx=false;let count=players.length;assert.equal(playVoice('villain-1-1'),true);assert.equal(players.length,count+1);stopNarration();
+ audio.settings.sfx=true;audio.settings.voice=false;count=players.length;assert.equal(playVoice('villain-1-1'),false);assert.equal(playVillainVoice('villain-1-1'),false);assert.equal(players.length,count);
+ audio.settings.voice=true;audio.ready=()=>false;assert.equal(playVoice('villain-1-1'),false);assert.equal(players.length,count);
+ audio.ready=()=>true;
 });

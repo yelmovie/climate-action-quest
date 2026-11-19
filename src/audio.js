@@ -34,13 +34,15 @@ export const CARD_CUES={
  'card-complete':[{src:sfx('victory-jingle-01'),gain:.8}],
 };
 export function createAudio(storage){
- let settings={bgm:true,sfx:true,volume:25,sfxVolume:25},quiet=false,voiceQuiet=false,unlocked=false,last=0,scene='main',finale=false,finalDone=false,stepTurn=0,ringUntil=0;
+ let settings={bgm:true,sfx:true,voice:true,volume:25,sfxVolume:25},quiet=false,voiceQuiet=false,unlocked=false,last=0,scene='main',finale=false,finalDone=false,stepTurn=0,ringUntil=0;
  const players={};
  // Effects follow their own size; the music size applies to the background tracks only.
  const effects=createThemeEffects('climate',()=>({enabled:settings.sfx,muted:quiet,volume:settings.sfxVolume/100}),{samples:{...MAP_CUES,...CARD_CUES,...STEP_CUES}});
  try{const s=JSON.parse(storage.getItem(SOUND_KEY));if(s){settings.bgm=s.bgm!==false;settings.sfx=s.sfx!==false;settings.volume=Number.isFinite(s.volume)?Math.max(0,Math.min(100,s.volume)):25;
  // Saves from before the split kept one shared size; start the effect size from it.
- settings.sfxVolume=Number.isFinite(s.sfxVolume)?Math.max(0,Math.min(100,s.sfxVolume)):settings.volume;}}catch{}
+ settings.sfxVolume=Number.isFinite(s.sfxVolume)?Math.max(0,Math.min(100,s.sfxVolume)):settings.volume;
+ // Voices followed the effect switch until they got their own: older saves carry that value over.
+ settings.voice=typeof s.voice==='boolean'?s.voice:settings.sfx;}}catch{}
  const want=()=>finale?'final':scene;
  function player(name){
   let a=players[name];
@@ -93,6 +95,10 @@ export function createAudio(storage){
   // A concept film mutes new effects; the completion tone that is already ringing is left to finish.
   quiet(value){quiet=value;syncMusic();},
   save(){effects.sync();syncMusic();if(!settings.sfx)stopEffect();try{storage.setItem(SOUND_KEY,JSON.stringify(settings));}catch{}},
-  toggle(){const on=!(settings.bgm||settings.sfx);settings.bgm=on;settings.sfx=on;this.save();if(on)effect('tap');},
+  // The header button covers music, effects and voices together.
+  anyOn:()=>settings.bgm||settings.sfx||settings.voice,
+  // true once a gesture has happened: before it, a voice is not tried at all (the browser would refuse it).
+  ready:()=>unlocked,
+  toggle(){const on=!(settings.bgm||settings.sfx||settings.voice);settings.bgm=on;settings.sfx=on;settings.voice=on;this.save();if(on)effect('tap');},
   dispose(){effects.dispose();for(const key in players)players[key].pause();stopEffect();document.removeEventListener('visibilitychange',visibility);document.removeEventListener('pointerdown',retry);}};
 }

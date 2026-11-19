@@ -67,7 +67,7 @@ const CUES={
  */
 export function mountMapEncounters({
   host,controls=host,stages,progress={},onSave=()=>{},blocked=()=>false,reduced=()=>false,
-  clearStage=()=>null,requiredFoes=0,art,tone=()=>{},voice=()=>{},speaking=()=>false,celebrating=()=>false,palette='#a855f7',reach=90,contact=22,effect='ring',
+  clearStage=()=>null,requiredFoes=0,art,tone=()=>{},voice=()=>{},ready=()=>true,speaking=()=>false,celebrating=()=>false,palette='#a855f7',reach=90,contact=22,effect='ring',
 }) {
   const handles=new AbortController(),{signal}=handles;
   const doc=host.ownerDocument,view=doc.defaultView;
@@ -273,11 +273,13 @@ export function mountMapEncounters({
     if(finaleAt&&now>=finaleAt&&!stop&&!celebrating()){finaleAt=0;openMapFinale(host,"/assets/map-encounters/map-finale.mp4");}
     const changed=nearest!==current;
     current=nearest;
-    if(current&&current!==lastNear&&current.saidUntil<=now&&now-lastHit>REPEAT&&now>=clearUntil){
+    // Before the first gesture the greeting waits (its voice would be refused): it comes once after the first input.
+    const waiting=current&&current!==lastNear&&!ready();
+    if(current&&current!==lastNear&&!waiting&&current.saidUntil<=now&&now-lastHit>REPEAT&&now>=clearUntil){
       const message=current.say[current.sayIndex++%current.say.length]??'다가왔구나!';
       speak(current,message,now+2200,now);
     }
-    lastNear=current;
+    if(!waiting)lastNear=current;
     const hasFocus=doc.activeElement===attack;
     attack.hidden=!(syncDock()&&current);
     if(current){

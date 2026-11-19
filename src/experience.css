@@ -165,6 +165,8 @@ h1,h2,h3 { text-wrap: balance; }
 .settings-scroll { padding-bottom: 12px; scrollbar-gutter: stable; }
 .settings-section p { font-size: var(--learning-text); }
 .settings-row { min-height: 56px; }
+/* The voice switch sits under the two sound switches, across both columns. */
+.science-settings-audio > .settings-voice { grid-column: 1 / -1; }
 .settings-dialog .settings-wide { min-height: 52px; margin-top: 10px; }
 /* The story is a translucent panel over the title art (about half the width), not a covering modal. */
 .story-dialog { width: min(50vw,620px); max-height: calc(100dvh - 32px); margin: auto auto auto clamp(16px,5vw,96px); background-color: rgba(252,255,248,.88) !important; box-shadow: 0 18px 48px #0b2f3540; }

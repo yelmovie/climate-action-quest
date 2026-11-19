@@ -25,6 +25,22 @@ test('effect size is stored apart from the music size and older saves start from
  } finally { globalThis.document = original; }
 });
 
+test('voices get their own switch: older saves carry the effect switch over, new students start with everything on', () => {
+ const original = globalThis.document;
+ const doc = new EventTarget(); doc.hidden = false; globalThis.document = doc;
+ try {
+  const cases = [[null, true, true], [{ bgm: true, sfx: false, volume: 25, sfxVolume: 25 }, false, false], [{ bgm: true, sfx: true, volume: 25, sfxVolume: 25 }, true, true], [{ bgm: true, volume: 25 }, true, true]];
+  for (const [saved, sfx, voice] of cases) { const a = createAudio(storage(saved)); assert.deepEqual([a.settings.sfx, a.settings.voice, a.settings.sfxVolume], [sfx, voice, saved?.sfxVolume ?? 25]); a.dispose(); }
+  const store = storage({ bgm: false, sfx: false, voice: true, volume: 25, sfxVolume: 25 });
+  const a = createAudio(store);
+  assert.equal(a.settings.voice, true); assert.equal(a.anyOn(), true); assert.equal(a.ready(), false);
+  a.toggle(); assert.deepEqual([store.saved.bgm, store.saved.sfx, store.saved.voice], [false, false, false]); assert.equal(a.anyOn(), false);
+  a.toggle(); assert.deepEqual([store.saved.bgm, store.saved.sfx, store.saved.voice], [true, true, true]);
+  a.settings.voice = false; a.save(); assert.deepEqual([store.saved.sfx, store.saved.voice], [true, false]);
+  a.dispose();
+ } finally { globalThis.document = original; }
+});
+
 test('map cues layer decoded CC0 files at the effect size, fall back to a tone until decoded, and stay silent when muted', async () => {
  const original = { document: globalThis.document, fetch: globalThis.fetch };
  const doc = new EventTarget(); doc.hidden = false; globalThis.document = doc;

@@ -9,12 +9,15 @@ export function stopNarration(){
  const waiting=[...idle];idle.clear();waiting.forEach(fn=>fn());
 }
 export const isNarrating=()=>!!player;
+// Voices have their own switch (settings.voice). Before the first gesture nothing is tried: the browser would refuse it.
+const voiceOn=()=>!!audio?.settings.voice;
+export const voiceReady=()=>audio?.ready?audio.ready():true;
 // One-shot callback for the next time no voice is playing.
 export function onNarrationIdle(fn){idle.add(fn);return()=>idle.delete(fn);}
 // Lines spoken by the scene itself (concept captions, villain bubbles) without a replay button.
 export function playVoice(id){
  stopNarration();
- if(!voiceLines[id]||document.hidden||!audio?.settings.sfx)return false;
+ if(!voiceLines[id]||document.hidden||!voiceOn()||!voiceReady())return false;
  const request=++serial,current=new Audio('/'+voiceLines[id].target);player=current;audio.duckVoice(true);
  current.onended=current.onerror=()=>{if(request===serial)stopNarration();};
  current.play().catch(()=>{if(request===serial)stopNarration();});
@@ -51,14 +54,14 @@ export function voiceControl(host,id,{autoplay=false}={}){
   if(isVillainSpeaking()){if(button.dataset.voiceWaiting)return;button.dataset.voiceWaiting='true';await villainDone();delete button.dataset.voiceWaiting;}
   stopNarration();
   if(document.hidden||!button.isConnected)return;
-  if(!audio?.settings.sfx){status.textContent='소리를 켜면 음성을 들을 수 있어요.';return;}
+  if(!voiceOn()){status.textContent='설정에서 목소리를 켜면 음성을 들을 수 있어요.';return;}
   status.textContent='AI 생성 음성';const request=++serial;const current=new Audio('/'+voiceLines[id].target);player=current;owner=button;current.preload='none';button.textContent='음성 멈추기';button.setAttribute('aria-pressed','true');audio.duckVoice(true);
   const fail=()=>{if(request!==serial)return;stopNarration();status.textContent='음성을 불러오지 못했어요. 화면의 글을 읽고 계속할 수 있어요.';};
   current.onended=()=>{if(request===serial)stopNarration();};current.onerror=fail;
   // The portrait speaks only while sound is audible; buffering and pauses rest it.
-  const speaking=on=>{if(request!==serial||owner!==button)return;if(on&&!document.hidden&&audio.settings.sfx)button.dataset.voicePlaying='true';else delete button.dataset.voicePlaying;};
+  const speaking=on=>{if(request!==serial||owner!==button)return;if(on&&!document.hidden&&voiceOn())button.dataset.voicePlaying='true';else delete button.dataset.voicePlaying;};
   current.onplaying=()=>speaking(true);current.onwaiting=current.onpause=()=>speaking(false);
-  try{await current.play();if(request!==serial)return;if(document.hidden||!button.isConnected||!audio.settings.sfx){stopNarration();return;}button.dataset.voicePlaying='true';}catch{fail();}
+  try{await current.play();if(request!==serial)return;if(document.hidden||!button.isConnected||!voiceOn()){stopNarration();return;}button.dataset.voicePlaying='true';}catch{fail();}
  };
  if(autoplay)button.click();return button;
 }
