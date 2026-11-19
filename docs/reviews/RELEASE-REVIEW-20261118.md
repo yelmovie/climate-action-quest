@@ -116,3 +116,4 @@
 - 설정 창 닫기 중복: 위 X를 없애고 아래 「닫기」 하나만 남김(16개 공통 기준 `SETTINGS-CLOSE-RULE-20261119`). Esc 닫기·기록 초기화·저장 로직 그대로.
 - 검증: `npm test` 69/69, 빌드 331 files, `check:interactions`·`check:journey`·`check:layout`·`check:flow`·`check:playback` 모두 통과(맥, `CHROME` 지정 없이).
 - E12는 PASS로 바뀐다. 성적표 4번(코드 품질) 감점 사유가 해소된다.
+- 운영 반영: 커밋 `f38030e`, 활성 버전 `99f4a552-0bf4-4c5f-827c-842b245cf10f`(바뀐 파일 3개). `src/main.js`·`src/concept-player.js`·`sw.js`·index 빌드=운영 MATCH. 운영 주소에서 설정 창 X 0개, 아래 「닫기」·Esc로 닫힘, 콘솔 오류 0.
