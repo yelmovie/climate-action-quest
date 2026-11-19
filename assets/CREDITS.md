@@ -182,7 +182,7 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 | 카드 공개(브론즈·실버·골드) | `reward-01.mp3` | Fantasy_ui_Button_3.wav | ZenithInfinitiveStudios | https://freesound.org/people/ZenithInfinitiveStudios/sounds/376745 |
 | 카드 공개(홀로·레전드, 긴 징글) | `reward-03.mp3` | Achievement Happy Beeps Jingle | CogFireStudios | https://freesound.org/people/CogFireStudios/sounds/619838 |
 | 카드가 보관함 칸에 들어갈 때 | `pickup-01.mp3` | item-pickup-v1.wav | DeltaCode | https://freesound.org/people/DeltaCode/sounds/678384 |
-| 다섯 장을 모두 모았을 때(2026-11-19부터 끝까지 나고, 지도 파이널 영상과 파이널 곡은 이 징글이 끝난 뒤 열린다) | `victory-jingle-01.mp3` | Game Success Fanfare Short | el_boss | https://freesound.org/people/el_boss/sounds/677858 |
+| 다섯 장을 모두 모았을 때(카드는 2026-11-19부터 악당 퇴장 대사가 끝난 뒤에 뜬다. 이 징글은 끝까지 나고, 지도 파이널 영상과 파이널 곡은 이 징글이 끝난 뒤 열린다) | `victory-jingle-01.mp3` | Game Success Fanfare Short | el_boss | https://freesound.org/people/el_boss/sounds/677858 |
 
 - 연결: `src/audio.js`의 `CARD_CUES`, 재생은 지도 악당 효과음과 같은 경로(`src/theme-effects.js`)라 효과음 켜기·효과음 크기·전체 소리 끄기·숨긴 탭 정지를 그대로 따른다. 효과음은 한 번에 하나만 난다(2026-11-19부터는 아래 「지도 발자국·스테이지 열림 소리」의 세 갈래 규칙).
 

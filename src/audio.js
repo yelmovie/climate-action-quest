@@ -90,7 +90,8 @@ export function createAudio(storage){
   // The finale opens after the last card's jingle has finished (map-encounters.js celebrating), so nothing is cut here.
   mapFinale(open){setTrack(scene,!!open);},
   duckVoice(value){voiceQuiet=value;syncMusic();},
-  quiet(value){quiet=value;if(value)stopEffect();syncMusic();},
+  // A concept film mutes new effects; the completion tone that is already ringing is left to finish.
+  quiet(value){quiet=value;syncMusic();},
   save(){effects.sync();syncMusic();if(!settings.sfx)stopEffect();try{storage.setItem(SOUND_KEY,JSON.stringify(settings));}catch{}},
   toggle(){const on=!(settings.bgm||settings.sfx);settings.bgm=on;settings.sfx=on;this.save();if(on)effect('tap');},
   dispose(){effects.dispose();for(const key in players)players[key].pause();stopEffect();document.removeEventListener('visibilitychange',visibility);document.removeEventListener('pointerdown',retry);}};

@@ -19,6 +19,10 @@ export const newRewardCards=(before,after)=>REWARD_CARDS.flatMap(({id},index)=>b
 // main.js hands over its effect call, so the cards follow the sound button, the effects switch and the effect size.
 let cue=()=>{};
 export function bindRewardSound(play){cue=play;}
+// main.js also says whether the villain's exit line is still being spoken: the card waits for it (PATIENCE at most).
+let speaking=()=>false;
+export function bindRewardVoice(isSpeaking){speaking=isSpeaking;}
+const PATIENCE=7000;
 
 // Built on first use: the unit tests load this module without a document.
 let instance;
@@ -49,7 +53,9 @@ let due=0;
 export const rewardCardDue=()=>due>0;
 
 // Call with the hit record before and after a save. The card opens once the villain's exit has played
-// (760 ms, 520 ms with reduced motion) and flies in from the villain while it is still on screen.
+// (760 ms, 520 ms with reduced motion) and its exit line has been spoken, and flies in from the villain's place.
+// While the line is spoken the map keeps running (the bubble stays with the voice); the all-villains finale
+// waits through rewardCardPending().
 // hits() returns the record at that moment; open() says whether that map is still the screen in view.
 export function awardRewardCards(before,after,hits,open){
  const won=newRewardCards(before,after);
@@ -57,9 +63,11 @@ export function awardRewardCards(before,after,hits,open){
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  for(const index of won){
   let counted=false;
+  const earned=Date.now();
   flying.add(index);
   const settle=()=>{if(counted)due--;flying.delete(index);rewards().syncSlots(settled(hits()));};
   const show=()=>{
+   if(open()&&speaking()&&Date.now()-earned<PATIENCE){setTimeout(show,100);return;}
    if(!counted){counted=true;due++;}
    // Left the map, or the record was reset meanwhile: no reveal, the slots simply show what is saved.
    if(!open()||!ownedRewardCards(hits())[index]){settle();return;}

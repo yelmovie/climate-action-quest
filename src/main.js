@@ -1,6 +1,6 @@
 import {ipsaeArt,ipsaeWalkArt} from './characters.js';
 import {mountWelcomeVoice} from './welcome-voice.js';
-import {configureNarration,voiceControl,stopNarration,yieldNarration} from './narration.js';
+import {configureNarration,voiceControl,stopNarration,yieldNarration,isVillainSpeaking} from './narration.js';
 import {voiceLines} from './voice-lines.js';
 import {npcName,npcPortrait} from './npc-conversation.js';
 let welcomeCleanup = () => {};
@@ -10,7 +10,7 @@ import {sourceActivityRecord} from './activity-record.js';
 import {loadActivity,loadMapArt,loadStyle,waitForScreen} from './screen-loaders.js';
 import {registerOffline,prepareOffline} from './offline.js';
 import {createAudio} from './audio.js';
-import {bindRewardSound,rewardSlotsHtml,awardRewardCards,rewardCardPending,rewardCardDue} from './map-reward-cards.js';
+import {bindRewardSound,bindRewardVoice,rewardSlotsHtml,awardRewardCards,rewardCardPending,rewardCardDue} from './map-reward-cards.js';
 import {artImage,chapterArt} from './concept-art.js';
 const app=document.querySelector('#app'),live=document.querySelector('#announcer'),toast=document.querySelector('#toast');
 let storage;try{storage=window.localStorage;}catch{storage={getItem:()=>null,setItem:()=>{throw Error('unavailable');},removeItem:()=>{}};}
@@ -23,6 +23,8 @@ const audio=createAudio(storage),asset=name=>`/assets/${name}.webp`,esc=s=>Strin
 configureNarration(audio);
 // 성취 카드(map-reward-cards.js)의 소리도 효과음 경로를 탄다: 소리 버튼·효과음 스위치·효과음 크기를 그대로 따른다.
 bindRewardSound(name=>audio.effect(name));
+// 카드는 악당의 퇴장 대사가 끝난 뒤에 뜬다.
+bindRewardVoice(isVillainSpeaking);
 function announce(message){live.textContent='';requestAnimationFrame(()=>live.textContent=message);toast.textContent=message;toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.hidden=true,5500);}
 function storageNotice(message){
  let notice=document.querySelector('#save-protection');
@@ -143,8 +145,8 @@ async function map(){
  // 성취 카드: 악당의 세 번째 타격이 저장되면(onMapHits, 기록 2→3) 퇴장 뒤 카드를 띄운다. 카드가 열린 동안 #app이 inert라 지도·악당이 쉬고,
  // 카드 차례(hold)에는 악당 모듈도 멈춰 다섯 악당 파이널이 카드를 닫은 뒤에 열린다.
  // 전투·보상 소리는 서로 겹쳐 나고 화면 조작음·발자국에 끊기지 않는다. 마지막 악당은 축하가 두 번 울리지 않게 3타 소리만 내고,
- // 축하는 카드의 컬렉션 완성 징글이 맡는다. 지도 파이널 창과 파이널 곡은 그 징글이 끝난 뒤에 열린다(celebrating).
- audio.prepareEffects();cleanup=module.mountMap(host,{state,save,go,icon,announce,opened:takeOpened(),footstep:on=>on?audio.step():audio.stopSteps(),celebrating:()=>audio.celebrating(),onMapHits:(before,after)=>awardRewardCards(before,after,()=>state.mapHits,()=>activeRoute==='map'&&host.isConnected),hold:rewardCardDue,tone:(kind,hits)=>audio.effect(kind==='hit'?'map-hit-'+hits:kind==='finish'||kind==='victory'&&rewardCardPending()?'map-hit-3':'map-'+kind),takeRestorations:()=>{if(studentState)return [];const ids=[...pendingRestoration];pendingRestoration.clear();return ids;},talkToIpsae(stage){
+ // 축하는 카드의 컬렉션 완성 징글이 맡는다. 지도 파이널 창과 파이널 곡은 카드를 넣고 그 징글이 끝난 뒤에 열린다(celebrating).
+ audio.prepareEffects();cleanup=module.mountMap(host,{state,save,go,icon,announce,opened:takeOpened(),footstep:on=>on?audio.step():audio.stopSteps(),celebrating:()=>rewardCardPending()||audio.celebrating(),onMapHits:(before,after)=>awardRewardCards(before,after,()=>state.mapHits,()=>activeRoute==='map'&&host.isConnected),hold:rewardCardDue,tone:(kind,hits)=>audio.effect(kind==='hit'?'map-hit-'+hits:kind==='finish'||kind==='victory'&&rewardCardPending()?'map-hit-3':'map-'+kind),takeRestorations:()=>{if(studentState)return [];const ids=[...pendingRestoration];pendingRestoration.clear();return ids;},talkToIpsae(stage){
   const voiceId=`map-${stage}`,line=voiceLines[voiceId];
   const d=dialog(`<h2 id="map-npc-name">앵무새 잎새</h2><div class="npc-dialogue-grid">${npcPortrait(line.speaker)}<div class="npc-dialogue-copy"><p>${esc(line.text)}</p></div></div>`,'npc-facility-dialog');
   d.setAttribute('aria-labelledby','map-npc-name');

@@ -149,7 +149,9 @@ test('map footsteps alternate two files at 0.15, halve under a voice and follow 
   assert.equal(audio.celebrating(), true);
   audio.effect('tap'); audio.step(); audio.mapFinale(true); audio.mapFinale(false);
   assert.equal(jingle.stopped, undefined); // neither a tap, a footstep nor the finale theme cuts the set jingle
-  audio.quiet(true); // a concept film does, and the wait ends with it
+  audio.quiet(true); // a concept film mutes new effects and lets a ringing one finish
+  assert.equal(jingle.stopped, undefined); assert.equal(audio.effect('success'), undefined);
+  audio.quiet(false); audio.settings.sfx = false; audio.save(); // turning effects off stops it, and the wait ends with it
   assert.deepEqual([jingle.stopped, audio.celebrating()], [true, false]);
  } finally { audio?.dispose(); world.restore(); }
 });
