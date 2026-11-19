@@ -1,0 +1,29 @@
+{
+ "src": "../../../_scratch/caption-motion-20261118/concepts/16/src/evidence.mp4",
+ "out": "../../assets/concepts/evidence.mp4",
+ "out_webm": "../../assets/concepts/evidence.webm",
+ "theme": {
+  "box": "#173f35",
+  "accent": "#ffd35c",
+  "hot": "#ffd35c"
+ },
+ "bottom": 4,
+ "sweep": false,
+ "cues": [
+  {
+   "s": 0,
+   "e": 4.9,
+   "text": "하루의 눈이나 추위는 그날의 [날씨]예요."
+  },
+  {
+   "s": 5,
+   "e": 9.9,
+   "text": "[기후]의 변화를 판단하려면 [긴 기간]의 자료가 필요해요."
+  },
+  {
+   "s": 10,
+   "e": 15,
+   "text": "[같은 장소]·[같은 기준]인지도 함께 확인해요."
+  }
+ ]
+}

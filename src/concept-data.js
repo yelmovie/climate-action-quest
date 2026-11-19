@@ -1,4 +1,5 @@
-// Three 5-second shots per discovery (films/: question → change → conclusion). Captions stay in the DOM, outside the video.
+// Three 5-second shots per discovery (films/: question → change → conclusion). These cues are burned into the shipped films
+// (docs/concept-captions-20261118/); the DOM caption stays for screen readers and becomes visible only before/after playback or when the film fails.
 export const concepts = [
   {id:'observe',title:'기록을 길게 모으면 보이는 것',cues:['하루의 날씨는 오르내릴 수 있어요.','같은 기준으로 여러 해의 기록을 모아 비교해요.','긴 기록에서 변화의 경향을 찾아요.']},
   {id:'evidence',title:'날씨와 기후를 구별하는 증거',cues:['하루의 눈이나 추위는 그날의 날씨예요.','기후의 변화를 판단하려면 긴 기간의 자료가 필요해요.','같은 장소·같은 기준인지도 함께 확인해요.']},

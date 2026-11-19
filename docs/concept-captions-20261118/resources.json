@@ -1,0 +1,29 @@
+{
+ "src": "../../../_scratch/caption-motion-20261118/concepts/16/src/resources.mp4",
+ "out": "../../assets/concepts/resources.mp4",
+ "out_webm": "../../assets/concepts/resources.webm",
+ "theme": {
+  "box": "#173f35",
+  "accent": "#ffd35c",
+  "hot": "#ffd35c"
+ },
+ "bottom": 4,
+ "sweep": false,
+ "cues": [
+  {
+   "s": 0,
+   "e": 4.9,
+   "text": "조명과 이동, 물건 만들기에 [에너지]와 [자원]이 쓰여요."
+  },
+  {
+   "s": 5,
+   "e": 9.9,
+   "text": "쓰지 않는 전기를 끄고, 물건을 [오래] 쓸 수 있어요."
+  },
+  {
+   "s": 10,
+   "e": 15,
+   "text": "숲을 지키는 일도 기후변화 대응과 연결돼요."
+  }
+ ]
+}

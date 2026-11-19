@@ -1,0 +1,29 @@
+{
+ "src": "../../../_scratch/caption-motion-20261118/concepts/16/src/effects.mp4",
+ "out": "../../assets/concepts/effects.mp4",
+ "out_webm": "../../assets/concepts/effects.webm",
+ "theme": {
+  "box": "#173f35",
+  "accent": "#ffd35c",
+  "hot": "#ffd35c"
+ },
+ "bottom": 4,
+ "sweep": false,
+ "cues": [
+  {
+   "s": 0,
+   "e": 4.9,
+   "text": "많은 비로 낮은 길에 물이 고일 수 있어요."
+  },
+  {
+   "s": 5,
+   "e": 9.9,
+   "text": "물이 고인 길은 지나기 어려워요. 가까이 가지 않아요."
+  },
+  {
+   "s": 10,
+   "e": 15,
+   "text": "어른과 안전한 길로 이동해요. [변화] → [영향] → [대응]을 이어요."
+  }
+ ]
+}

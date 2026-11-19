@@ -177,23 +177,34 @@ h1,h2,h3 { text-wrap: balance; }
 .story-dialog .story-next { align-self: flex-end; }
 .story-dialog .dialog-close { z-index: 2; }
 body:has(.story-dialog[open]) .home-copy { visibility: hidden; }
-.concept-dialog { width: min(1080px,calc(100vw - 40px)); }
-.concept-dialog .dialog-body { display: flex; flex-direction: column; align-items: stretch; gap: 12px; padding: 22px 24px; overflow: auto; max-height: calc(100dvh - 40px); }
-.concept-heading { padding-right: 52px; }
-.concept-heading h2 { font-size: clamp(28px,2.1vw,40px); margin-top: 5px; }
-.concept-screen { position: relative; width: 100%; min-height: 0; aspect-ratio: 16/9; max-height: 49dvh; flex: 0 1 auto; background: #e4efda; border: 2px solid #a7c19b; border-radius: 20px; overflow: hidden; }
+/* Concept films play full screen; the caption is burned into the film's lower band, so nothing covers it while playing. */
+.game-dialog.concept-dialog { inset: 0; width: 100vw; width: 100dvw; height: 100vh; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; border-radius: 0; background: #000; box-shadow: none; }
+.concept-dialog::backdrop { background: #000; }
+.concept-dialog .dialog-body { position: relative; width: 100%; height: 100%; max-height: none; padding: 0; overflow: hidden; }
+.concept-dialog .dialog-close { z-index: 6; }
+.concept-screen { position: absolute; inset: 0; background: #000; overflow: hidden; }
 .concept-screen video,.concept-screen .concept-end { display: block; width: 100%; height: 100%; object-fit: contain; }
 .concept-end { position: absolute; inset: 0; }
-.concept-play { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+.concept-play { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 2; }
 .concept-play:hover:not(:disabled),.concept-play:active:not(:disabled) { transform: translate(-50%,-50%); }
-.concept-explanation { text-align: center; padding: 0 8px; }
-.concept-caption { font-size: clamp(22px,1.9vw,34px) !important; min-height: 2.6em; display: grid; place-items: center; }
+/* Top chrome: title, scene buttons and actions. While the film plays only pause and close stay; a tap or focus brings the rest back. */
+.concept-chrome { position: absolute; z-index: 4; left: 0; right: 0; top: 0; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: start; gap: 8px 14px; padding: 12px 76px 30px 20px; background: linear-gradient(#000000c4,#0000008a 70%,#0000); color: #fff; pointer-events: none; transition: background .25s; }
+.concept-chrome > * { pointer-events: auto; transition: opacity .25s, visibility .25s; }
+.concept-heading { grid-column: 1; min-width: 0; padding: 0; }
+.concept-heading .eyebrow { color: #ffe49b; }
+.concept-heading h2 { font-size: clamp(24px,2vw,34px); margin: 2px 0 0; color: #fff; line-height: 1.2; }
+.concept-chrome .science-focus-rail { grid-column: 1 / -1; grid-row: 2; width: min(760px,100%); }
+.concept-actions { grid-column: 2; grid-row: 1; display: flex; flex-direction: row-reverse; align-items: center; gap: 10px; }
+.concept-dialog.is-playing:not(.show-chrome) .concept-chrome { background: none; }
+.concept-dialog.is-playing:not(.show-chrome) .concept-chrome:not(:focus-within) > :not(.concept-actions),.concept-dialog.is-playing:not(.show-chrome) .concept-chrome:not(:focus-within) .concept-next { opacity: 0; visibility: hidden; }
+/* The written caption is the reading panel before the film starts, after it ends and when it cannot play. */
+.concept-explanation { position: absolute; z-index: 3; left: 50%; bottom: max(16px,3dvh); transform: translateX(-50%); width: min(980px,calc(100% - 32px)); max-height: 46%; overflow: auto; text-align: center; padding: 12px 22px; border-radius: 20px; background: #fcfff8f0; color: var(--ink); box-shadow: 0 10px 30px #0006; }
+.concept-caption { font-size: clamp(22px,1.9vw,34px) !important; margin: 0; display: grid; place-items: center; }
+.concept-dialog.concept-film-live .concept-explanation { left: 0; bottom: 0; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; transform: none; box-shadow: none; }
 .concept-timeline { display: flex; justify-content: center; gap: 8px; margin-top: 8px; }
 .concept-timeline i { width: 36px; height: 5px; border-radius: 5px; background: #d2dfc6; }
 .concept-timeline i.on { background: #39795c; }
 .concept-fallback { text-align: left; margin: 0; padding-left: 30px; font-size: var(--learning-text); }
-.concept-actions { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-shrink: 0; }
-.concept-next { margin-left: auto; }
 #app .facility-copy { top: 50%; transform: translateY(-50%); }
 #app .facility-activities { top: 50%; transform: translateY(-50%); max-height: calc(100% - 155px); gap: 16px; }
 .activity-card { min-height: 0; padding: 18px 22px; }
@@ -294,10 +305,6 @@ body:has(.story-dialog[open]) .home-copy { visibility: hidden; }
   #app .facility-activities { top: auto; transform: none; max-height: none; }
   .story-dialog { width: calc(100vw - 32px); margin: auto; }
   .story-art { height: 150px; }
-  .concept-dialog .dialog-body { padding: 18px 16px; }
-  .concept-caption { font-size: 22px !important; }
-  .concept-heading h2 { font-size: 26px; }
-  .concept-actions .button { font-size: 18px; }
   .home-copy { top: 50%; }
 }
 @media (min-width:1101px) and (max-height:780px) {
@@ -357,10 +364,6 @@ body:has(.story-dialog[open]) .home-copy { visibility: hidden; }
   .comparison-card .metric { padding: 6px; }
   .test-city { min-height: 180px; }
   .test-city .district-tile { min-height: 80px; }
-  .concept-screen { max-height: 40dvh; }
-  .concept-dialog .dialog-body { gap: 8px; padding: 14px 20px; }
-  .concept-caption { min-height: 1.5em; font-size: 22px !important; }
-  .concept-heading h2 { font-size: 28px; }
   .story-art { height: clamp(100px,22dvh,160px); }
 }
 /* Immediate, local feedback keeps the next action clear without timed advances. */

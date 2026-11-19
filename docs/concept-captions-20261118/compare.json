@@ -1,0 +1,29 @@
+{
+ "src": "../../../_scratch/caption-motion-20261118/concepts/16/src/compare.mp4",
+ "out": "../../assets/concepts/compare.mp4",
+ "out_webm": "../../assets/concepts/compare.webm",
+ "theme": {
+  "box": "#173f35",
+  "accent": "#ffd35c",
+  "hot": "#ffd35c"
+ },
+ "bottom": 4,
+ "sweep": false,
+ "cues": [
+  {
+   "s": 0,
+   "e": 4.9,
+   "text": "[비교]할 때 다른 조건은 [같게] 두어요."
+  },
+  {
+   "s": 5,
+   "e": 9.9,
+   "text": "생활의 선택 [한 가지만] 바꾸어 결과를 나란히 봐요."
+  },
+  {
+   "s": 10,
+   "e": 15,
+   "text": "생활 만족을 지키면서 자원 사용을 줄일 수 있어요."
+  }
+ ]
+}

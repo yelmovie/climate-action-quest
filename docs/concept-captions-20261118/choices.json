@@ -1,0 +1,29 @@
+{
+ "src": "../../../_scratch/caption-motion-20261118/concepts/16/src/choices.mp4",
+ "out": "../../assets/concepts/choices.mp4",
+ "out_webm": "../../assets/concepts/choices.webm",
+ "theme": {
+  "box": "#173f35",
+  "accent": "#ffd35c",
+  "hot": "#ffd35c"
+ },
+ "bottom": 4,
+ "sweep": false,
+ "cues": [
+  {
+   "s": 0,
+   "e": 4.9,
+   "text": "더운 날, 전기를 아끼려고 [더위]를 참아야 할까요?"
+  },
+  {
+   "s": 5,
+   "e": 9.9,
+   "text": "[더위]를 참으면 몸이 위험해요. [물과 그늘]에서 쉬어요."
+  },
+  {
+   "s": 10,
+   "e": 15,
+   "text": "[건강과 안전]을 지키면서 필요 없는 사용을 줄여요."
+  }
+ ]
+}

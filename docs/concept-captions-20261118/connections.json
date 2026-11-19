@@ -1,0 +1,29 @@
+{
+ "src": "../../../_scratch/caption-motion-20261118/concepts/16/src/connections.mp4",
+ "out": "../../assets/concepts/connections.mp4",
+ "out_webm": "../../assets/concepts/connections.webm",
+ "theme": {
+  "box": "#173f35",
+  "accent": "#ffd35c",
+  "hot": "#ffd35c"
+ },
+ "bottom": 4,
+ "sweep": false,
+ "cues": [
+  {
+   "s": 0,
+   "e": 4.9,
+   "text": "활동의 겉모습만으로 영향을 단정하지 않아요."
+  },
+  {
+   "s": 5,
+   "e": 9.9,
+   "text": "어떤 [에너지]와 [자원]을 쓰는지 연결해 살펴봐요."
+  },
+  {
+   "s": 10,
+   "e": 15,
+   "text": "불필요한 사용을 [줄이는] 대응을 찾아요."
+  }
+ ]
+}

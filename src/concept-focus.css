@@ -18,4 +18,6 @@
 
 .science-focus-player.science-focus-reduced *{animation:none!important;transition:none!important}
 
-.science-focus-player .concept-caption{display:block}.science-focus-player .concept-timeline{display:none}.concept-dialog.science-focus-player .concept-screen{max-height:calc(100dvh - 360px)}.concept-dialog.science-focus-player .science-focus-rail{margin:0}@media(max-height:700px){.concept-dialog.science-focus-player .dialog-body{gap:6px;padding:12px 16px}.concept-dialog.science-focus-player .concept-heading h2{font-size:24px}.concept-dialog.science-focus-player .concept-screen{max-height:calc(100dvh - 300px)}.concept-dialog.science-focus-player .concept-caption{font-size:20px!important;min-height:2.7em;line-height:1.4}}
+.science-focus-player .concept-caption{display:block}.science-focus-player .concept-timeline{display:none}.concept-dialog.science-focus-player .science-focus-rail{margin:0}
+/* Full-screen concept films (experience.css): the film keeps the whole screen on short displays too. */
+.concept-dialog.science-focus-player .concept-screen video{max-height:none!important}@media(max-height:700px){.concept-dialog.science-focus-player .concept-heading h2{font-size:24px}.concept-dialog.science-focus-player .concept-caption{font-size:20px!important;line-height:1.4}}

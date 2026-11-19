@@ -1,0 +1,29 @@
+{
+ "src": "../../../_scratch/caption-motion-20261118/concepts/16/src/water.mp4",
+ "out": "../../assets/concepts/water.mp4",
+ "out_webm": "../../assets/concepts/water.webm",
+ "theme": {
+  "box": "#173f35",
+  "accent": "#ffd35c",
+  "hot": "#ffd35c"
+ },
+ "bottom": 4,
+ "sweep": false,
+ "cues": [
+  {
+   "s": 0,
+   "e": 4.9,
+   "text": "[땅의 높이]를 살펴보고 물이 닿을 곳을 예상해요."
+  },
+  {
+   "s": 5,
+   "e": 9.9,
+   "text": "모형의 [수위]가 오르면 [낮은 곳]부터 물이 닿아요."
+  },
+  {
+   "s": 10,
+   "e": 15,
+   "text": "같은 [수위]에서도 땅 높이에 따라 영향이 달라요."
+  }
+ ]
+}

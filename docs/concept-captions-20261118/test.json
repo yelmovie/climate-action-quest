@@ -1,0 +1,29 @@
+{
+ "src": "../../../_scratch/caption-motion-20261118/concepts/16/src/test.mp4",
+ "out": "../../assets/concepts/test.mp4",
+ "out_webm": "../../assets/concepts/test.webm",
+ "theme": {
+  "box": "#173f35",
+  "accent": "#ffd35c",
+  "hot": "#ffd35c"
+ },
+ "bottom": 4,
+ "sweep": false,
+ "cues": [
+  {
+   "s": 0,
+   "e": 4.9,
+   "text": "영상 속 예시 도시를 [시설]이 없는 상태에서 시험해요."
+  },
+  {
+   "s": 5,
+   "e": 9.9,
+   "text": "[시설]을 놓고 [같은 폭염] 조건으로 [다시 시험]해요."
+  },
+  {
+   "s": 10,
+   "e": 15,
+   "text": "처음과 [같은 조건]으로 [다시 시험]해야 비교할 수 있어요."
+  }
+ ]
+}
