@@ -151,3 +151,20 @@
 .screen-load-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 16px; }
 .map-load-status.screen-load-status { inset: 0; display: grid; place-items: center; max-width: none; transform: none; padding: 70px 20px 24px; overflow: auto; border: 0; border-radius: 0; background: #174f47; }
 .screen-load-actions .button { margin-top: 0; }
+
+/* Facility (2026-11-18 balance): the two research cards are what the student taps, so they take the
+   right column's full height below the HUD instead of a short band in the middle of the scene. */
+@media (min-width: 761px) and (min-height: 501px) and (orientation: landscape) {
+  #app .facility-activities { top: clamp(88px, 11dvh, 128px); bottom: clamp(24px, 5dvh, 56px); transform: none; max-height: none; display: flex; flex-direction: column; justify-content: center; gap: clamp(12px, 2dvh, 24px); }
+  .teacher-on .facility-activities { bottom: calc(clamp(24px, 5dvh, 56px) + 64px); }
+  #app .facility-activities > .activity-card { flex: 1 1 0; min-height: 0; max-height: 34dvh; grid-template-rows: minmax(0,1fr) auto auto auto minmax(0,1fr); grid-template-columns: clamp(116px, 13vw, 260px) minmax(0, 1fr); padding: clamp(16px, 2.4dvh, 30px) clamp(18px, 1.8vw, 32px); gap: clamp(6px, 1dvh, 12px) clamp(14px, 1.4vw, 24px); }
+  #app .facility-activities > .activity-card > .activity-card-visual { grid-row: 1 / -1; width: 100%; min-height: 0; height: 100%; }
+  #app .facility-activities > .activity-card .chapter-art { width: 100%; min-height: 0; height: 100%; }
+  #app .facility-activities > .activity-card > .eyebrow { grid-row: 2; }
+  #app .facility-activities > .activity-card > h2 { grid-row: 3; }
+  #app .facility-activities > .activity-card > .card-go { grid-row: 4; }
+  #app .facility-activities > .activity-card > .eyebrow { font-size: clamp(18px, min(1.3vw, 2.2dvh), 24px); }
+  #app .facility-activities > .activity-card > h2 { font-size: clamp(24px, min(2.4vw, 4dvh), 44px); }
+  #app .facility-activities > .activity-card > .card-go { font-size: clamp(18px, min(1.5vw, 2.5dvh), 28px); }
+  #app .facility-activities > .facility-clips { flex: none; }
+}
