@@ -75,6 +75,7 @@ http://localhost:4173 에서 연다. `npm test`로 학습 모형·진행·지도
 
 - 검증: `npm test` 69개, 빌드 331 files, `check:screen` 8해상도 208상태 0건, `check:playback`·`check:layout`·`check:flow` 통과, 홈→72단위→인증서 실제 클릭 완주. 납품 점검 `docs/reviews/RELEASE-REVIEW-20261118.md`(조건부 배포 가능), 성적 `SCORE-20261118.md` 83점.
 - 11-19 후속: `check:journey`가 활동 두 개마다 지도 「…로 가기」를 눌러 시설·엔딩으로 가도록 갱신했다. `check:interactions` 실패는 실제 버그였다: 개념 영상이 음성을 기다리며 멈춰 있을 때 「잠깐 멈춤」을 누르면 영상이 다시 재생됐다. `src/concept-player.js`에 기다림 상태(`held`)를 두어 그때도 멈추게 고쳤다. 검사 스크립트의 Chrome 기본 경로는 맥·윈도우를 자동으로 고르고(`CHROME`로 덮어쓰기 가능), 설정 창은 위 X를 없애고 아래 「닫기」 하나만 남겼다(16개 공통 기준, Esc 닫기 유지). 운영 반영 커밋 `f38030e`, 버전 `99f4a552-0bf4-4c5f-827c-842b245cf10f`, 해시 MATCH. 재채점 `docs/reviews/SCORE-20261119.md` 84점.
+- 11-19 저녁: 지도 학생 대원 그림을 1.11MiB → 514KiB로 줄이고(WebP q92), 화면에서 안 쓰는 Jua 폰트를 배포본에서 뺐다. 운영 커밋 `aa5d69e`, 버전 `67c83087-7fb1-480e-b5af-f3bba0dc7755`, 해시 MATCH. 재채점 86점.
 - 운영 반영: 커밋 `77acc78`, `deploy.sh 16 "16 weatherchange" worker-cfg climate-action-quest`, 활성 버전 `fd8a2a88-192c-4f54-84a8-fc935343d99f`. 변경 CSS 2개·`src/main.js`·`sw.js`·index 해시 빌드=운영 MATCH, 운영 주소 4해상도 16화면 오류 0, 첫 화면 시작 버튼 1.43초.
 
 ## 설계 자료

@@ -118,3 +118,14 @@
 - E12는 PASS로 바뀐다. 성적표 4번(코드 품질) 감점 사유가 해소된다.
 - 운영 반영: 커밋 `f38030e`, 활성 버전 `99f4a552-0bf4-4c5f-827c-842b245cf10f`(바뀐 파일 3개). `src/main.js`·`src/concept-player.js`·`sw.js`·index 빌드=운영 MATCH. 운영 주소에서 설정 창 X 0개, 아래 「닫기」·Esc로 닫힘, 콘솔 오류 0.
 - 재채점: `SCORE-20261119.md` 84/100(4번 7→8). A~G 합계 PASS 105 · WARNING 7 · FAIL 0 · NOT TESTED 9 · N/A 3. 운영 첫 로딩 재실측 시작 버튼 1,136ms·1.02MiB.
+
+## 11-19 저녁 남은 문제 정리 (공유 노트 `REMAINING-FIX-20261119`)
+
+- 남은 WARNING 7개(D2·D6·D13·D14·E2·E14·F12) 중 코드로 안전하게 고칠 수 있는 2개를 고쳤다.
+- D2 → PASS: `assets/field-team.webp`(지도 학생 대원·잎새 걷기 그림)를 lossless 1,164,360 → WebP q92 526,166 bytes로. 알파 오차 0, 알파 가중 PSNR 39.95dB, 2배 확대 비교에서 차이 없음. 원본 PNG(`references/generated/field-team.png`)는 그대로.
+- D6 → PASS: 화면이 쓰지 않는 Jua WOFF2 두 개(약 376KiB)를 `scripts/build.mjs`에서 배포본에서 뺌. 개념 영상은 `films/*/assets/fonts/` 사본으로 렌더링한다. 배포 파일 331 → 329개.
+- `check:delivery`가 없앤 설정 창 X(`.dialog-close`)를 누르던 것을 아래 「닫기」(`#close-settings`)로 맞춤.
+- 그대로 두는 것: E2(활동 화면·판정 코드 리팩터링이라 범위 밖), E14(출처 추적 이름 유지), D14(인증서 이름 칸에 임의 한글이 들어와 부분 글꼴 불가), D13·D9·D10(실기 FPS 필요), F12(권리 증빙은 사람 확인).
+- 검증: `npm test` 69/69, 빌드 329 files, `check:layout`(overlaps·small·scroll 0)·`check:journey`(72단위·인증서·새로고침)·`check:flow` 통과, `check:delivery`는 배포본 서버(`--dist`, 4275)에서 오프라인 준비·MP4 범위 요청까지 통과.
+- 운영 반영: 커밋 `aa5d69e`, 활성 버전 `67c83087-7fb1-480e-b5af-f3bba0dc7755`(바뀐 파일 3개). `assets/field-team.webp`·`sw.js`·`src/screen-loaders.js`·index 빌드=운영 MATCH. 운영에서 Jua 경로 404, 오프라인 캐시 목록에 Jua 없음.
+- 재채점: `SCORE-20261119.md` 86/100(7번 4→6). A~G 합계 PASS 107 · WARNING 5 · FAIL 0 · NOT TESTED 9 · N/A 3. 판정은 조건부 배포 가능 그대로.
