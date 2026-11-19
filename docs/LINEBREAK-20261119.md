@@ -37,3 +37,4 @@
 - 커밋 `661e2b5` main 푸시, `run-lock.sh lbk-deploy-1 deploy.sh 16 "16 weatherchange" worker-cfg climate-action-quest`.
 - 활성 버전 `66b1fcbf-776e-4da5-af34-f34173f27d34`, 바뀐 파일 3개 업로드(333 기존).
 - 해시(빌드=운영): `src/korean-linebreak.css` `0d021a96896eba90`, `src/frontdoor.css`·`/`(index) MATCH, `sw.js` `36dd0e8c05e99da2`(cache `eb63f6f26a1b`).
+- 추가 수정(2026-11-20, 공통 지침 8절): `src/reward-cards.css` `.rc-locked small` 아래 컨테이너 규칙 4줄 — 좁은 잠긴 카드 「악당을 물리치면 / 열려요」를 「악당을 / 물리치면 / 열려요」로. 로컬 확인 1280×800 한 줄(카드 폭 180), 1024×768 세 줄(175), 넘침 없음. 커밋 `ec59e90`, 활성 버전 `dca6f9cf-37f2-4600-a2fb-8d12ff66fa92`, `reward-cards.css` `7bf850473c4e60f3`·index 빌드=운영 MATCH.
