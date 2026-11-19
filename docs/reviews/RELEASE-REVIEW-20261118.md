@@ -117,3 +117,4 @@
 - 검증: `npm test` 69/69, 빌드 331 files, `check:interactions`·`check:journey`·`check:layout`·`check:flow`·`check:playback` 모두 통과(맥, `CHROME` 지정 없이).
 - E12는 PASS로 바뀐다. 성적표 4번(코드 품질) 감점 사유가 해소된다.
 - 운영 반영: 커밋 `f38030e`, 활성 버전 `99f4a552-0bf4-4c5f-827c-842b245cf10f`(바뀐 파일 3개). `src/main.js`·`src/concept-player.js`·`sw.js`·index 빌드=운영 MATCH. 운영 주소에서 설정 창 X 0개, 아래 「닫기」·Esc로 닫힘, 콘솔 오류 0.
+- 재채점: `SCORE-20261119.md` 84/100(4번 7→8). A~G 합계 PASS 105 · WARNING 7 · FAIL 0 · NOT TESTED 9 · N/A 3. 운영 첫 로딩 재실측 시작 버튼 1,136ms·1.02MiB.
