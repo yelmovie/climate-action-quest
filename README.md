@@ -69,6 +69,14 @@ http://localhost:4173 에서 연다. `npm test`로 학습 모형·진행·지도
 - 카드 그림 5장은 GPT 이미지로 생성했고, 효과음 5종은 공통 CC0 라이브러리 파일이다(출처 `assets/CREDITS.md`). 소리는 기존 효과음 경로를 타서 효과음 스위치·효과음 크기·전체 소리 끄기를 따른다.
 - 검증·운영 반영(2026-11-18): `npm test` 69개 통과, `npm run build` 성공(331 files). 헤드리스 Chrome으로 실제 공격 버튼 격퇴 → 카드 → 칸 → 새로고침 유지, 1·2타와 접촉 피격, 5장 완성 축하 뒤 파이널, 3타 직후 설정창을 열었다 닫는 경우, 소리 끄기·움직임 줄이기, 1024×768·1280×800·844×390 헤더까지 20항목을 배포본(dist)과 운영 주소에서 모두 통과했다(검사 스크립트와 화면은 `.tmp/reward-cards/`, Git 미포함). 커밋 `71a2294`를 main에 푸시하고 `_scratch/deploy-20261118/deploy.sh 16 "16 weatherchange" worker-cfg climate-action-quest`로 배포했다. 운영 주소 https://climate-action-quest.yelsam.workers.dev/ 의 활성 버전은 `296831d8-b352-4390-b193-9164b0ce7022`(100%)이고, index.html·`src/main.js`·`sw.js`·카드 그림 10장·카드 효과음 5개의 SHA-256이 빌드와 같다. 실제 태블릿의 소리 크기와 터치감은 기기로 확인해야 한다.
 
+## 놀이 화면 비율·배경 조화 · 2026-11-18
+
+학생이 누르는 영역이 배경보다 작아 보이지 않게 배치만 고쳤다(학습 문구·판정·저장·진행 로직 불변). 시설 화면의 활동 카드 두 장이 HUD 아래부터 화면 아래까지 높이를 나눠 갖고(카드 열 높이 1280×800 50.4→84%, 1920×1080 39.6→84%), 활동 1·6의 선택 버튼이 자료 옆 열을 채우는 큰 타일이 됐다(실제 내용 커버율 활동 1 35→68%, 활동 6 51→78%). 활동 3·5·7의 grid 작업 칸이 내용 폭으로 줄던 것을 고쳐 1920에서 좌우 빈 띠 약 27%가 사라졌다(활동 7 커버율 37→79%). 중복 조작 버튼은 전수 점검했고 없앤 것은 없다(이유는 `docs/LAYOUT-BALANCE-20261118.md`). 수정 파일은 `src/frontdoor.css`·`src/activity-screen.css`.
+
+- 검증: `npm test` 69개, 빌드 331 files, `check:screen` 8해상도 208상태 0건, `check:playback`·`check:layout`·`check:flow` 통과, 홈→72단위→인증서 실제 클릭 완주. 납품 점검 `docs/reviews/RELEASE-REVIEW-20261118.md`(조건부 배포 가능), 성적 `SCORE-20261118.md` 83점.
+- 원본 `check:journey`(11-13 지도 경유 흐름 이전 작성)와 `check:interactions`(11-18 개념 영상 음성 이후 일시정지 검사)는 이번 변경과 무관하게 실패한다. 갱신이 필요하다.
+- 운영 반영: 커밋 `77acc78`, `deploy.sh 16 "16 weatherchange" worker-cfg climate-action-quest`, 활성 버전 `fd8a2a88-192c-4f54-84a8-fc935343d99f`. 변경 CSS 2개·`src/main.js`·`sw.js`·index 해시 빌드=운영 MATCH, 운영 주소 4해상도 16화면 오류 0, 첫 화면 시작 버튼 1.43초.
+
 ## 설계 자료
 
 - [PRD](docs/PRD.md) · [TRD](docs/TRD.md) · [디자인 시스템](docs/DESIGN-SYSTEM.md)
