@@ -42,7 +42,7 @@
 | 적용 파일 | 보존 원본 | 원본 규격 | 처리·용도 |
 |---|---|---|---|
 | `assets/village.webp` | `references/generated/village-map.png` | 1672×941 | WebP quality 92; 사선 시점 픽셀 연구마을 지도 |
-| `assets/field-team.webp` | `references/generated/field-team.png` | 887×1774 RGBA, 4열×8행 | lossless WebP; 학생 대원 위 4행·잎새 동행 아래 4행, 방향 down/left/right/up |
+| `assets/field-team.webp` | `references/generated/field-team.png` | 887×1774 RGBA, 4열×8행 | WebP quality 92(2026-11-19 lossless 1,164,360 → 526,166 bytes, 알파 오차 0·가중 PSNR 39.95dB); 학생 대원 위 4행·잎새 동행 아래 4행, 방향 down/left/right/up |
 
 픽셀 지도와 시설 일러스트는 각각 지도/실내라는 다른 공간에서 사용한다. 스프라이트의 원본 픽셀 크기와 프레임 접지·잘림은 실제 지도 렌더에서 최종 확인한다.
 
@@ -56,6 +56,7 @@ Google Fonts 배포판 **Jua Regular**, weight 400, Version 1.001을 사용한�
 - 공식 원문: [Google Fonts Jua OFL.txt](https://raw.githubusercontent.com/google/fonts/main/ofl/jua/OFL.txt), [Jua METADATA.pb](https://raw.githubusercontent.com/google/fonts/main/ofl/jua/METADATA.pb). 확인일 2026-10-21.
 - SIL Open Font License 1.1은 저작권·라이선스를 동봉해 폰트를 소프트웨어에 포함·임베딩·재배포하는 것을 허용한다. 폰트 자체만 별도로 판매할 수 없다. 폰트 파일은 OFL을 유지하며 앱 자체 제작물 제한 문구의 대상이 아니다.
 - 공식 라이선스 전체를 `assets/fonts/OFL.txt`로 동봉한다. 폰트 설치는 필요하지 않고 외부 서버로 요청하지 않는다.
+- 2026-11-19: 현재 웹 화면은 Jua를 쓰지 않는다(본문 나눔스퀘어 네오, 제목 Climate Lab Title). 그래서 두 WOFF2는 `scripts/build.mjs`에서 웹 배포본에서 뺀다. 개념 영상은 `films/*/assets/fonts/`의 사본으로 렌더링한다. 원본 파일과 이 라이선스 기록은 그대로 둔다.
 
 ## 교육 내용 출처
 

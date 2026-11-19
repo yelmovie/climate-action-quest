@@ -7,7 +7,8 @@ for(const file of await readdir(join(root,'src')))if(!file.startsWith('._')&&fil
 // Start from an empty dist so moved or deleted assets never linger in the deploy or the offline cache list.
 await rm(dist,{recursive:true,force:true});
 await mkdir(dist,{recursive:true});
-for(const p of ['index.html','manifest.webmanifest','src','assets'])await cp(join(root,p),join(dist,p),{recursive:true,filter:path=>!path.split(/[\\/]/).pop().startsWith('._')});
+// Jua is only used when concept videos are rendered (films/ has its own copy); the web screens never load it.
+for(const p of ['index.html','manifest.webmanifest','src','assets'])await cp(join(root,p),join(dist,p),{recursive:true,filter:path=>{const name=path.split(/[\\/]/).pop();return !name.startsWith('._')&&!/^jua-.*\.woff2$/.test(name);}});
 const files=[];
 // exFAT drives add macOS "._*" metadata files while copying; they must never enter the offline cache list.
 async function walk(dir,prefix=''){for(const f of await readdir(dir,{withFileTypes:true})){if(f.name.startsWith('._'))continue;const rel=prefix+'/'+f.name;if(f.isDirectory())await walk(join(dir,f.name),rel);else if(!f.name.endsWith('.md')&&f.name!=='sw.js')files.push(rel);}}

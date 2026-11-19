@@ -12,7 +12,7 @@
 ## 학생 대원 · 잎새
 
 - 원본: `references/generated/field-team.png` (887×1774 RGBA)
-- 배포: `assets/field-team.webp` (lossless)
+- 배포: `assets/field-team.webp` (2026-11-19부터 WebP quality 92, 526,166 bytes. 이전 lossless 1.11MiB)
 - 생성 프롬프트: “Use case: stylized-concept. Production pixel RPG walking sprite sheet, transparent background. Exact uniform 4-column by 8-row sheet, 32 equal square cells, same baseline at 85% cell height. No scenery, text, labels, borders or watermarks. Premium cozy 2.5D pixel RPG crisp pixel clusters. Cute elementary student science research cadet: moss-green cap, cream shirt, turquoise vest, brown hiking shorts, green backpack, brown boots, friendly chibi face. Top 4 rows: same student facing down/front, left, right, away/up; each row 4 walking steps. Lower 4 rows: tiny orange squirrel science companion, curled fluffy tail, green leaf scarf and tan satchel, same direction order. Student70% cell height, squirrel55%. Preserve identical design and scale, fully inside each cell, aligned feet, subtle steps, transparent between subjects. Usable game atlas, not a concept sheet.”
 - 정해진 셀을 캔버스에서 분리해 그린다. 재생성·임의 배경 제거·원본 덮어쓰기는 하지 않았다. 방향별 걷기와 잎새의 길 따라오기를 실제 지도에 적용했다.
 
