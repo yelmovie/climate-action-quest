@@ -4,7 +4,7 @@ import {freshState} from '../src/state.js';
 const require=createRequire(import.meta.url);
 let chromium;try{({chromium}=require('playwright-core'));}catch{({chromium}=require('../.tools/node_modules/playwright-core'));}
 const out='.tmp/experience-check';await mkdir(out,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--disable-crash-reporter','--disable-breakpad'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--disable-crash-reporter','--disable-breakpad'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
 const page=await browser.newPage({serviceWorkers:'block'}),errors=[];page.on('requestfailed',req=>{if(req.failure()?.errorText!=='net::ERR_ABORTED')console.warn('Failed request',req.url(),req.failure()?.errorText);});page.on('pageerror',e=>errors.push(e.message));
 const state=freshState();state.adminUnlocked=true;state.introSeen=true;
 for(let i=0;i<10;i++){state.records[i]={done:true,workComplete:true};state.completed.push(i);}

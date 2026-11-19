@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {freshState,SAVE_KEY} from '../src/state.js';
 const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_modules/playwright-core');
-const browser=await chromium.launch({executablePath:process.env.CHROME||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true});
 const base=process.env.BASE_URL||'http://127.0.0.1:5356',checks=[],errors=[];
 await mkdir('.tmp/safety-check',{recursive:true});
 const context=await browser.newContext(),page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));

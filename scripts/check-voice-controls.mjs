@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_modules/playwright-core');
-const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true});
 const page=await browser.newPage({viewport:{width:1280,height:800},serviceWorkers:'block'}),base=process.env.BASE_URL||'http://127.0.0.1:5357',checks=[];
 await page.addInitScript(()=>{const Native=window.Audio;window.voicePlayers=[];window.musicPlayers=[];window.Audio=function(...args){const a=new Native(...args);(String(args[0]).includes('/audio/bgm/')?window.musicPlayers:window.voicePlayers).push(a);return a;};});
 const playing=()=>page.evaluate(()=>window.voicePlayers.filter(a=>!a.paused).length);

@@ -3,13 +3,13 @@ import {createRequire} from 'node:module';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {evidenceSites,humanSites,relationCases,effectChains,dailyCases,compareCaseIndices,experimentLevels} from '../src/activity-data.js';
 const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_modules/playwright-core');
-const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true});
 const context=await browser.newContext({viewport:{width:1280,height:800},hasTouch:true}),page=await context.newPage(),errors=[],checks=[];
 const base=process.env.BASE_URL||'http://127.0.0.1:5357',out='.tmp/full-journey';await mkdir(out,{recursive:true});
 page.on('pageerror',e=>errors.push(e.message));
 const saved=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('climate-future:v1')));
 let units=0;
-async function done(index){await page.locator('.concept-dialog').waitFor();const s=await saved();assert.deepEqual(s.completed,Array.from({length:index+1},(_,i)=>i));assert.equal(s.records[index].example,false);assert.equal(s.records[index].workComplete,true);assert.equal(s.adminUnlocked,false);await page.locator('.concept-dialog .dialog-close').click();await page.locator('.continue-activity').click();if(index%2===1&&index<9)await page.locator(`[data-activity="${index+1}"]`).click();checks.push(`activity ${index}: actual cumulative completion, ${units} units`);console.log(checks.at(-1));}
+async function done(index){await page.locator('.concept-dialog').waitFor();const s=await saved();assert.deepEqual(s.completed,Array.from({length:index+1},(_,i)=>i));assert.equal(s.records[index].example,false);assert.equal(s.records[index].workComplete,true);assert.equal(s.adminUnlocked,false);await page.locator('.concept-dialog .dialog-close').click();await page.locator('.continue-activity').click();if(index%2===1&&index<9){await page.locator('.map-action').waitFor({timeout:30000});await page.keyboard.press('Escape');await page.locator('.map-action').click();await page.locator(`[data-activity="${index+1}"]`).click({timeout:90000});}checks.push(`activity ${index}: actual cumulative completion, ${units} units`);console.log(checks.at(-1));}
 try{
  await page.goto(base+'/#activity/0',{waitUntil:'domcontentloaded'});assert.deepEqual((await saved()).completed,[]);
  for(let i=0;i<8;i++){await page.locator('.compare-slider').focus();await page.keyboard.press('End');assert.equal((await saved()).records[0].collected.length,i+1);units++;if(i<7)await page.locator('.next-site').click();}await page.locator('.submit').click();await done(0);
@@ -23,7 +23,7 @@ try{
  const good=['shade','pond','shade','pond','trees','trees'];for(let i=0;i<6;i++){await page.locator(`[data-tool="${good[i]}"]`).click();await page.locator(`[data-district="${i}"]`).click();units++;}await page.locator('.submit').click();await done(8);
  for(let i=0;i<3;i++)await page.locator('.run').click();const before=(await saved()).records[9].before;assert.deepEqual(Object.keys(before).sort(),['heat','rain']);units+=2;
  await page.locator('.retest').click();await page.reload({waitUntil:'domcontentloaded'});assert.equal((await saved()).records[9].phase,3);await page.locator('.run').click();units+=2;await page.locator('.run').click();await done(9);
- assert.equal(units,72);assert.equal(new URL(page.url()).hash,'#ending');await page.locator('#finalize').click();await page.locator('.certificate-dialog').waitFor();assert.equal((await saved()).finalized,true);
+ assert.equal(units,72);await page.locator('.map-action').waitFor({timeout:30000});await page.keyboard.press('Escape');await page.locator('.map-action').click();await page.waitForURL(/#ending$/,{timeout:90000});await page.locator('#finalize').click();await page.locator('.certificate-dialog').waitFor();assert.equal((await saved()).finalized,true);
  const dl=page.waitForEvent('download');await page.locator('#download-certificate').click();const file=await dl;assert.match(file.suggestedFilename(),/인증서/);await file.saveAs(out+'/certificate.svg');
  const exported=await readFile(out+'/certificate.svg','utf8');assert.equal((exported.match(/data:font\/woff2;base64,/g)||[]).length,2);assert.match(exported,/OPEN FONT LICENSE/);assert.match(exported,/font-family="NanumSquareNeo, sans-serif"/);
  await page.screenshot({path:out+'/certificate.png'});

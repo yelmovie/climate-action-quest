@@ -8,7 +8,7 @@ const {chromium}=require('../.tools/node_modules/playwright-core');
 const base=process.env.BASE_URL||'http://127.0.0.1:5416';
 const out='.tmp/play-mission-check';
 await mkdir(out,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.CHROME||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--disable-crash-reporter','--disable-breakpad']});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--disable-crash-reporter','--disable-breakpad']});
 const checks=[],layouts=[],errors=[];
 const plans=[['park','park'],['park','park','wetland','wetland'],['park','park','wetland','wetland','bus']];
 

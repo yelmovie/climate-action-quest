@@ -107,3 +107,12 @@
 - `cmp.sh`: `src/main.js`·루트 index MATCH. 변경 CSS `src/frontdoor.css`·`src/activity-screen.css`와 `sw.js` SHA-256 빌드=운영 MATCH.
 - 운영 주소 실기 브라우저: 1280×800·873×580·915×412·1920×1080 × 시설·활동 1·6·7 16화면에서 새 CSS 적용, 가로 넘침 0, 44px 미만 버튼 0, 작업 칸 잘림 0, 콘솔 오류 0. 홈·이야기·지도 6해상도 0건, 최소 글자 18px.
 - 롤백 대상: 직전 운영 커밋 `71a2294`(성취 카드)·버전 `296831d8-b352-4390-b193-9164b0ce7022`.
+
+## 11-19 후속 (E12 해소)
+
+- `check:journey`: 활동 1·3·5·7 뒤와 활동 9 뒤에 지도에서 「…로 가기」를 누르도록 갱신. 72단위·인증서·새로고침 통과.
+- `check:interactions`: 원인은 스크립트가 아니라 앱이었다. 개념 영상이 앞 음성을 기다리며 멈춰 있을 때(`hold`) 「잠깐 멈춤」을 누르면 `video.paused`만 보고 다시 재생했다. `src/concept-player.js`에 `held` 상태를 두어 기다림 중에도 멈춤으로 동작하게 고침. 스크립트 수정 없이 통과.
+- 검사 스크립트 13개의 Chrome 기본 경로를 운영체제별로 자동 선택(`CHROME` 환경변수 우선).
+- 설정 창 닫기 중복: 위 X를 없애고 아래 「닫기」 하나만 남김(16개 공통 기준 `SETTINGS-CLOSE-RULE-20261119`). Esc 닫기·기록 초기화·저장 로직 그대로.
+- 검증: `npm test` 69/69, 빌드 331 files, `check:interactions`·`check:journey`·`check:layout`·`check:flow`·`check:playback` 모두 통과(맥, `CHROME` 지정 없이).
+- E12는 PASS로 바뀐다. 성적표 4번(코드 품질) 감점 사유가 해소된다.

@@ -6,7 +6,7 @@ import {evaluateCity} from '../src/activities.js';
 const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_modules/playwright-core');
 const out=fileURLToPath(new URL('../.tmp/responsive-check/',import.meta.url));
 await mkdir(out,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.CHROME||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--disable-crash-reporter','--disable-breakpad'],downloadsPath:out});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--disable-crash-reporter','--disable-breakpad'],downloadsPath:out});
 const context=await browser.newContext({reducedMotion:'reduce',serviceWorkers:'block'}),page=await context.newPage(),errors=[],results=[];
 page.on('pageerror',e=>errors.push(e.message));
 const base=process.env.BASE_URL||'http://127.0.0.1:5368';

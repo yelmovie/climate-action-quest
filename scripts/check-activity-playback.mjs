@@ -4,7 +4,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {freshState} from '../src/state.js';
 const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_modules/playwright-core');
 const out='.tmp/activity-playback';await mkdir(out,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.CHROME||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true});
 const page=await browser.newPage({viewport:{width:1280,height:800},serviceWorkers:'block'}),errors=[],checks=[];
 page.on('pageerror',e=>errors.push(e.message));
 const base=process.env.BASE_URL||'http://127.0.0.1:5368';let fixture;
