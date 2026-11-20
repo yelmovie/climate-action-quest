@@ -2,6 +2,7 @@
 
 > 점검 2026-11-20 10:00~12:30 · 브랜치 `main` · 기준 커밋(앱 코드) `6a789cf` · 운영 https://climate-action-quest.yelsam.workers.dev · 운영 배포 버전 `b95463c9-04c8-4827-86fb-2fcd43f29231`(2026-11-20 01:40 KST)
 > 스킬 `edu-final-check`, 지침 `_shared/FINAL-RECHECK-20261120.md` 16번 줄. **대상은 운영 주소에 올라가 있는 빌드**이고, 브라우저 점검은 전부 운영 주소로 했다. 지난 판정을 옮겨 적지 않았다. 이번에 다시 보지 못한 항목은 NOT TESTED로 적었다.
+> 점검 중(10:29) 다른 세션이 앱 커밋 `a5a786d`(저작권·제작 표기 문구 통일, `src/main.js` 6줄·`assets/CREDITS.md`)를 올렸다. 이 문서 작성 시점(12:40) 운영은 아직 `6a789cf` 빌드(prodcmp 일치 40/40)라 판정 대상은 그대로 `6a789cf`다. 그 세션은 `src/main.js`·`src/frontdoor.css`를 더 고치는 중이다(미커밋, 건드리지 않음).
 > 지난 점검: `RELEASE-REVIEW-20261118.md`(11-19 저녁 절, 문서 커밋 `be04423`) · `SCORE-20261119.md` 86점.
 
 ## 최종 판정
