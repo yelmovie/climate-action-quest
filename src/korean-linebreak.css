@@ -23,3 +23,5 @@
 .home-copy .hero-subtitle strong { display: block; text-wrap: balance; }
 /* 16 기후: 첫 화면 잎새 환영 자막(세 줄 고정 글) — 끝줄 「방법을 찾아보자.」만 짧게 남지 않게 */
 .home-copy .npc-welcome-voice p { text-wrap: balance; }
+/* 16 기후: 지도 악당 말풍선(최대 184px) — 「내가 가린 행동 카드가 / 다 보여!」처럼 끝줄만 짧게 남지 않게 */
+.map-encounter-say { text-wrap: balance; }
