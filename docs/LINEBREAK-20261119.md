@@ -38,3 +38,12 @@
 - 활성 버전 `66b1fcbf-776e-4da5-af34-f34173f27d34`, 바뀐 파일 3개 업로드(333 기존).
 - 해시(빌드=운영): `src/korean-linebreak.css` `0d021a96896eba90`, `src/frontdoor.css`·`/`(index) MATCH, `sw.js` `36dd0e8c05e99da2`(cache `eb63f6f26a1b`).
 - 추가 수정(2026-11-20, 공통 지침 8절): `src/reward-cards.css` `.rc-locked small` 아래 컨테이너 규칙 4줄 — 좁은 잠긴 카드 「악당을 물리치면 / 열려요」를 「악당을 / 물리치면 / 열려요」로. 로컬 확인 1280×800 한 줄(카드 폭 180), 1024×768 세 줄(175), 넘침 없음. 커밋 `ec59e90`, 활성 버전 `dca6f9cf-37f2-4600-a2fb-8d12ff66fa92`, `reward-cards.css` `7bf850473c4e60f3`·index 빌드=운영 MATCH.
+
+## 남은 것 정리 (2026-11-20, 공통 지침 9절)
+
+- 지도 악당 말풍선 `.map-encounter-say`: 지도 화면에 같은 클래스 요소를 띄워 악당 대사 25줄 전부(만남 2·맞음 2·퇴장 1 × 5곳)와 도움 배너 `.map-encounter-clear` 5줄을 1280×800·1024×768에서 잼. 전 1줄(「내가 가린 행동 카드가 / 다 보여!」, 184px) → 후 0. `src/korean-linebreak.css` 프로젝트 보정에 `.map-encounter-say { text-wrap: balance; }`. 말풍선 위치는 기존 `layoutSpeech`가 버튼·캐릭터·이름표를 피해 화면 안에 두는 코드라 그대로(최대 폭 184px 그대로).
+- 1차 때 못 잰 DOM 화면: 성취 카드 획득 장면(`awardRewardCards`로 실제 공개 장면을 띄움)을 두 크기에서 잼 — 문제 0.
+- 활동 5의 1건: 물길 실험 결과 `.evidence-card p.notice`의 두 요약 줄 사이 `<br>`를 도구가 낱말 끊김으로 본 오탐. 두 줄 길이 268/420px(1280)로 고르게 나뉘어 고칠 것 없음.
+- 캔버스 글: `src/`에 `fillText`·`strokeText`·`wordWrap`이 없음. 지도 캔버스는 그림만 그리고 이름표·안내·말풍선은 모두 DOM이라 1차·이번 측정에 포함됨. 확인함, 문제없음.
+- 검사: 깨끗한 사본(HEAD + 이번 CSS)에서 `npm test` 76개 통과, 빌드 성공.
+- 운영: 커밋 `3debf89`, `lbk-deploy-1`에서 같은 deploy 명령, 활성 버전 `f0402982-e68a-4e40-a79c-8dae4d82d651`, `korean-linebreak.css` `6bc20cee3d367728`·index 빌드=운영 MATCH.
