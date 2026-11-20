@@ -4,3 +4,6 @@
    app's other gold buttons: dark ink on gold instead of white on gold. */
 .rc-layer .rc-take, .rc-layer .rc-take:hover, .rc-layer .rc-take:focus { font-weight: 900; font-size: 22px; line-height: 1; color: var(--rc-ink); text-shadow: none; }
 .rc-layer .rc-rarity { font-weight: 900; font-size: max(18px, calc(var(--h) * .036)); line-height: 1; }
+/* Album mini cards: the stage line under the card name was 12px; it reads at 16px where the card is tall enough (240px+)
+   to keep it on one line. On lower or narrower screens (1024x600, phone landscape) 16px wraps and covers the art, so it stays as shipped. */
+@media (min-height: 700px) and (min-width: 1000px) { .rc-album-item .rc-card.is-mini .rc-plate span { font-size: 16px; line-height: 1.25; } }
