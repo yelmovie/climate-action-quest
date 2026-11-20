@@ -225,6 +225,8 @@ body:has(.story-dialog[open]) .home-copy { visibility: hidden; }
 .certificate-dialog .certificate { padding: 18px 28px; }
 .certificate-dialog .certificate { min-height: 0; overflow: auto; }
 .certificate-dialog #download-certificate { flex-shrink: 0; margin: 16px auto 0; }
+/* 서명이 두 줄이 되는 좁은 세로 화면에서도 「ⓒ 아이스크림미디어」는 한 줄에 둔다. */
+.certificate-dialog .certificate > strong > span { white-space: nowrap; }
 .certificate-summary { font-size: var(--learning-text) !important; }
 .certificate-badges span { font-size: clamp(18px,1.2vw,24px); }
 .map-screen { background: #c9d9bb url('/assets/village.webp') center/cover; }

@@ -26,6 +26,8 @@
 .home-cast .home-otter { margin-left: -14px; animation-delay: -1.2s; }
 .home-bubble { position: absolute; right: 58%; bottom: calc(100% - 8px); margin: 0; padding: 10px 18px; border: 2px solid #41674e; border-radius: 20px; background: var(--cream); color: var(--ink); font-size: var(--font-small); white-space: nowrap; box-shadow: var(--shadow); animation: bubble-rise .6s .5s ease-out both; }
 .home-bubble::after { content: ""; position: absolute; right: 26px; bottom: -11px; width: 18px; height: 18px; border: 2px solid #41674e; border-width: 0 2px 2px 0; background: var(--cream); transform: rotate(45deg); }
+/* 제작·저작권 표기: 시작 화면 우측 하단에 작게. 조작 요소가 아니다. */
+.home-screen .home-credit { position: absolute; z-index: 2; right: calc(clamp(8px, 1.4vw, 24px) + env(safe-area-inset-right, 0px)); bottom: calc(clamp(8px, 1.5vh, 16px) + env(safe-area-inset-bottom, 0px)); margin: 0; padding: 3px 9px; border-radius: 999px; background: #0b2f28b8; color: #f2f7ea; font-size: clamp(10px, calc(5px + .5vw), 13px); font-weight: 700; line-height: 1.4; letter-spacing: 0; white-space: nowrap; pointer-events: none; user-select: none; }
 @keyframes home-drift { from { transform: scale(1.07); } to { transform: scale(1); } }
 @keyframes home-rise { from { opacity: 0; transform: translateY(calc(-50% + 18px)); } }
 @keyframes cast-bob { 50% { transform: translateY(-8px); } }
