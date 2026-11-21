@@ -209,6 +209,7 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 
 ## 2026-11-21 인트로·마무리 영상 (`films/intro.mp4`, `films/finale.mp4`)
 
+- (19:40) 마무리 셋째 장면(F-3)을 Gemini 앱 Veo 영상(보조 계정 2)으로 바꿨다. 이제 여섯 장면 모두 실제 영상이고, 영상 오른쪽 아래 Veo 표시는 그대로 둔다.
 - (16:50 최종) 장면 출처·계정·시각, 새 대사 `el-intro-3`·`el-finale-4`(잎새 Bee), 자막(영상 안, `burn.py`·주아체 OFL), 끝 장면 배지는 `docs/story-films-20261121/README.md`. 아래는 첫 판 기록이다.
 
 - 장면 그림 6장: GPT 이미지(Codex 내장 이미지 도구, ChatGPT 로그인)로 만들고 기존 그림(`home.webp`, `village.webp`, `design.webp`, `reward-cards/card-1-0.webp`, `ipsae-parrot.webp`, `home-otter.webp`, 악당 스프라이트)을 참고 그림으로 붙였다. 원본·프롬프트: 외장 `_scratch/films-16-20261121/frames/`, `prompts.json`.

@@ -29,10 +29,12 @@ def concat(parts, out):
 def last(src, png): run(['-sseof', '-0.5', '-i', src, '-update', '1', png])
 
 used = {}
+# 영상에서 쓸 최대 길이: F3은 6.5초 뒤 카메라가 빈 하늘로 올라가 화자(잎새)가 사라지므로, 잎새가 하늘에 보이는 6.5초에서 멈추고 남은 시간은 그 장면을 천천히 당긴다.
+CAP = {'F3': 6.5}
 def scene(key, still, out, length, kb_args):
     g = f'{C}/G-{key}.mp4'
     if os.path.exists(g) and dur(g) > 4:
-        use = min(dur(g) - 0.1, length); clip(g, f'{OUT}/{key}-g.mp4', use); rest = round(length - use, 3)
+        use = min(dur(g) - 0.1, length, CAP.get(key, length)); clip(g, f'{OUT}/{key}-g.mp4', use); rest = round(length - use, 3)
         if rest < 0.2: shutil.move(f'{OUT}/{key}-g.mp4', out); used[key] = 'gemini'; return
         last(f'{OUT}/{key}-g.mp4', f'{OUT}/{key}-g-last.png'); kb(f'{OUT}/{key}-g-last.png', f'{OUT}/{key}-hold.mp4', rest, 1.0, 1.05)
         concat([f'{OUT}/{key}-g.mp4', f'{OUT}/{key}-hold.mp4'], out); used[key] = 'gemini+hold %.1fs' % rest; return

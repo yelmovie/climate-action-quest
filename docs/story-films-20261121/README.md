@@ -15,11 +15,10 @@
 | I-3 다섯 시설로 | `i3.png` | Gemini 앱 동영상 만들기(Veo), 보조 계정 1(화면 표시 PRO·사용자 확인 유료), 2026-11-21 16:3x KST. 첫 시도(주 계정 15:51)는 물방울이 둘·악당이 함께 걸어 버림 | 잎새 Bee `intro-3` ★새 줄 `5cWis7FIWvjifSdg69Ev` |
 | F-1 다섯 불빛 | `f1.png` | Gemini 앱 동영상 만들기(Veo), 주 계정(PRO), 2026-11-21 15:52 KST | Haemi `ending-1`(기존) |
 | F-2 중앙 작전실 | `f2.png` | Gemini 앱 동영상 만들기(Veo), 주 계정(PRO), 2026-11-21 15:58 KST | Haemi `finale-2` ★ `7JR4eQmFAUGOOxmyQlmd` |
-| F-3 다음 날 아침 | `f3.png` | **임시: ffmpeg 카메라 움직임.** Gemini 두 번(주 계정 15:59 「생성 용량 초과」, 보조 계정 2 16:5x 「오류」) 모두 영상이 오지 않음 | Haemi `ending-2`(기존), 잎새 `finale-4` ★ `3c2mZvGeFCCguKR3KM2p` |
+| F-3 다음 날 아침 | `f3.png` | Gemini 앱 Veo, **보조 계정 2**(`u/1`, 요금제 표시 PRO(같은 계정 Flow 화면), 사용자 확인 2026-11-21: 유료), 19:3x 제출·19:36 받음(세 번째 시도째, 앞 두 번은 주 계정 15:59 「생성 용량 초과」·보조 계정 2 16:5x 「오류」). 10초 가운데 **앞 6.5초**만 쓴다(그 뒤 카메라가 빈 하늘로 올라가 화자 잎새가 사라짐), 남은 8초는 잎새가 하늘에 보이는 마지막 화면을 천천히 당긴다(`render3.py`의 `CAP`) | Haemi `ending-2`(기존), 잎새 `finale-4` ★ `3c2mZvGeFCCguKR3KM2p` |
 
 - 장면 그림·프롬프트: `frame-prompts.json`, Flow `flow-clips.json`, Gemini `gemini-prompts.json`. 원본·작업 폴더: 외장 `_scratch/films-16-20261121/`.
 - 합성: `render3.py`(장면 → 끝 장면 모션그래픽 → `_shared/caption-motion-20261118/burn.py` 자막 → 웹 인코딩). 자막 큐 `intro.json`, `finale.json`. 자막·목소리 대조와 음량: `CAPTION-VOICE-CHECK.md`.
 - 전환: 인트로는 시작·끝 프레임으로 이은 한 흐름(Flow), 마무리는 0.5초 디졸브·흰빛. 끝 장면: 앱 제목 그림 `logo-title.webp`과 주아체 한 줄 / 금빛 「탐구 완료!」 배지(주아체)와 잎 꽃가루.
 - 워터마크: Flow·Gemini 영상 오른쪽 아래의 작은 Veo 표시를 지우지 않았다.
-- 임시 판 장면: **F-3 하나**(나머지 5장면은 실제 영상). 2026-11-21 18:53 사용자 결정(남은 사용량은 코드·점검 먼저)으로 영상 재시도를 멈췄다. 보조 계정 3 시도는 잠금 대기 중 멈춰 제출되지 않았다(생성 0회).
-- F-3을 바꾸려면: Gemini·Flow 한도가 풀린 뒤 `f3.png`와 `gemini-prompts.json`의 `F3`로 한 편을 만들어 `_scratch/films-16-20261121/clips/G-F3.mp4`에 두고 `render3.py`를 다시 돌린다(자막·목소리 시간은 그대로).
+- 임시 판 장면: 없음(2026-11-21 19:40, 여섯 장면 모두 실제 영상). 프롬프트는 `gemini-prompts.json`의 `F3`.
