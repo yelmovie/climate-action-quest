@@ -53,7 +53,7 @@
   "bgm": true,
   "sfx": true,
   "voice": true,
-  "voiceLines": 128
+  "voiceLines": 129
  },
  "weight": {
   "firstScreenKB": 748,
