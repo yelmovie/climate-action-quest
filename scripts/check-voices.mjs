@@ -9,7 +9,7 @@ const page=await browser.newPage({viewport:process.env.VIEWPORT?JSON.parse(proce
 const base=process.env.BASE_URL||'http://127.0.0.1:5357',playback=process.argv.includes('--playback'),seen=[],errors=[];
 // This script drives the home, story, map, facility, hint, retry, badge and ending voices. Brief, learn, concept,
 // villain and certificate lines are checked by the activity/concept/map checks, so they are not expected here.
-const covered=/^(welcome|home-bubble|story|map|facility|hint|retry|badge|ending)-/;
+const covered=/^(welcome|home-bubble|story|intro|map|facility|hint|retry|badge|ending|finale)-/;
 // SKIP_VOICES=retry-5,retry-7 reports known gaps by name instead of stopping there (the default run still fails on them).
 const skipped=new Set((process.env.SKIP_VOICES||'').split(',').filter(Boolean));
 const final=(JSON.parse(await readFile('.tmp/full-journey/result.json'))).state;
@@ -21,7 +21,9 @@ async function load(route,s=final){fixture=structuredClone(s);await page.goto('a
 async function check(id){if(skipped.has(id)){console.log('SKIPPED',id);return;}const b=page.locator(`[data-voice="${id}"]`);await b.waitFor({state:'visible'});assert.equal(await b.count(),1);if(!playback&&process.env.CHECK_CLICKS)await b.click();if(playback){if(await b.getAttribute('aria-pressed')==='true')await b.click();await b.click();await page.waitForFunction(id=>window.voicePlayers.some(a=>a.src.endsWith('/'+id+'.mp3')&&!a.paused),id);await page.waitForFunction(id=>window.voicePlayers.some(a=>a.dataset.ended==='true'&&a.dataset.voiceId===id),id,{timeout:60000});assert.equal(await b.getAttribute('aria-pressed'),'false');}seen.push(id);console.log('PASS',id,playback?'actual Chrome ended':'screen connection');}
 try{
  await load('home',freshState());await check('welcome-1');await check('home-bubble-new');
- await page.locator('#mission-story').click();for(let i=1;i<=3;i++){await check('story-'+i);await page.locator('.story-next').click();}
+ // The story opens as the intro film (story-1, story-2, intro-3); the illustrated pages (story-1~3) are its fallback.
+ await page.locator('#mission-story').click();for(const id of ['story-1','story-2','intro-3']){await check(id);await page.locator('.story-next').click();}
+ await page.route('**/assets/films/**',route=>route.abort());await load('home',freshState());await page.locator('#mission-story').click();await page.locator('.story-dialog').waitFor();for(let i=1;i<=3;i++){await check('story-'+i);await page.locator('.story-next').click();}await page.unroute('**/assets/films/**');
  await load('home');await check('home-bubble-back');
  for(let i=0;i<=5;i++){const s=structuredClone(final);s.completed=s.completed.filter(n=>n<i*2);await load('map',s);await page.locator('.companion-talk').click();await check('map-'+i);}
  for(let i=0;i<5;i++){await load('facility/'+i);if(await page.locator('.guide-character').isVisible())await page.locator('.guide-character').click();await check('facility-'+i);}
@@ -29,7 +31,10 @@ try{
  for(const i of [3,5,6,7,8]){const s=structuredClone(final);s.records[i]={};await load('activity/'+i,s);if(i===3)await page.locator('[data-link="1"]').click();if(i===5)for(const n of [2,1,0])await page.locator(`[data-part="${n}"]`).click();if(i===6)await page.locator('[data-choice="2"]').click();if(i===7)await page.getByRole('button',{name:'B의 선택',exact:true}).click();if(i===8){await page.locator('[data-tool="refuge"]').click();for(let j=0;j<6;j++)await page.locator(`[data-district="${j}"]`).click();}await check('retry-'+i);}
  // Finish each final research unit through its actual controls using the earned journey's records.
  for(let i=0;i<5;i++){const n=i*2+1,s=structuredClone(final);s.completed=s.completed.filter(x=>x<n);s.records[n]={...s.records[n],done:false,workComplete:false};if(n===1){s.records[n].round=7;s.records[n].checked=true;}if(n===3){s.records[n].round=7;s.records[n].checked=true;}if(n===5){s.records[n].round=7;s.records[n].order=[0,1,2];s.records[n].checked=true;}if(n===7){s.records[n].round=4;s.records[n].practice=1;}if(n===9)s.records[n].phase=4;await load('activity/'+n,s);await page.locator(n===7?'.submit':n===9?'.run':'.check').click();await check('badge-'+i);}
- const s=structuredClone(final);s.finalized=false;await load('ending',s);await check('ending-1');await load('ending');await check('ending-2');
+ const s=structuredClone(final);s.finalized=false;await load('ending',s);await check('ending-1');
+ // Finishing plays the finale film once: ending-1, finale-2, ending-2, finale-4 (the screen's own ending-1 button stays behind it).
+ await page.locator('#finalize').click();await page.locator('.story-film').waitFor();for(const id of ['finale-2','ending-2','finale-4']){await page.locator('.story-film .story-next').click();await page.locator(`.story-film [data-voice="${id}"]`).waitFor({state:'visible'});seen.push(id);console.log('PASS',id,'film');}
+ await load('ending');await check('ending-2');
  assert.deepEqual([...new Set(seen)].sort(),Object.keys(voiceLines).filter(id=>covered.test(id)&&!skipped.has(id)).sort());assert.deepEqual(errors,[]);
  await mkdir('.tmp/voice-check',{recursive:true});await writeFile('.tmp/voice-check/'+(playback?'playback':'connections')+'-'+page.viewportSize().width+'x'+page.viewportSize().height+'.json',JSON.stringify({seen,errors,playback,humanListening:false},null,2));
 }finally{await browser.close();}

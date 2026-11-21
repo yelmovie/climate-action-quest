@@ -209,6 +209,8 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 
 ## 2026-11-21 인트로·마무리 영상 (`films/intro.mp4`, `films/finale.mp4`)
 
+- (16:50 최종) 장면 출처·계정·시각, 새 대사 `el-intro-3`·`el-finale-4`(잎새 Bee), 자막(영상 안, `burn.py`·주아체 OFL), 끝 장면 배지는 `docs/story-films-20261121/README.md`. 아래는 첫 판 기록이다.
+
 - 장면 그림 6장: GPT 이미지(Codex 내장 이미지 도구, ChatGPT 로그인)로 만들고 기존 그림(`home.webp`, `village.webp`, `design.webp`, `reward-cards/card-1-0.webp`, `ipsae-parrot.webp`, `home-otter.webp`, 악당 스프라이트)을 참고 그림으로 붙였다. 원본·프롬프트: 외장 `_scratch/films-16-20261121/frames/`, `prompts.json`.
 - 움직이는 장면 2컷(인트로 앞 두 장면): Google Flow `Omni 1.2 Flash`, 시작·끝 프레임 지정(프레임 → 동영상), 2026-11-21. 프롬프트 `_scratch/films-16-20261121/clips.json`. 이 지역은 Flow 워터마크 표시가 필수라 화면 구석의 작은 표시를 그대로 둔다.
 - 나머지 장면(인트로 마지막·마무리 3장면): 같은 그림을 ffmpeg로 천천히 확대·이동하고 디졸브로 이은 장면. 제목 로고는 `logo-title.webp`를 ffmpeg로 얹었다(`_scratch/films-16-20261121/render.py`).

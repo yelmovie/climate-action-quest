@@ -61,7 +61,7 @@ try{
   }
   await page.getByRole('button',{name:'설정',exact:true}).click();await page.waitForTimeout(220);await inspect('settings',w,h);
   for(let i=0;i<4;i++){await page.locator('.settings-section').nth(i).locator('summary').first().click();await inspect('settings-section-'+i,w,h);}
-  await page.locator('#replay-story').click();await page.waitForTimeout(220);await inspect('story',w,h);for(let i=2;i<=3;i++){await page.locator('.story-next').click();await inspect('story-'+i,w,h);}await page.locator('.dialog-close').click();
+  await page.locator('#replay-story').click();await page.waitForTimeout(220);await inspect('story',w,h);for(let i=2;i<=3;i++){await page.locator('.story-next').click();await inspect('story-'+i,w,h);}await page.locator('.story-film .film-skip').click();
   const scenarios=[
    [0,'observation-recorded',{open:0,reveal:100,compared:['summer'],collected:['summer']}],
    [1,'judgment-feedback',{round:6,selected:0,checked:true,feedback:'같은 기준으로 여러 해의 평균을 비교해 긴 변화의 경향을 찾아요.'}],
@@ -80,7 +80,7 @@ try{
   ];
   for(const [i,name,record] of scenarios){await loadFixture('activity/'+i,i,record);await inspect(name,w,h);}
   for(let i=0;i<10;i++){await loadFixture('facility/'+Math.floor(i/2));await page.locator(`[data-clip="${i}"]`).click();await page.waitForFunction(()=>document.querySelector('video')?.readyState>=2);await page.waitForTimeout(220);await inspect('concept-'+i,w,h);await page.locator('.dialog-close').click();}
-  await loadFixture('ending');await inspect('ending',w,h);await page.locator('#finalize').click();await page.locator('.story-film').waitFor();await page.waitForTimeout(220);await inspect('finale-film',w,h);for(let i=0;i<3&&!(await page.locator('.certificate-dialog').count());i++)await page.locator('.story-film .story-next').click();await page.waitForTimeout(220);await inspect('certificate',w,h);await page.locator('.dialog-close').click();await page.getByRole('button',{name:'설정',exact:true}).click();await page.locator('#reset-progress').click();await page.waitForTimeout(220);await inspect('reset-confirmation',w,h);
+  await loadFixture('ending');await inspect('ending',w,h);await page.locator('#finalize').click();await page.locator('.story-film, .certificate-dialog').first().waitFor();await page.waitForTimeout(220);await inspect('finale-film',w,h);for(let i=0;i<6&&!(await page.locator('.certificate-dialog').count());i++)await page.locator('.story-film .story-next').click();await page.waitForTimeout(220);await inspect('certificate',w,h);await page.locator('.dialog-close').click();await page.getByRole('button',{name:'설정',exact:true}).click();await page.locator('#reset-progress').click();await page.waitForTimeout(220);await inspect('reset-confirmation',w,h);
  }
  await writeFile(out+(viewport?'/layout-'+viewport+'.json':'/layout.json'),JSON.stringify({results,errors},null,2));
  console.log(JSON.stringify({screens:results.length,errors,clipped:results.filter(r=>r.clipped.length||r.overflowX),overlaps:results.filter(r=>r.overlaps.length),small:results.filter(r=>r.small.length),scroll:results.filter(r=>r.scroll>20).map(({name,w,h,scroll})=>({name,w,h,scroll}))},null,2));
