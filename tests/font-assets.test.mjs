@@ -32,3 +32,22 @@ test('로딩·저장 보호 안내와 동적 스타일의 font 축약도 나눔�
     }
   }
 });
+
+// scripts/subset-fonts.py keeps the screen text in small subset files. New on-screen text with a character outside the
+// subset still shows (the official file is the fallback), but it would download the full font again: regenerate the subset.
+test('화면 글자는 모두 부분 글꼴 범위 안에 있다(벗어나면 scripts/subset-fonts.py를 다시 돌린다)', () => {
+  const styles = readFileSync(new URL('src/styles.css', root), 'utf8');
+  const block = styles.slice(styles.indexOf('/* font-subset:start */'), styles.indexOf('/* font-subset:end */'));
+  const inRange = (spec, code) => spec.split(',').some(part => { const [a, b = a] = part.trim().slice(2).split('-').map(h => parseInt(h, 16)); return code >= a && code <= b; });
+  const face = file => block.match(new RegExp(`url\\("/assets/fonts/${file}"\\)[^}]*unicode-range: ([^;]+);`))[1];
+  for (const weight of [400, 700]) assert.ok(readFileSync(new URL(`assets/fonts/climate-body-${weight}.woff2`, root)).length < 100000);
+  const subset = face('climate-body-400\\.woff2'), full = face('NanumSquareNeoTTF-bRg\\.woff2');
+  const outside = new Set();
+  for (const file of [...readdirSync(new URL('src/', root)).map(f => 'src/' + f), 'index.html', 'manifest.webmanifest']) {
+    if (file.includes('/._') || !/\.(css|js|html|webmanifest)$/.test(file)) continue;
+    let text = readFileSync(new URL(file, root), 'utf8');
+    if (file === 'src/styles.css') text = text.replace(block, '');
+    for (const ch of text) { const code = ch.codePointAt(0); if (code >= 0x20 && !inRange(subset, code) && inRange(full, code)) outside.add(ch); }
+  }
+  assert.deepEqual([...outside], []);
+});
