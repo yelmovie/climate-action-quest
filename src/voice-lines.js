@@ -140,6 +140,11 @@ export const voiceLines = {
     "text": "처음과 같은 날씨 조건이어야 공정하게 비교할 수 있어. 좋은 설계는 바꾸지 않고 다시 확인해도 돼!",
     "target": "assets/audio/voices/hint-9.mp3"
   },
+  "intro-2": {
+    "speaker": "mulbangul",
+    "text": "지도 속 다섯 시설이 모두 깜깜해! 누가 날씨 기록을 바꿔치기한 걸까? 그 단서는 다섯 곳에 숨어 있을 거야.",
+    "target": "assets/audio/voices/el-intro-2.mp3"
+  },
   "intro-3": {
     "speaker": "ipsae",
     "text": "대원, 네 도움이 필요해! 다섯 시설에 다시 불을 켜러 같이 가자!",

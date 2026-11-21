@@ -21,8 +21,8 @@ async function load(route,s=final){fixture=structuredClone(s);await page.goto('a
 async function check(id){if(skipped.has(id)){console.log('SKIPPED',id);return;}const b=page.locator(`[data-voice="${id}"]`);await b.waitFor({state:'visible'});assert.equal(await b.count(),1);if(!playback&&process.env.CHECK_CLICKS)await b.click();if(playback){if(await b.getAttribute('aria-pressed')==='true')await b.click();await b.click();await page.waitForFunction(id=>window.voicePlayers.some(a=>a.src.endsWith('/'+id+'.mp3')&&!a.paused),id);await page.waitForFunction(id=>window.voicePlayers.some(a=>a.dataset.ended==='true'&&a.dataset.voiceId===id),id,{timeout:60000});assert.equal(await b.getAttribute('aria-pressed'),'false');}seen.push(id);console.log('PASS',id,playback?'actual Chrome ended':'screen connection');}
 try{
  await load('home',freshState());await check('welcome-1');await check('home-bubble-new');
- // The story opens as the intro film (story-1, story-2, intro-3); the illustrated pages (story-1~3) are its fallback.
- await page.locator('#mission-story').click();for(const id of ['story-1','story-2','intro-3']){await check(id);await page.locator('.story-next').click();}
+ // The story opens as the intro film (story-1, intro-2, intro-3); the illustrated pages (story-1~3) are its fallback.
+ await page.locator('#mission-story').click();for(const id of ['story-1','intro-2','intro-3']){await check(id);await page.locator('.story-next').click();}
  await page.route('**/assets/films/**',route=>route.abort());await load('home',freshState());await page.locator('#mission-story').click();await page.locator('.story-dialog').waitFor();for(let i=1;i<=3;i++){await check('story-'+i);await page.locator('.story-next').click();}await page.unroute('**/assets/films/**');
  await load('home');await check('home-bubble-back');
  for(let i=0;i<=5;i++){const s=structuredClone(final);s.completed=s.completed.filter(n=>n<i*2);await load('map',s);await page.locator('.companion-talk').click();await check('map-'+i);}

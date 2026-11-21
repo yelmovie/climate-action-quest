@@ -3266,6 +3266,31 @@
    "format": "mp3 mono 44.1kHz 96kbps",
    "createdAt": "2026-11-21",
    "editing": "vf.py norm; no word cuts"
+  },
+  {
+   "id": "intro-2",
+   "speaker": "mulbangul",
+   "speakerName": "물방울",
+   "text": "지도 속 다섯 시설이 모두 깜깜해! 누가 날씨 기록을 바꿔치기한 걸까? 그 단서는 다섯 곳에 숨어 있을 거야.",
+   "spoken": "지도 속 다섯 시설이 모두 깜깜해! 누가 날씨 기록을 바꿔치기한 걸까? 그 단서는 다섯 곳에 숨어 있을 거야.",
+   "target": "assets/audio/voices/el-intro-2.mp3",
+   "file": "el-intro-2.mp3",
+   "voice": "SK",
+   "voiceId": "vn80HZNY7EsdYzoFRYZm",
+   "model": "ElevenLabs v4",
+   "generatedBy": "ElevenLabs API",
+   "requestId": "9m1OAgkCogpII56nI940",
+   "license": "ElevenLabs paid plan, commercial use",
+   "asrHeard": "지도 속 다섯 시설이 모두 깜깜해. 누가 날씨 기록을 바꿔치기 한 걸까? 그 단서는 다섯 곳에 숨어 있을 거야.",
+   "asrSimilarity": 1.0,
+   "asrEndSimilarity": 1.0,
+   "duration": 7.31,
+   "lufs": -16.9,
+   "peak": -1.55,
+   "sha256": "8e9722e7ef8399feedae764d230c3f64bf78591d89955ff3f8d456f9cd63b0f1",
+   "format": "mp3 mono 44.1kHz 96kbps",
+   "createdAt": "2026-11-21",
+   "editing": "+9.5 dB with limiter (raw was -23 LUFS); no word cuts"
   }
  ]
 }
