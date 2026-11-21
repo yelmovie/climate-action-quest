@@ -130,6 +130,7 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 - 원본: https://campaign.naver.com/nanumsquare_neo/download/NaverNanumSquareNeo.zip
 - 라이선스: SIL Open Font License 1.1. 전체 저작권 안내·전문은 `fonts/NanumSquareNeo-OFL.txt`.
 - 기존 영상·삽화에 포함된 글자는 영상 제작 당시 글꼴을 유지한다.
+- 2026-11-21 화면용 부분 글꼴: `fonts/climate-body-400.woff2`·`climate-body-700.woff2`는 위 원본에서 앱 화면 글자(704자)만 남긴 파일이다(`scripts/subset-fonts.py`, fontTools). OFL의 수정본이라 글꼴 안쪽 이름을 예약 글꼴 이름(NanumSquareNeo)이 아닌 「Climate Lab Body」로 바꿨고, 라이선스 전문은 같은 `fonts/NanumSquareNeo-OFL.txt`를 따른다. 원본 두 파일은 그대로 두고, 부분 글꼴에 없는 글자가 나오면 원본을 받아 쓴다. 내려받는 인증서 SVG에는 지금처럼 원본을 넣는다.
 
 ## 과학 개념 장면 보강 · 2026-11-12
 
@@ -168,6 +169,10 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 ## 2026-11-18 캐릭터 목소리 통일·팝업 음성
 
 잎새·물방울의 나머지 지도 안내·힌트·다시 생각하기 대사, 이야기·배지·엔딩·인증서 내레이션, 개념 영상 자막, 도움말 개념·안내, 악당 말풍선 음성(`audio/voices/el-*.mp3`, 109줄)을 ElevenLabs 공식 API(유료 Creator 요금제, 상업 이용 가능) `eleven_v4`로 만들었다. 캐릭터마다 한 목소리만 쓴다(잎새 Bee, 물방울 SK, 내레이터 Haemi, 날씨 바꿔치기 악당 Harry). 실제 사람의 목소리를 복제하지 않았다. 요청 ID·받아쓰기·SHA-256은 `docs/VOICE-FILL-20261118.json`과 `audio/voices/manifest.json`에 있다.
+
+## 2026-11-21 다시 생각하기 음성 2줄 새 녹음
+
+활동 6·8(`retry-5`·`retry-7`)의 화면 오답 문구가 11-12·11-14에 바뀌어 옛 녹음이 붙지 않던 것을 같은 목소리로 다시 만들었다(`audio/voices/el-retry-5-v2.mp3` 물방울 SK `vn80HZNY7EsdYzoFRYZm`, `el-retry-7-v2.mp3` 잎새 Bee `FhznnhFhq61uh1kbvfw1`, `eleven_v4`, ElevenLabs 공식 API·유료 Creator 요금제, 한 줄당 한 번 생성). 요청 ID·받아쓰기·음량·SHA-256은 `audio/voices/manifest.json`과 `docs/VOICE-FILL-20261118.json`. 옛 파일 `el-retry-5.mp3`·`el-retry-7.mp3`는 지우지 않았고 앱이 부르지 않는다.
 
 ## 2026-11-18 성취 카드
 

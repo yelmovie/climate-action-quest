@@ -4,7 +4,7 @@ import {createRequire} from 'node:module';
 import {freshState} from '../src/state.js';
 import {voiceLines} from '../src/voice-lines.js';
 const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_modules/playwright-core');
-const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--autoplay-policy=no-user-gesture-required']});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--autoplay-policy=no-user-gesture-required','--mute-audio']});
 const page=await browser.newPage({viewport:process.env.VIEWPORT?JSON.parse(process.env.VIEWPORT):{width:1280,height:800},serviceWorkers:'block',reducedMotion:'reduce'});
 const base=process.env.BASE_URL||'http://127.0.0.1:5357',playback=process.argv.includes('--playback'),seen=[],errors=[];
 // This script drives the home, story, map, facility, hint, retry, badge and ending voices. Brief, learn, concept,

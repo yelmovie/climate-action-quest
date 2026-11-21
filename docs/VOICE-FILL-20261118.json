@@ -192,17 +192,27 @@
    "voiceName": "Bee",
    "model": "eleven_v4",
    "provider": "ElevenLabs API",
-   "requestId": "3VM5FFlp2pI6UPC33znY",
-   "text": "기후 부담과 사용 자원은 낮은 쪽, 생활 만족은 유지되는 쪽을 찾아보세요.",
-   "prompt": "기후 부담과 사용 자원은 낮은 쪽, 생활 만족은 유지되는 쪽을 찾아보세요.",
-   "asr": "기후부담과 사용자원은 낮은 쪽, 생활 만족은 유지되는 쪽을 찾아보세요.",
+   "requestId": "SG91bPHk8nO6QMXL39vJ",
+   "text": "건강·생활을 지키며 기후 부담과 사용 자원을 줄인 쪽을 찾아요.",
+   "prompt": "건강, 생활을 지키며 기후 부담과 사용 자원을 줄인 쪽을 찾아요.",
+   "asr": "건강, 생활을 지키며 기후부담과 사용자원을 줄인 쪽을 찾아요.",
    "match": 1.0,
    "end": 1.0,
-   "lufs": -16.6,
-   "peakDbtp": -1.88,
-   "duration": 6.09,
-   "sha256": "ca7dbac30521ebb79f7ba08938e2f2aa046e6fcf3b09604e50daf4d002b55707",
-   "file": "assets/audio/voices/el-retry-7.mp3"
+   "lufs": -16.52,
+   "peakDbtp": -1.78,
+   "duration": 5.51,
+   "sha256": "0991e0b4257f40737dc4915ae892fca31a71945f5aa6384af564bc30ccd60336",
+   "file": "assets/audio/voices/el-retry-7-v2.mp3",
+   "rerecorded": {
+    "date": "2026-11-21",
+    "why": "화면 오답 문구가 바뀌어(11-12·11-14) 옛 녹음이 붙지 않음(B18). 사용자 결정 「기존 목소리로 새 녹음」, 같은 voiceId·eleven_v4, 한 줄당 한 번 생성",
+    "previous": {
+     "requestId": "3VM5FFlp2pI6UPC33znY",
+     "text": "기후 부담과 사용 자원은 낮은 쪽, 생활 만족은 유지되는 쪽을 찾아보세요.",
+     "sha256": "ca7dbac30521ebb79f7ba08938e2f2aa046e6fcf3b09604e50daf4d002b55707",
+     "file": "assets/audio/voices/el-retry-7.mp3"
+    }
+   }
   },
   {
    "key": "retry-8",
@@ -268,17 +278,27 @@
    "voiceName": "SK",
    "model": "eleven_v4",
    "provider": "ElevenLabs API",
-   "requestId": "dPP2uaC3FCVm78JlkaWK",
-   "text": "환경의 변화 → 생활·환경의 영향 → 필요한 대응 순서로 생각해 보세요. 카드를 끌어 순서를 바꿀 수 있어요.",
-   "prompt": "환경의 변화, 생활, 환경의 영향, 필요한 대응 순서로 생각해 보세요. 카드를 끌어 순서를 바꿀 수 있어요.",
-   "asr": "환경의 변화, 생활, 환경의 영향, 필요한 대응 순서로 생각해보세요 카드를 끌어 순서를 바꿀 수 있어요",
-   "match": 1.0,
+   "requestId": "A1picnWEqwp7XMRDY97u",
+   "text": "놓은 두 카드를 비교해요. 뒤 카드의 일이 일어나려면 앞 카드에서 무엇이 달라져야 할까요? 카드를 누르면 빼고 다시 놓을 수 있어요.",
+   "prompt": "놓은 두 카드를 비교해요. 뒤 카드의 일이 일어나려면 앞 카드에서 무엇이 달라져야 할까요? 카드를 누르면 빼고 다시 놓을 수 있어요.",
+   "asr": "놓은 두 카드를 비교해요. 뒤 카드에 일이 일어나려면 앞 카드에서 무엇이 달라져야 할까요? 카드를 누르면 빼고 다시 놓을 수 있어요.",
+   "match": 0.981,
    "end": 1.0,
-   "lufs": -17.85,
-   "peakDbtp": -1.63,
-   "duration": 8.41,
-   "sha256": "335f442a50fe5b467ea79c99b520099d3abc72277ec7928dc712c4e042a75508",
-   "file": "assets/audio/voices/el-retry-5.mp3"
+   "lufs": -17.21,
+   "peakDbtp": -1.58,
+   "duration": 9.59,
+   "sha256": "ea0dccf546fa82d8883ec7675aca138c90616bc73aa4fe2dcd99a25f8aaafa69",
+   "file": "assets/audio/voices/el-retry-5-v2.mp3",
+   "rerecorded": {
+    "date": "2026-11-21",
+    "why": "화면 오답 문구가 바뀌어(11-12·11-14) 옛 녹음이 붙지 않음(B18). 사용자 결정 「기존 목소리로 새 녹음」, 같은 voiceId·eleven_v4, 한 줄당 한 번 생성",
+    "previous": {
+     "requestId": "dPP2uaC3FCVm78JlkaWK",
+     "text": "환경의 변화 → 생활·환경의 영향 → 필요한 대응 순서로 생각해 보세요. 카드를 끌어 순서를 바꿀 수 있어요.",
+     "sha256": "335f442a50fe5b467ea79c99b520099d3abc72277ec7928dc712c4e042a75508",
+     "file": "assets/audio/voices/el-retry-5.mp3"
+    }
+   }
   },
   {
    "key": "hint-5",

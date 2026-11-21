@@ -147,8 +147,8 @@ export const voiceLines = {
   },
   "retry-5": {
     "speaker": "mulbangul",
-    "text": "환경의 변화 → 생활·환경의 영향 → 필요한 대응 순서로 생각해 보세요. 카드를 끌어 순서를 바꿀 수 있어요.",
-    "target": "assets/audio/voices/el-retry-5.mp3"
+    "text": "놓은 두 카드를 비교해요. 뒤 카드의 일이 일어나려면 앞 카드에서 무엇이 달라져야 할까요? 카드를 누르면 빼고 다시 놓을 수 있어요.",
+    "target": "assets/audio/voices/el-retry-5-v2.mp3"
   },
   "retry-6": {
     "speaker": "ipsae",
@@ -157,8 +157,8 @@ export const voiceLines = {
   },
   "retry-7": {
     "speaker": "ipsae",
-    "text": "기후 부담과 사용 자원은 낮은 쪽, 생활 만족은 유지되는 쪽을 찾아보세요.",
-    "target": "assets/audio/voices/el-retry-7.mp3"
+    "text": "건강·생활을 지키며 기후 부담과 사용 자원을 줄인 쪽을 찾아요.",
+    "target": "assets/audio/voices/el-retry-7-v2.mp3"
   },
   "retry-8": {
     "speaker": "ipsae",
