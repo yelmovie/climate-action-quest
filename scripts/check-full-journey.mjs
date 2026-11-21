@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {evidenceSites,humanSites,relationCases,effectChains,dailyCases,compareCaseIndices,experimentLevels} from '../src/activity-data.js';
 const require=createRequire(import.meta.url),{chromium}=require('../.tools/node_modules/playwright-core');
-const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--mute-audio']});
 const context=await browser.newContext({viewport:{width:1280,height:800},hasTouch:true}),page=await context.newPage(),errors=[],checks=[];
 const base=process.env.BASE_URL||'http://127.0.0.1:5357',out='.tmp/full-journey';await mkdir(out,{recursive:true});
 page.on('pageerror',e=>errors.push(e.message));
@@ -23,7 +23,7 @@ try{
  const good=['shade','pond','shade','pond','trees','trees'];for(let i=0;i<6;i++){await page.locator(`[data-tool="${good[i]}"]`).click();await page.locator(`[data-district="${i}"]`).click();units++;}await page.locator('.submit').click();await done(8);
  for(let i=0;i<3;i++)await page.locator('.run').click();const before=(await saved()).records[9].before;assert.deepEqual(Object.keys(before).sort(),['heat','rain']);units+=2;
  await page.locator('.retest').click();await page.reload({waitUntil:'domcontentloaded'});assert.equal((await saved()).records[9].phase,3);await page.locator('.run').click();units+=2;await page.locator('.run').click();await done(9);
- assert.equal(units,72);await page.locator('.map-action').waitFor({timeout:30000});await page.keyboard.press('Escape');await page.locator('.map-action').click();await page.waitForURL(/#ending$/,{timeout:90000});await page.locator('#finalize').click();await page.locator('.certificate-dialog').waitFor();assert.equal((await saved()).finalized,true);
+ assert.equal(units,72);await page.locator('.map-action').waitFor({timeout:30000});await page.keyboard.press('Escape');await page.locator('.map-action').click();await page.waitForURL(/#ending$/,{timeout:90000});await page.locator('#finalize').click();await page.locator('.story-film').waitFor();for(let i=0;i<3&&!(await page.locator('.certificate-dialog').count());i++)await page.locator('.story-film .story-next').click();await page.locator('.certificate-dialog').waitFor();assert.equal((await saved()).finalized,true);
  const dl=page.waitForEvent('download');await page.locator('#download-certificate').click();const file=await dl;assert.match(file.suggestedFilename(),/인증서/);await file.saveAs(out+'/certificate.svg');
  const exported=await readFile(out+'/certificate.svg','utf8');assert.equal((exported.match(/data:font\/woff2;base64,/g)||[]).length,2);assert.match(exported,/OPEN FONT LICENSE/);assert.match(exported,/font-family="NanumSquareNeo, sans-serif"/);
  await page.screenshot({path:out+'/certificate.png'});

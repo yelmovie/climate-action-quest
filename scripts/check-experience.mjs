@@ -4,7 +4,7 @@ import {freshState} from '../src/state.js';
 const require=createRequire(import.meta.url);
 let chromium;try{({chromium}=require('playwright-core'));}catch{({chromium}=require('../.tools/node_modules/playwright-core'));}
 const out='.tmp/experience-check';await mkdir(out,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--disable-crash-reporter','--disable-breakpad'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--disable-crash-reporter','--disable-breakpad','--mute-audio'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
 const page=await browser.newPage({serviceWorkers:'block'}),errors=[];page.on('requestfailed',req=>{if(req.failure()?.errorText!=='net::ERR_ABORTED')console.warn('Failed request',req.url(),req.failure()?.errorText);});page.on('pageerror',e=>errors.push(e.message));
 const state=freshState();state.adminUnlocked=true;state.introSeen=true;
 for(let i=0;i<10;i++){state.records[i]={done:true,workComplete:true};state.completed.push(i);}
@@ -80,7 +80,7 @@ try{
   ];
   for(const [i,name,record] of scenarios){await loadFixture('activity/'+i,i,record);await inspect(name,w,h);}
   for(let i=0;i<10;i++){await loadFixture('facility/'+Math.floor(i/2));await page.locator(`[data-clip="${i}"]`).click();await page.waitForFunction(()=>document.querySelector('video')?.readyState>=2);await page.waitForTimeout(220);await inspect('concept-'+i,w,h);await page.locator('.dialog-close').click();}
-  await loadFixture('ending');await inspect('ending',w,h);await page.locator('#finalize').click();await page.waitForTimeout(220);await inspect('certificate',w,h);await page.locator('.dialog-close').click();await page.getByRole('button',{name:'설정',exact:true}).click();await page.locator('#reset-progress').click();await page.waitForTimeout(220);await inspect('reset-confirmation',w,h);
+  await loadFixture('ending');await inspect('ending',w,h);await page.locator('#finalize').click();await page.locator('.story-film').waitFor();await page.waitForTimeout(220);await inspect('finale-film',w,h);for(let i=0;i<3&&!(await page.locator('.certificate-dialog').count());i++)await page.locator('.story-film .story-next').click();await page.waitForTimeout(220);await inspect('certificate',w,h);await page.locator('.dialog-close').click();await page.getByRole('button',{name:'설정',exact:true}).click();await page.locator('#reset-progress').click();await page.waitForTimeout(220);await inspect('reset-confirmation',w,h);
  }
  await writeFile(out+(viewport?'/layout-'+viewport+'.json':'/layout.json'),JSON.stringify({results,errors},null,2));
  console.log(JSON.stringify({screens:results.length,errors,clipped:results.filter(r=>r.clipped.length||r.overflowX),overlaps:results.filter(r=>r.overlaps.length),small:results.filter(r=>r.small.length),scroll:results.filter(r=>r.scroll>20).map(({name,w,h,scroll})=>({name,w,h,scroll}))},null,2));

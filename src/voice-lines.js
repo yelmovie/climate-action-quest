@@ -140,6 +140,11 @@ export const voiceLines = {
     "text": "처음과 같은 날씨 조건이어야 공정하게 비교할 수 있어. 좋은 설계는 바꾸지 않고 다시 확인해도 돼!",
     "target": "assets/audio/voices/hint-9.mp3"
   },
+  "finale-2": {
+    "speaker": "narrator",
+    "text": "다섯 메달이 하나로 이어졌어요. 이제 중앙 작전실에서 탐구 인증서를 받아요.",
+    "target": "assets/audio/voices/el-finale-2.mp3"
+  },
   "retry-3": {
     "speaker": "ipsae",
     "text": "처음 활동과 마지막 설명을 함께 이어 주는 이유인지 다시 살펴보세요.",

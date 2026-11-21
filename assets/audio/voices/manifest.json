@@ -3191,6 +3191,31 @@
    "format": "mp3 mono 44.1kHz 96kbps",
    "createdAt": "2026-11-18",
    "editing": "vf.py norm; no word cuts"
+  },
+  {
+   "id": "finale-2",
+   "speaker": "narrator",
+   "speakerName": "내레이터",
+   "text": "다섯 메달이 하나로 이어졌어요. 이제 중앙 작전실에서 탐구 인증서를 받아요.",
+   "spoken": "다섯 메달이 하나로 이어졌어요. 이제 중앙 작전실에서 탐구 인증서를 받아요.",
+   "target": "assets/audio/voices/el-finale-2.mp3",
+   "file": "el-finale-2.mp3",
+   "voice": "Haemi",
+   "voiceId": "ZjAPD4f11zlnEnZpKDgo",
+   "model": "ElevenLabs v4",
+   "generatedBy": "ElevenLabs API",
+   "requestId": "7JR4eQmFAUGOOxmyQlmd",
+   "license": "ElevenLabs paid plan, commercial use",
+   "asrHeard": "다섯 메달이 하나로 이어졌어요 이제 중앙작전실에서 탐구 인증서를 받아요",
+   "asrSimilarity": 1.0,
+   "asrEndSimilarity": 1.0,
+   "duration": 6.16,
+   "lufs": -16.67,
+   "peak": -1.58,
+   "sha256": "0304109b5017a1163e47fa51ab3d097d9e9063ac8812df68829722ad17f1c37b",
+   "format": "mp3 mono 44.1kHz 96kbps",
+   "createdAt": "2026-11-21",
+   "editing": "vf.py norm; no word cuts"
   }
  ]
 }

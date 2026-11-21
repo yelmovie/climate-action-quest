@@ -18,7 +18,7 @@ const invalid=await fetch(base+'/assets/concepts/water.mp4',{headers:{Range:'byt
 assert.equal(invalid.status,fullResponse?200:416);
 if(fullResponse)assert.deepEqual(Buffer.from(await invalid.arrayBuffer()),original);
 checks.push(fullResponse?'Workers MP4 full response matches source + MIME':'server MP4 byte ranges + MIME');
-const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--no-sandbox'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
+const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--no-sandbox','--mute-audio'],env:{...process.env,TEMP:process.cwd()+'/.tmp',TMP:process.cwd()+'/.tmp'}});
 const context=await browser.newContext({viewport:{width:1280,height:800}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
 const state=freshState();state.introSeen=true;for(let i=0;i<10;i++){state.completed.push(i);state.records[i]={done:true,workComplete:true};}state.records[8].plan=['shade','pond','shade','pond','trees','trees'];
 await page.addInitScript(state=>{if(location.protocol.startsWith('http'))localStorage.setItem('climate-future:v1',JSON.stringify(state));window.soundEvents=[];const native=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){if(this.tagName==='AUDIO')window.soundEvents.push({src:this.src,volume:this.volume});return native.call(this);};},state);
