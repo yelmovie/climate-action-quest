@@ -1,6 +1,8 @@
 # 16 기후 미래 작전실 · 권리 장부 (2026-11-21)
 
-**요약: 전체 28줄 · 확인됨 8 · 근거 약함 16 · 출처 미확인 4 · 배포되는 그림 파일 75개 중 출처 미확인 4개**(`assets/map-encounters/villain-left.png`, `villain-right.png`, `assets/npc-dialogue/ipsae.webp`, `mulbangul.webp`).
+**요약(2026-11-21 3-2a 갱신): 전체 30줄 · 확인됨 11 · 근거 약함 19 · 출처 미확인 0 · 배포되는 그림 파일 75개 중 출처 미확인 0개.** 아침 장부의 출처 미확인 4줄(IMG-12·IMG-13·VID-03·FNT-02)을 `_shared/CODEX-IMAGE-RECORDS-20261121.md` 방법대로 생성·작업 기록과 이었다. 그림 두 줄은 만든 도구·시각·프롬프트 첫 구절까지 찾았지만 이미지 도구 요금제·약관 기록이 없어 다른 생성 그림처럼 「근거 약함」이다. 새로 FNT-03(화면 부분 글꼴)·VOX-06(다시 생각하기 새 녹음)을 더했다.
+
+(아침 요약: 전체 28줄 · 확인됨 8 · 근거 약함 16 · 출처 미확인 4 · 배포되는 그림 파일 75개 중 출처 미확인 4개(`assets/map-encounters/villain-left.png`, `villain-right.png`, `assets/npc-dialogue/ipsae.webp`, `mulbangul.webp`).)
 
 ## 범위와 기준
 
@@ -28,8 +30,8 @@
 | **IMG-09** 성취 카드 10장: `assets/reward-cards/card-{1..5}-{0..4}.webp`, `thumb-{1..5}-{0..4}.webp` | ChatGPT 앱의 Codex 내장 이미지 도구(GPT 이미지). `field-team.webp`·`ipsae-parrot*.webp`·시설 배경을 화풍 참고로 붙임. 글자·테두리는 코드(`src/reward-cards.js`, `src/reward-cards.css`) | 2026-11-18. 원본 PNG `_scratch/reward-cards-20261118/gen/16/`(Git 제외). 프롬프트 기록 위치는 CREDITS에 없음 | CREDITS: "생성 계정의 요금제·약관에 따른 이용 권리는 … 생성 이미지와 같은 조건으로 확인"(미확인) | `assets/CREDITS.md`(2026-11-18 성취 카드), `_shared/reward-cards/INTEGRATION.md`(코드 연결만, 그림 출처 없음) | 근거 약함 · 빠진 것: 프롬프트 기록, 요금제·약관 |
 | **IMG-10** 지도 대원·동료 시트 2장: `assets/map-encounters/hero.png`, `ally.png` | 이 프로젝트용 새 자세를 "생성·알파 정리·검수"(도구 이름은 이 줄에 없음. 같은 문서의 악당 시안은 "Codex 기본 이미지 도구") | 2026-11-14 커밋 `50de79a`. `_shared/MAP-VILLAINS-HANDOFF-20261114.md` 114·116행, 작업 폴더 `_scratch/villain-resume-20261114/16-sheets/` | 기록 없음 | `_shared/MAP-VILLAINS-HANDOFF-20261114.md`, `docs/MAP-VILLAIN-HANDOFF-20261114.md`(설계·대사 계획만) | 근거 약함 · 빠진 것: 생성 도구 이름, 프롬프트, 요금제·약관 |
 | **IMG-11** 악당 전투 자세 2장: `assets/map-encounters/villain-poses-left.png`, `villain-poses-right.png` | "16은 … 신규 악당 동작을 더했다", "새로 그렸다"(도구 이름 없음) | 2026-11-14 커밋 `1ad931f`. `_shared/MAP-VILLAINS-HANDOFF-20261114.md` 131행, `_scratch/map-redraw-20261114/README.md` 9행 | 기록 없음 | `_shared/MAP-VILLAINS-HANDOFF-20261114.md` | 근거 약함 · 빠진 것: 생성 도구, 프롬프트, 요금제·약관 |
-| **IMG-12** 옛 악당 2장: `assets/map-encounters/villain-left.png`, `villain-right.png` | 기록 못 찾음 | 2026-11-14 커밋 `50de79a`에 추가된 사실만 있음. 이 두 파일을 만든 기록은 저장소·`_shared` 어디에도 없음 | 기록 없음 | (없음) 커밋 `50de79a` | **출처 미확인** · 코드에서 파일 이름으로 부르는 곳을 못 찾았다(배포본에는 들어감) |
-| **IMG-13** 대화 초상 2장: `assets/npc-dialogue/ipsae.webp`, `mulbangul.webp` | 기록 못 찾음 | 2026-11-13 커밋 `85961fe`("portraits")에 추가된 사실만 있음. `_shared/OBSIDIAN-RULES-AUDIT-PROPOSAL-20261117.md` 199행이 "16번 `npc-dialogue/mulbangul·ipsae.webp` 대화 초상 출처가 CREDITS에 없음"이라고 적음 | 기록 없음 | `_shared/OBSIDIAN-RULES-AUDIT-PROPOSAL-20261117.md` | **출처 미확인** |
+| **IMG-12** 옛 악당 2장: `assets/map-encounters/villain-left.png`, `villain-right.png` | Codex 내장 이미지 도구(GPT 이미지)로 기존 지도 악당 그림을 고친 대기 자세 2장 → Swift 스크립트로 잘라 6칸 시트로 만듦 | 2026-11-14 01:17·01:19 KST, Codex 세션 `rollout-2026-11-14T00-29-37-01a1d587…`의 `image_gen` 「Edit the attached sprite into ONE map idle pose…」(`exec-ba62466f` → `_scratch/villain-concepts-20261114/readability-09-16/facing/villain-16-left.png`, `exec-4ac3dfe1` → `…-right.png`), 세션 `rollout-2026-11-14T01-24-29-01a1d5b9…`의 시트 스크립트(`villain(…, destinations[4]+"/map-encounters/villain-"+side+".png")`), 커밋 `50de79a`. `_shared/codex-image-records-20261121/` 색인(읽기 전용, 방법 `_shared/CODEX-IMAGE-RECORDS-20261121.md`) | 생성 계정 요금제·약관 기록 없음(IMG-04~11과 같음) | `_scratch/villain-concepts-20261114/readability-09-16/facing/`, `_scratch/map-encounters-12-16/integrate.py`, 위 세션 기록 | 근거 약함(2026-11-21 출처 미확인 → 생성 기록 연결) · 빠진 것: 이미지 도구 요금제·약관. 앱은 지금 `villain-poses-left/right.png`를 써서 이 두 파일을 부르지 않는다 |
+| **IMG-13** 대화 초상 2장: `assets/npc-dialogue/ipsae.webp`, `mulbangul.webp` | Codex 내장 이미지 도구(GPT 이미지)로 만든 2×2 대화 초상 시트를 잘라 WebP 2장으로 | 2026-11-12 21:52 KST, Codex 세션 `rollout-2026-11-12T21-49-45-01a1cfce…`의 `image_gen` 「Transparent 2-column × 2-row dialogue portrait sprite sheet… Top left: Ipsae…」(`exec-260ce874`), 같은 세션이 `_scratch/npc-14-16-20261112/sheet-16.png`로 복사, `pack.sh` 13·14행이 `ipsae`·`mulbangul` 칸을 잘라 저장(`HANDOFF.md` 9·10행), 커밋 `85961fe`. `_shared/codex-image-records-20261121/` 색인(읽기 전용, 방법 `_shared/CODEX-IMAGE-RECORDS-20261121.md`) | 생성 계정 요금제·약관 기록 없음(IMG-04~11과 같음) | `_scratch/npc-14-16-20261112/sheet-16.png`·`pack.sh`·`HANDOFF.md`, 위 세션 기록 | 근거 약함(2026-11-21 출처 미확인 → 생성 기록 연결) · 빠진 것: 이미지 도구 요금제·약관. `ipsae.webp`(다람쥐 시절 잎새)는 지금 앱이 부르지 않는다 |
 | **IMG-14** 앱 아이콘 `assets/favicon.svg`(307바이트 SVG) | 직접 쓴 SVG로 보이나, CREDITS의 "공통 SVG 아이콘·앱 UI … 프로젝트 코드에서 직접 제작"은 `src/icons.js` 이야기이고 이 파일을 따로 적지 않음 | 2026-10-21(`docs/reviews/ASSET-CLASSROOM-MEDIA-20261021.md` 36행 목록), 커밋 `9eb4c37` | CREDITS 권리 표시의 자체 제작물 조건이 적용된다고 볼 근거는 간접적 | `docs/reviews/ASSET-CLASSROOM-MEDIA-20261021.md`, `assets/CREDITS.md` | 근거 약함 · 빠진 것: 이 파일을 직접 만들었다는 한 줄 기록 |
 
 ## 2. 영상 (3줄 · 31파일)
@@ -38,7 +40,7 @@
 |---|---|---|---|---|---|
 | **VID-01** 앵무새 편 개념 영상 5편: `assets/concepts/{observe,resources,water,choices,design}.{mp4,webm,webp}`(영상 10 + 포스터 5) | HyperFrames로 프로젝트에서 직접 짠 HTML 모션을 로컬 렌더(`films/`). 그림 재료는 IMG-05 `ipsae-parrot.webp`와 IMG-06·07·08 개념 그림, 글꼴은 나눔스퀘어 네오(OFL). 소리 트랙 없음(ffprobe로 영상 트랙만 확인) | 2026-10-22 최초, 2026-10-28 그림 합성, 2026-11-10 HyperFrames 재제작(커밋 `30b02bb`), 2026-11-14 앵무새로 갱신(커밋 `a1ce7f1`). `films/build.mjs`, `films/REVIEW.md`, `docs/CONCEPT-CLIPS.md` | 영상 제작 자체는 자체 제작. 들어간 그림의 이용 조건은 IMG-05~08과 같이 미기록 | `assets/CREDITS.md`(개념 영상·CC0 효과음 추가, 주요 개념 일러스트 추가), `films/build.mjs`, `films/REVIEW.md` | 근거 약함 · 빠진 것: 들어간 생성 그림의 요금제·약관(IMG-05~08) |
 | **VID-02** 물방울 편 개념 영상 5편: `assets/concepts/{evidence,connections,effects,compare,test}.{mp4,webm,webp}`(영상 10 + 포스터 5) | VID-01과 같은 방식. 물방울 자세는 사용자 제공 그림 `references/characters/chatgpt_generated_22.png`에서 잘라 씀(`films/build.mjs` 16~17행). 소리 트랙 없음 | VID-01과 같음(2026-10-22 ~ 2026-11-12 재렌더) | 들어간 물방울 그림은 IMG-01과 같은 "원본 권리 확인 필요" | `films/build.mjs`, `films/REVIEW.md`, `assets/CREDITS.md` | 근거 약함 · 빠진 것: `chatgpt_generated_22.png`의 권리(IMG-01), 생성 그림 요금제·약관 |
-| **VID-03** 지도 파이널 영상 `assets/map-encounters/map-finale.mp4`(소리 없음) | 기록 못 찾음 | 2026-11-14 커밋 `b3ac890`에 추가된 사실만 있음. `docs/AUDIO-PROVENANCE.md`·`_shared/BGM-APPLY-BRIEF-20261117.md`는 "무음 재생"만 적고 제작 출처는 없음 | 기록 없음 | (없음) 커밋 `b3ac890` | **출처 미확인** |
+| **VID-03** 지도 파이널 영상 `assets/map-encounters/map-finale.mp4`(소리 없음) | ffmpeg로 만든 6초 영상: 운영 지도 공격 장면 캡처 한 장을 천천히 확대하고 글자 3줄을 얹음(macOS Apple SD Gothic Neo로 그린 그림 글자) | 2026-11-14, `_scratch/stage-villain-dialogue/movies.py`(`-loop 1 -i _scratch/live-map-contact-review/originals/16-attack.png … zoompan … drawtext`), 캡처 스크립트 `_scratch/live-map-contact-review/capture-16.mjs`, 커밋 `b3ac890` | 재료가 앱 지도 그림(IMG-10·11)이라 그 조건을 따른다. 글자는 시스템 글꼴로 그린 그림이고 글꼴 파일은 들어 있지 않다 | `_scratch/stage-villain-dialogue/movies.py`, `_scratch/live-map-contact-review/originals/16-attack.png` | 근거 약함(2026-11-21 출처 미확인 → 제작 방법 확인) · 빠진 것: 재료 그림의 요금제·약관 |
 
 ## 3. 음악 (1줄 · 2파일)
 
@@ -54,7 +56,7 @@
 | **SFX-02** 성취 카드 4개: `reward-01.mp3`, `reward-03.mp3`, `pickup-01.mp3`, `victory-jingle-01.mp3`(카드 휙 소리는 SFX-01의 `wind-whoosh-03.mp3`를 같이 씀) | 같은 라이브러리(원본 Freesound: ZenithInfinitiveStudios, CogFireStudios, DeltaCode, el_boss) | 2026-11-18 적용. CREDITS 표에 원본 정보. 바이트 일치 확인 | **CC0 1.0** | `assets/CREDITS.md`(2026-11-18 성취 카드), `_shared/sfx-library-20261117/manifest.json` | 확인됨 |
 | **SFX-03** 발자국·스테이지 열림 4개: `step-01.mp3`, `step-02.mp3`, `open-03.mp3`, `twinkle-03.mp3` | 같은 라이브러리(원본 Freesound: sgossner, Yoyodaman234, ZenithInfinitiveStudios / Kenney Interface Sounds 1.0) | 2026-11-19 적용. CREDITS 표에 원본 정보. 바이트 일치 확인 | **CC0 1.0** | `assets/CREDITS.md`(지도 발자국·스테이지 열림 소리 · CC0 · 2026-11-19), `_shared/sfx-library-20261117/manifest.json` | 확인됨 |
 
-## 5. 목소리 (5줄 · 151파일)
+## 5. 목소리 (6줄 · 153파일)
 
 | 파일(묶음) | 만든 곳 | 만든 날·기록 위치 | 이용 조건 | 근거 파일 경로 | 상태 |
 |---|---|---|---|---|---|
@@ -63,13 +65,15 @@
 | **VOX-03** 첫 인사 녹음 `assets/audio/npc-welcome.m4a` | 모모 로컬 음성(Supertonic 3). 앱에서 재생하지 않음(`_shared/voice-provenance-20261118.md` 157행. 코드에도 `.m4a` 경로 없음) | 2026-11-07T22:03:14Z. 원본 WAV·m4a SHA-256과 길이: `docs/AUDIO-PROVENANCE.md` | **OpenRAIL-M**(사용 제한 조항 있음, 출력물 권리 주장 없음). 라이선스 사본 `docs/SUPERTONIC3-LICENSE.txt` | `docs/AUDIO-PROVENANCE.md`, `docs/SUPERTONIC3-LICENSE.txt` | 확인됨 · 재생하지 않으니 배포본에서 빼는 편이 깔끔하다는 공통 기록 있음 |
 | **VOX-04** 옛 모모 음성 21개(재생 안 함): `badge-0~4.mp3`, `ending-1.mp3`, `ending-2.mp3`, `map-0~5.mp3`, `retry-3.mp3`, `retry-5~8.mp3`, `story-1~3.mp3` | 모모 로컬 Qwen3-TTS-12Hz-1.7B-VoiceDesign(preset-01·02·06). 지금은 같은 대사의 `el-*`가 대신 재생됨(`src/voice-lines.js`의 target이 모두 `el-*`) | 2026-11-10 커밋 `4a60e7a`. 지금 manifest에는 없고, 파일 SHA-256이 git 기록의 옛 manifest(`13e86af`, `map-0`은 `d272074`)와 일치함을 이번에 확인. `docs/VOICE-INTEGRATION-20261110.md` | 모델 라이선스 **Apache-2.0** | `docs/VOICE-INTEGRATION-20261110.md`, `_shared/voice-provenance-20261118.md`(16번 표), git 기록 `assets/audio/voices/manifest.json`@`13e86af` | 확인됨 · 쓰지 않는 파일. 지금 작업 트리의 manifest에는 기록이 없다 |
 | **VOX-05** 옛 Higgsfield 음성 3개(재생 안 함): `hint-0.mp3`, `hint-5.mp3`, `hint-7.mp3` | Higgsfield / ByteDance Seed Audio 1.0(기존 합성 녹음 참조). 지금은 `el-hint-*`가 대신 재생됨 | 2026-11-14. 파일 SHA-256이 git 기록의 옛 manifest(`13e86af`)와 일치 | 기록 없음. `_shared/voice-provenance-20261118.md`: "요금제·이용 조건 문구가 없다" | `_shared/voice-provenance-20261118.md`(16번 표, 빈칸 3번), git 기록 `assets/audio/voices/manifest.json`@`13e86af` | 근거 약함 · 빠진 것: Higgsfield 요금제·이용 조건. 쓰지 않는 파일 |
+| **VOX-06** 다시 생각하기 새 녹음 2개: `el-retry-5-v2.mp3`(물방울 SK), `el-retry-7-v2.mp3`(잎새 Bee) | ElevenLabs 공식 API `eleven_v4`, VOX-01과 같은 목소리 | 2026-11-21, 요청 ID `A1picnWEqwp7XMRDY97u`·`SG91bPHk8nO6QMXL39vJ`, `assets/audio/voices/manifest.json`, `docs/VOICE-FILL-20261118.json` | ElevenLabs Creator 유료 요금제(VOX-01과 같은 계정, API 구독 조회 `tier: creator`) | 위 두 파일, `assets/CREDITS.md` | 확인됨 |
 
-## 6. 글꼴 (2줄 · 4파일)
+## 6. 글꼴 (3줄 · 6파일)
 
 | 파일(묶음) | 만든 곳 | 만든 날·기록 위치 | 이용 조건 | 근거 파일 경로 | 상태 |
 |---|---|---|---|---|---|
 | **FNT-01** 본문 글꼴 2개: `assets/fonts/NanumSquareNeoTTF-bRg.woff2`, `NanumSquareNeoTTF-cBd.woff2` | 네이버 나눔스퀘어 네오 공식 배포본(수정 없음). 원본 https://campaign.naver.com/nanumsquare_neo/download/NaverNanumSquareNeo.zip | 2026-11-10 CREDITS 기록 | **SIL OFL 1.1**. 전문 `assets/fonts/NanumSquareNeo-OFL.txt`를 함께 배포 | `assets/CREDITS.md`(나눔스퀘어 네오 UI 글꼴), `assets/fonts/NanumSquareNeo-OFL.txt` | 확인됨 |
-| **FNT-02** 제목 글꼴 2개: `assets/fonts/title-400.woff2`, `title-700.woff2`(CSS 이름 "Climate Lab Title", 시작 화면에서만 씀) | 기록 못 찾음 | 2026-11-14 커밋 `5bdc48c`에 추가된 사실만 있음. `_shared/OBSIDIAN-RULES-AUDIT-PROPOSAL-20261117.md` 162행: "Title 글꼴이 출처 문서에 이름이 없다" | 기록 없음 | `src/styles.css` 604~605행(연결만), `_shared/OBSIDIAN-RULES-AUDIT-PROPOSAL-20261117.md` | **출처 미확인** |
+| **FNT-02** 제목 글꼴 2개: `assets/fonts/title-400.woff2`, `title-700.woff2`(CSS 이름 "Climate Lab Title", 시작 화면에서만 씀) | 나눔스퀘어 네오(FNT-01)를 시작 화면 글자만 남겨 줄인 파생본(fontTools). 글꼴 안 이름 「Climate Lab Title」(예약 글꼴 이름을 쓰지 않음, 2026-11-21 확인) | 2026-11-14, Codex 세션 `rollout-2026-11-13T21-43-10-01a1d4ee…`의 `fonts(16,'assets/fonts','Climate Lab Title',[index.html·main.js·voice-lines.js·welcome-voice.js],[(400,'bRg'),(700,'cBd')])`, 커밋 `5bdc48c` | **SIL OFL 1.1**(수정본). 전문 `assets/fonts/NanumSquareNeo-OFL.txt` | 위 세션 기록, `assets/fonts/NanumSquareNeo-OFL.txt` | 확인됨(2026-11-21 출처 미확인 → 원본·만든 방법 확인) |
+| **FNT-03** 화면 본문 부분 글꼴 2개: `assets/fonts/climate-body-400.woff2`, `climate-body-700.woff2` | 나눔스퀘어 네오(FNT-01)를 앱 화면 글자 704자만 남겨 줄인 파생본. 글꼴 안 이름 「Climate Lab Body」 | 2026-11-21, `scripts/subset-fonts.py`(fontTools), 커밋 `2bdd154` | **SIL OFL 1.1**(수정본). 전문 `assets/fonts/NanumSquareNeo-OFL.txt` | `scripts/subset-fonts.py`, `assets/CREDITS.md` | 확인됨 |
 
 ## 참고: 장부 밖으로 둔 것
 
@@ -88,9 +92,9 @@
 | 4 | 관측소 그림의 **프롬프트**(남아 있으면). 원본 `output/overnight-20261108/observe-v2.png`를 `references/`로 옮겨 보존할지 결정 | IMG-08 | 프롬프트 원문이 없다 |
 | 5 | 성취 카드 그림의 **프롬프트 기록 위치**(`_scratch/reward-cards-20261118/gen/16/` 옆에 있는지) | IMG-09 | CREDITS에 프롬프트 위치가 없다 |
 | 6 | 지도 대원·동료·악당 전투 자세를 **만든 도구 이름과 프롬프트**(`_scratch/villain-resume-20261114/16-sheets/`, `_scratch/map-redraw-20261114/`의 기록) | IMG-10, IMG-11 | "생성했다", "새로 그렸다"만 있다 |
-| 7 | 옛 악당 그림 `villain-left.png`·`villain-right.png`와 대화 초상 `npc-dialogue/ipsae.webp`·`mulbangul.webp`를 **누가·무엇으로·언제 만들었는지**. 모르면 새로 만들거나(초상) 배포본에서 뺄지(옛 악당, 코드에서 안 부름) 결정 | IMG-12, IMG-13 | 어떤 기록도 없다 |
-| 8 | 지도 파이널 영상 `map-finale.mp4`의 **제작 방법(도구·작업 파일)과 안에 들어간 그림 목록** | VID-03 | 어떤 기록도 없다 |
-| 9 | 제목 글꼴 `title-400/700.woff2`의 **원래 글꼴 이름·배포처·라이선스 원문 파일**(예: OFL이면 `OFL.txt`) | FNT-02 | 이름·라이선스 기록이 없다 |
+| 7 | (2026-11-21 생성 기록으로 해결, 남은 것은 2번 요금제 자료) 옛 악당 그림 `villain-left.png`·`villain-right.png`와 대화 초상 `npc-dialogue/ipsae.webp`·`mulbangul.webp`를 **누가·무엇으로·언제 만들었는지**. 모르면 새로 만들거나(초상) 배포본에서 뺄지(옛 악당, 코드에서 안 부름) 결정 | IMG-12, IMG-13 | 어떤 기록도 없다 |
+| 8 | (2026-11-21 제작 방법 확인: `movies.py`, 재료는 지도 캡처) 지도 파이널 영상 `map-finale.mp4`의 **제작 방법(도구·작업 파일)과 안에 들어간 그림 목록** | VID-03 | 어떤 기록도 없다 |
+| 9 | (2026-11-21 해결: 나눔스퀘어 네오 OFL 파생본) 제목 글꼴 `title-400/700.woff2`의 **원래 글꼴 이름·배포처·라이선스 원문 파일**(예: OFL이면 `OFL.txt`) | FNT-02 | 이름·라이선스 기록이 없다 |
 | 10 | **ElevenLabs Starter 요금제 화면(2026-11-12 무렵)과 상업 이용 조항**, Voice Library 목소리(Bee·SK) 이용 조건 캡처 | VOX-02 | 유료였다는 확인만 있고 조건 문구가 없다 |
 | 11 | **Higgsfield 요금제·이용 조건** 캡처. 또는 쓰지 않는 세 파일을 배포본에서 빼기로 결정 | VOX-05 | 조건 기록이 없다 |
 | 12 | (보강) **ElevenLabs Creator**, **Suno Premier** 요금제 화면 캡처 | VOX-01, MUS-01 | 지금도 확인됨이지만 사용자 확인 문장만 있어 캡처가 있으면 단단해진다 |
