@@ -1,7 +1,6 @@
 /* A4 가로 한 장. 글자는 화면·인쇄·PNG가 같은 위치를 쓴다. */
 html body dialog.game-dialog.certificate-dialog{width:max-content;max-width:calc(100vw - 24px);max-height:calc(100dvh - 16px);padding:0;border:0;border-radius:10px;background:transparent;box-shadow:none;overflow:visible;backdrop-filter:none}
 html body .certificate-dialog .dialog-body{display:flex;align-items:center;gap:8px;flex-direction:column;max-height:none;padding:0;overflow:visible;background:transparent;backdrop-filter:none}
-html body .certificate-dialog>.dialog-close{top:8px;right:8px;z-index:3;width:44px;height:44px;padding:10px}
 html body .certificate-dialog .cert-paper{--cert-ink:#174f47;position:relative;width:min(calc(100vw - 40px),calc((100dvh - 116px)*297/210));aspect-ratio:297/210;flex:none;container-type:inline-size;margin:0;padding:0;background:#fffbea;border:0;border-radius:3px;color:var(--cert-ink);box-shadow:0 8px 35px #0c302b44;overflow:hidden;animation:cert-paper-arrive .8s ease-out both}
 .cert-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}
 .cert-content{position:absolute;inset:9% 11% 11%;display:grid;grid-template-rows:6% 12% 24% 17% 16% 20% 5%;justify-items:center;align-items:center;text-align:center;color:#174f47}

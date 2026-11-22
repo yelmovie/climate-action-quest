@@ -11,3 +11,5 @@
 - 근거: `.tmp/cert-design-20261122/local-final.json`, `shots/local-final.pdf`, `shots/local-final-saved.png`, `compare.png`. 운영 확인 기록은 배포 뒤 아래에 덧붙인다.
 
 운영 반영: 그림 `4e5a932`·앱 `f28586c`·문서 `c07a43e`, Worker `ece89d90-a6bf-4e96-8700-d8910ea3b98b`. 공식 운영 주소 `https://climate-action-quest.yelsam.workers.dev`에서 같은 세 뷰·설정 입구·PNG 다운로드·인쇄를 확인했고 콘솔 오류/4xx 0. 배포본 index와 코드 파일 40개가 로컬 최신 빌드와 일치한다.
+
+추가 확인: 종이 위의 X를 없애고 「닫기」를 인쇄·PNG와 같은 하단 종이 밖 버튼 줄로 옮겼다. 세 크기에서 버튼 전체와 종이 표시, 기존 닫기/설정 재진입 통과.
