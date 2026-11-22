@@ -20,7 +20,11 @@
   "consistency": {
     "creditLine": {
       "text": "기획·제작: 옐샘 & ⓒ 아이스크림미디어",
-      "where": ["settings", "certificate", "start"]
+      "where": [
+        "settings",
+        "certificate",
+        "start"
+      ]
     },
     "settings": {
       "items": [
@@ -39,13 +43,17 @@
         "오프라인 자료 받기",
         "탐험 기록 초기화"
       ],
-      "close": ["esc"],
+      "close": [
+        "esc"
+      ],
       "closeLabel": "닫기",
       "note": "위 X는 제거, 아래 푸른 「닫기」 버튼 하나와 Esc. 바깥 눌러 닫기 없음."
     },
     "certificate": {
       "fields": [],
-      "buttons": ["인증서 내려받기"],
+      "buttons": [
+        "인증서 내려받기"
+      ],
       "note": "이름 입력·날짜 칸 없음. 배지 5개, 나의 실천 요약, 크레딧 표시. 창 위 X 닫기 있음."
     },
     "rewardCards": {
@@ -56,11 +64,17 @@
     },
     "modalButtons": {
       "primarySide": "right",
-      "order": ["취소", "기록 지우기"],
+      "order": [
+        "취소",
+        "기록 지우기"
+      ],
       "note": "초기화 확인 창 기준. 이야기 창은 다음 버튼 하나."
     },
     "startScreen": {
-      "buttons": ["연구 시작하기(이어 하기 때는 탐구 이어 하기)", "어떤 모험인가요?"]
+      "buttons": [
+        "연구 시작하기(이어 하기 때는 탐구 이어 하기)",
+        "어떤 모험인가요?"
+      ]
     }
   },
   "ledger": {
@@ -82,7 +96,6 @@
   },
   "teacherGuide": {
     "needsConfirm": [
-      "단원명(교과서 대조)",
       "예상 수업 시간(40분 수업 실측 없음)",
       "앱 안 과학 문장 교사 검토(contentReview.needsReview 열림)"
     ]
@@ -90,5 +103,8 @@
   "files": {
     "teacherGuide": "docs/TEACHER-GUIDE.md",
     "handoff": "docs/DELIVERY-HANDOFF.md"
-  }
+  },
+  "gradeRepo": "4학년",
+  "unitRepo": "기후변화와 우리 생활",
+  "gradeUnitSource": "운영 시트 「이예리 선생님」 탭, 2026-11-22 확인"
 }
