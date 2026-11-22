@@ -22,7 +22,7 @@ function drawText(ctx, node, box, s) {
   for (const m of text.matchAll(/\S+/g)) {
     range.setStart(node, m.index); range.setEnd(node, m.index + m[0].length);
     const r = [...range.getClientRects()].find(x => x.width > 0);
-    if (r) ctx.fillText(m[0], (r.left - box.left) * s, (r.top - box.top + r.height / 2) * s);
+    if(r){const x=(r.left-box.left)*s,y=(r.top-box.top+r.height/2)*s,stroke=parseFloat(cs.getPropertyValue('-webkit-text-stroke-width'))||0;if(stroke){ctx.strokeStyle=cs.color;ctx.lineWidth=stroke*s;ctx.lineJoin='round';ctx.strokeText(m[0],x,y);}ctx.fillText(m[0],x,y);}
   }
 }
 

@@ -43,3 +43,5 @@ html body .certificate-dialog .cert-note{font-size:14px;font-weight:700;line-hei
  .certificate-dialog .cert-note,.certificate-dialog .cert-actions,.certificate-dialog>.dialog-close{display:none!important}
 }
 html body .certificate-dialog .cert-actions #download-certificate{margin:0}
+
+html body .certificate-dialog .cert-content .cert-title{font-weight:900;-webkit-text-stroke:.018em currentColor}
