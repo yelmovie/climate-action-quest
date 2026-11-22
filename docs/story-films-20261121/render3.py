@@ -124,7 +124,8 @@ def chunks(start, key, parts, who=None):
     out, t = [], start
     for i, (p, l) in enumerate(zip(parts, L)):
         d = total * l / sum(L); s0, s1 = t, t + d
-        c = {'s': round(max(0, s0 - 0.15), 2), 'e': round(s1 + (0.05 if i < len(parts) - 1 else 0.45), 2), 'speech': [round(s0, 2), round(s1, 2)], 'text': p}
+        # 같은 대사 안의 경계: 앞 자막이 다 사라진 뒤(사라짐 효과 포함) 다음 자막이 나오게 한 시각(말 끝 0.05초 전)에서 맞붙인다.
+        c = {'s': round(max(0, s0 - (0.15 if i == 0 else 0.05)), 2), 'e': round(s1 + (-0.05 if i < len(parts) - 1 else 0.45), 2), 'speech': [round(s0, 2), round(s1, 2)], 'text': p}
         if who: c['who'] = who
         out.append(c); t = s1
     return out
@@ -137,6 +138,12 @@ final_cues = (chunks(0.4, 'ending-1', ['다섯 연구 기록이 모두 연결됐
               + chunks(8.0, 'finale-2', ['다섯 메달이 하나로 이어졌어요.', '이제 중앙 작전실에서\n[탐구 인증서]를 받아요.'])
               + chunks(15.4, 'ending-2', ['우리의 탐구는 계속돼요.', '모형 속 답을 찾았다면,\n이제 생활 속 [작은 실천]을 이어가요.'])
               + chunks(22.6, 'finale-4', ['대원, 우리가 [해냈어]!', '함께 탐구해서 정말 즐거웠어. 고마워!'], '잎새'))
+def no_overlap(cues):
+    # 다른 대사 사이: 앞 대사 마지막 자막의 끝을 다음 자막 시작으로 당겨 화면에서 겹치지 않게 한다.
+    for a_, b_ in zip(cues, cues[1:]):
+        if a_['e'] > b_['s']: a_['e'] = b_['s']
+    return cues
+intro_cues, final_cues = no_overlap(intro_cues), no_overlap(final_cues)
 for name, cues in (('intro', intro_cues), ('finale', final_cues)):
     j = {'src': f'{OUT}/{name}-mg.mp4', 'out': f'{OUT}/{name}-cap.mp4', 'theme': theme, 'speakers': speakers, 'bottom': 64, 'sweep': True, 'cues': cues}
     jp = f'{OUT}/{name}.json'; json.dump(j, open(jp, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)

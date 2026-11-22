@@ -23,7 +23,8 @@ try{
  await load('home',freshState());await check('welcome-1');await check('home-bubble-new');
  // The story opens as the intro film (story-1, intro-2, intro-3); the illustrated pages (story-1~3) are its fallback.
  await page.locator('#mission-story').click();for(const id of ['story-1','intro-2','intro-3']){await check(id);await page.locator('.story-next').click();}
- await page.route('**/assets/films/**',route=>route.abort());await load('home',freshState());await page.locator('#mission-story').click();await page.locator('.story-dialog').waitFor();for(let i=1;i<=3;i++){await check('story-'+i);await page.locator('.story-next').click();}await page.unroute('**/assets/films/**');
+ // The closed film dialog stays in the DOM until its close event, so the fallback's button is picked inside .story-dialog.
+ await page.route('**/assets/films/**',route=>route.abort());await load('home',freshState());await page.locator('#mission-story').click();await page.locator('.story-dialog').waitFor();for(let i=1;i<=3;i++){await check('story-'+i);await page.locator('.story-dialog .story-next').click();}await page.unroute('**/assets/films/**');
  await load('home');await check('home-bubble-back');
  for(let i=0;i<=5;i++){const s=structuredClone(final);s.completed=s.completed.filter(n=>n<i*2);await load('map',s);await page.locator('.companion-talk').click();await check('map-'+i);}
  for(let i=0;i<5;i++){await load('facility/'+i);if(await page.locator('.guide-character').isVisible())await page.locator('.guide-character').click();await check('facility-'+i);}
