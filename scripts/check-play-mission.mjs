@@ -10,6 +10,8 @@ const out='.tmp/play-mission-check';
 await mkdir(out,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROME||(process.platform==='win32'?'C:/Program Files/Google/Chrome/Application/chrome.exe':'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),headless:true,args:['--disable-crash-reporter','--disable-breakpad']});
 const checks=[],layouts=[],errors=[];
+// Since 2026-11-22 the mission opens from settings (「도시 운영 미션」, above 「앱 정보 · 배움과 보상」).
+async function openMission(page,how='click'){await page.locator('[data-settings]')[how]();await page.locator('#open-mission')[how]();await page.locator('.play-mission').waitFor();}
 const plans=[['park','park'],['park','park','wetland','wetland'],['park','park','wetland','wetland','bus']];
 
 async function audit(page,label){
@@ -42,7 +44,7 @@ try{
  for(const [width,height] of [[1280,800],[1024,768],[1920,1080],[915,412],[1024,600],[830,515],[390,844],[768,1024]]){
   const context=await browser.newContext({viewport:{width,height},hasTouch:true,reducedMotion:'reduce',serviceWorkers:'block'});
   const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
-  await page.goto(base);await page.locator('.play-mission-entry').first().tap();
+  await page.goto(base);await openMission(page,'tap');
   await audit(page,'initial');
   await page.locator('[data-test]').tap();
   assert.match(await page.locator('.pm-feedback').innerText(),/폭염 부담/);
@@ -62,7 +64,7 @@ try{
   const completed=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),MISSION_SAVE_KEY);
   assert.deepEqual(completed.won,[0,1,2]);
   await page.locator('[data-close]').tap();await page.reload();
-  await page.locator('.play-mission-entry').first().tap();
+  await openMission(page,'tap');
   assert.equal(await page.locator('[aria-current="step"]').getAttribute('data-level'),'2');
   assert.equal(await page.locator('.pm-cell.occupied').count(),5);
   await page.locator('[data-tool="roof"]').focus();await page.keyboard.press('Enter');
@@ -85,12 +87,12 @@ try{
  }
  const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage();
  await page.goto(base);await page.evaluate(key=>localStorage.setItem(key,'{broken'),MISSION_SAVE_KEY);
- await page.locator('.play-mission-entry').first().click();await page.locator('[data-cell="0"]').click();
+ await openMission(page);await page.locator('[data-cell="0"]').click();
  assert.equal(await page.evaluate(key=>localStorage.getItem(key),MISSION_SAVE_KEY),'{broken');
  await page.locator('.pm-error').waitFor();await page.locator('[data-close]').click();
  await page.evaluate(key=>localStorage.removeItem(key),MISSION_SAVE_KEY);
- await page.locator('.play-mission-entry').first().click();
- const other=await context.newPage();await other.goto(base);await other.locator('.play-mission-entry').first().click();
+ await openMission(page);
+ const other=await context.newPage();await other.goto(base);await openMission(other);
  await other.locator('[data-tool="bus"]').click();await other.locator('[data-cell="0"]').click();
  const latest=await other.evaluate(key=>localStorage.getItem(key),MISSION_SAVE_KEY);
  await page.locator('[data-cell="1"]').click();

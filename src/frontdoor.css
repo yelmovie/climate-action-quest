@@ -2,16 +2,13 @@
 
 /* ── Title screen ─────────────────────────────────────────── */
 .home-screen { background: #0f3a32; }
-.home-screen::after { background: linear-gradient(90deg, #0b2f28f2 0%, #0d3a31d6 28%, #11443a85 47%, #11443a00 66%), linear-gradient(0deg, #0a2a2399 0%, #0a2a2300 32%); }
+.home-screen::after { background: linear-gradient(180deg, #0b2f2833 0%, #0b2f2800 26%), linear-gradient(0deg, #0a2a2399 0%, #0a2a2300 32%); }
 .home-art { object-position: 66% center; transform-origin: 72% 55%; animation: home-drift 26s ease-in-out infinite alternate; }
-.home-copy { left: clamp(28px, 6vw, 112px); top: 50%; width: min(48vw, 660px); max-width: none; transform: translateY(-50%); color: #fff; animation: home-rise .7s ease-out both; }
-.home-tag { display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border: 1px solid #ffffff42; border-radius: 999px; background: #ffffff1c; color: #fff1bd; font-size: var(--font-small); backdrop-filter: blur(6px); }
-.home-tag .icon { width: 20px; height: 20px; color: #b9e58c; }
-.home-title { margin: clamp(14px, 2.4vh, 26px) 0 0; line-height: 0; }
-.home-logo { display: block; width: 100%; max-width: 640px; height: auto; transform: rotate(-2deg); transform-origin: left center; filter: drop-shadow(0 3px 0 #fffdf2) drop-shadow(0 -3px 0 #fffdf2) drop-shadow(3px 0 0 #fffdf2) drop-shadow(-3px 0 0 #fffdf2) drop-shadow(0 7px 0 #0c362e) drop-shadow(0 16px 22px #00000070); }
-.home-copy .hero-subtitle { max-width: 600px; margin-top: clamp(16px, 3vh, 30px); color: #eef7ef; font-weight: 400; text-shadow: 0 2px 10px #00000070; }
-.home-copy .hero-subtitle strong { font-weight: 400; color: #ffe08a; }
-.home-copy .hero-actions { margin-top: clamp(18px, 3.4vh, 34px); gap: 16px; }
+/* 우당탕 양식(2026-11-22): logo in the upper centre, the two buttons side by side at the bottom centre. */
+.home-title { position: absolute; z-index: 3; left: 50%; top: clamp(56px, 15dvh, 170px); width: min(76vw, 1150px, 150dvh); margin: 0; line-height: 0; transform: translateX(-50%); animation: home-rise .7s ease-out both; }
+.home-logo { display: block; width: 100%; max-width: none; height: auto; margin: 0; transform: rotate(-2deg); transform-origin: center; filter: drop-shadow(0 3px 0 #fffdf2) drop-shadow(0 -3px 0 #fffdf2) drop-shadow(3px 0 0 #fffdf2) drop-shadow(-3px 0 0 #fffdf2) drop-shadow(0 7px 0 #0c362e) drop-shadow(0 16px 22px #00000070); }
+.home-buttons { position: absolute; z-index: 4; left: 50%; bottom: clamp(28px, 7dvh, 72px); display: flex; gap: 16px; transform: translateX(-50%); }
+.home-buttons .button { min-width: clamp(170px, 17vw, 240px); min-height: 62px; padding: 12px 28px; font-size: clamp(20px, 1.8vw, 26px); white-space: nowrap; }
 .button.gold { color: #45290a; border-color: #a8721d; background: linear-gradient(180deg, #ffecb0, #f4bf52); box-shadow: 0 5px 0 #8c5c17, 0 14px 26px #00000038; }
 .button.gold:hover:not(:disabled) { background: linear-gradient(180deg, #fff3cc, #f8cc6c); box-shadow: 0 7px 0 #8c5c17, 0 16px 28px #00000038; }
 .button.gold:active:not(:disabled) { box-shadow: 0 1px 0 #8c5c17; }
@@ -19,29 +16,22 @@
 /* The glass layer paints this button light, so its label uses the dark ink (white was 1.36:1). */
 .button.ghost { color: var(--ink); border-color: #ffffff70; background: #ffffff14; box-shadow: none; }
 .button.ghost:hover:not(:disabled) { color: var(--ink); background: #ffffff2e; box-shadow: none; }
-.home-progress { display: flex; align-items: center; gap: 12px; margin-top: 22px; color: #e3f0e4; font-size: var(--font-small); }
-.home-progress-bar { width: 170px; height: 12px; overflow: hidden; border-radius: 99px; background: #ffffff30; box-shadow: inset 0 0 0 1px #ffffff30; }
-.home-progress-bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #b9e58c, #ffd574); }
-.home-cast { position: absolute; z-index: 2; right: clamp(18px, 5vw, 96px); bottom: clamp(16px, 6vh, 64px); display: flex; align-items: flex-end; pointer-events: none; }
+/* Ipsae stands at the left, Mul-bangul at the right, so the centred buttons stay clear (like 1번's student and corgi). */
+.home-cast { position: absolute; z-index: 2; left: clamp(18px, 5vw, 96px); right: clamp(18px, 5vw, 96px); bottom: clamp(16px, 6vh, 64px); display: flex; justify-content: space-between; align-items: flex-end; pointer-events: none; }
 .home-cast img { height: clamp(150px, 30vh, 290px); width: auto; filter: drop-shadow(0 14px 16px #0b2a2340); animation: cast-bob 3.4s ease-in-out infinite; }
-.home-cast .home-otter { margin-left: -14px; animation-delay: -1.2s; }
-.home-bubble { position: absolute; right: 58%; bottom: calc(100% - 8px); margin: 0; padding: 10px 18px; border: 2px solid #41674e; border-radius: 20px; background: var(--cream); color: var(--ink); font-size: var(--font-small); white-space: nowrap; box-shadow: var(--shadow); animation: bubble-rise .6s .5s ease-out both; }
-.home-bubble::after { content: ""; position: absolute; right: 26px; bottom: -11px; width: 18px; height: 18px; border: 2px solid #41674e; border-width: 0 2px 2px 0; background: var(--cream); transform: rotate(45deg); }
+.home-cast .home-otter { animation-delay: -1.2s; }
 /* 제작·저작권 표기: 시작 화면 우측 하단에 작게. 조작 요소가 아니다. */
 .home-screen .home-credit { position: absolute; z-index: 2; right: calc(clamp(8px, 1.4vw, 24px) + env(safe-area-inset-right, 0px)); bottom: calc(clamp(8px, 1.5vh, 16px) + env(safe-area-inset-bottom, 0px)); margin: 0; padding: 3px 9px; border-radius: 999px; background: #0b2f28b8; color: #f2f7ea; font-size: clamp(10px, calc(5px + .5vw), 13px); font-weight: 700; line-height: 1.4; letter-spacing: 0; white-space: nowrap; pointer-events: none; user-select: none; }
 @keyframes home-drift { from { transform: scale(1.07); } to { transform: scale(1); } }
-@keyframes home-rise { from { opacity: 0; transform: translateY(calc(-50% + 18px)); } }
+@keyframes home-rise { from { opacity: 0; translate: 0 18px; } }
 @keyframes cast-bob { 50% { transform: translateY(-8px); } }
-@keyframes bubble-rise { from { opacity: 0; transform: translateY(10px); } }
-@media (max-height: 650px) and (min-width: 700px) {
-  .home-logo { max-width: 470px; }
-  .home-copy .hero-actions .button { min-height: 54px; padding: 10px 22px; }
+@media (max-height: 650px) {
+  .home-buttons .button { min-height: 54px; padding: 10px 22px; }
 }
 @media (max-width: 699px), (orientation: portrait) and (max-width: 950px) {
-  .home-screen::after { background: linear-gradient(180deg, #0b2f28ee 0%, #0d3a31c4 52%, #0d3a3100 78%); }
-  .home-copy { top: 9%; left: 6%; width: 88%; transform: none; animation: none; }
+  .home-title { width: min(90vw, 150dvh); }
   .home-cast img { height: clamp(120px, 22vh, 200px); }
-  .home-bubble { display: none; }
+  .home-buttons .button { min-width: 0; padding: 10px 20px; }
 }
 
 /* ── Stage map: always covers the screen, follows the walker ─ */
@@ -121,31 +111,14 @@
   .teacher-where { max-width: 34vw; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-art, .home-copy, .home-cast img, .home-bubble, .map-here { animation: none; }
+  .home-art, .home-title, .home-cast img, .map-here { animation: none; }
 }
-/* Keep the optional welcome caption readable in front of decorative characters. */
-.home-copy:has(.npc-welcome-voice) { z-index: 3; }
 
 .map-tools .map-tool{width:48px;min-width:48px;height:48px;min-height:48px;padding:0;justify-content:center}.map-tools .map-tool:focus-visible{outline:3px solid #d5a628;outline-offset:3px}
 
-/* Keep the existing title, actions and voice captions reachable on short landscape screens. */
-@media (max-height: 650px) and (min-width: 700px) {
-  .home-copy:has(.npc-welcome-voice) {
-    top: 16px;
-    max-height: calc(100dvh - 32px);
-    overflow-y: auto;
-    transform: none;
-    animation: none;
-    padding: 4px 8px 10px 4px;
-  }
-}
 
 .map-node[data-map-label-covered]:not(:focus-visible){opacity:0;pointer-events:none}
 
-.play-mission-entry {
- min-height:48px;padding:8px 20px;border:1px solid var(--line);border-radius:18px;
- background:var(--glass-control);color:var(--forest-dark);font:inherit;font-weight:700;
-}
 
 /* Recovery uses only the first screen styles. */
 #map-host, #activity-host { min-width: 0; }

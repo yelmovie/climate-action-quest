@@ -50,14 +50,6 @@ try{
    await page.goto(base+'/#'+route);await page.locator('h1,.map-action').first().waitFor();await page.evaluate(()=>Promise.race([Promise.all([document.fonts.ready,...[...document.images].filter(img=>img.getBoundingClientRect().width&&img.getBoundingClientRect().height).map(img=>img.decode().catch(()=>{}))]),new Promise((_,reject)=>setTimeout(()=>reject(Error('Page assets did not settle within 10 seconds')),10000))]));await page.waitForTimeout(220);
    if(new URL(page.url()).hash!=='#'+route)throw new Error('Expected route '+route+', got '+page.url());
    await inspect(route,w,h);
-   if(route==='home'&&await page.locator('.home-copy').evaluate(el=>getComputedStyle(el).overflowY==='auto')){
-    for(const button of await page.locator('.home-copy [data-voice]').all()){
-     await button.click();
-     const bounds=await button.boundingBox();
-     if(!bounds||bounds.y<0||bounds.y+bounds.height>h)throw Error('Scrolled home voice remains offscreen');
-    }
-    await page.locator('.home-copy').evaluate(el=>el.scrollTop=0);
-   }
   }
   await page.getByRole('button',{name:'설정',exact:true}).click();await page.waitForTimeout(220);await inspect('settings',w,h);
   for(let i=0;i<4;i++){await page.locator('.settings-section').nth(i).locator('summary').first().click();await inspect('settings-section-'+i,w,h);}

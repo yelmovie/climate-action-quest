@@ -55,3 +55,10 @@ html .science-settings-body>*{flex:none}
 html [data-science-settings] .science-settings-label{grid-column:1/-1;margin:0 0 4px}
 html [data-science-settings] .science-settings-body > .science-settings-guides{display:flex;flex-direction:column;gap:9px}
 html [data-science-settings] :is(h2,.settings-title,.settings-header){color:var(--settings-ink)}
+/* 안내 목소리 듣기(2026-11-22): the two guide voices moved here from the title screen. */
+html [data-science-settings] .settings-guide-voice{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;min-height:49px;border:1px solid var(--settings-line);border-radius:11px;padding:6px 11px;background:#edf3e2}
+html [data-science-settings] .settings-guide-voice-label{font-weight:700;margin-right:auto}
+html [data-science-settings] .settings-guide-voice .button{min-height:44px;padding:6px 16px}
+html [data-science-settings] .settings-guide-voice small{font-size:18px;color:#4f6b58}
+html [data-science-settings] .settings-guide-voice .voice-status:empty{display:none}
+html [data-science-settings] .settings-guide-voice .voice-status{flex-basis:100%;font-size:18px}
