@@ -19,6 +19,7 @@ export function normalizeState(raw){
  base.completed=Array.isArray(raw.completed)?[...new Set(raw.completed.filter(i=>Number.isInteger(i)&&i>=0&&i<10&&base.records[i]&&!base.records[i].example&&base.records[i].done===true))]:[];
  base.adminUnlocked=raw.adminUnlocked===true;base.introSeen=raw.introSeen===true;
  base.finalized=raw.finalized===true&&base.completed.length===10;
+ if(base.finalized&&Number.isFinite(raw.finalizedAt))base.finalizedAt=raw.finalizedAt;
  if(typeof raw.route==='string'&&/^(home|map|ending|facility\/[0-4]|activity\/[0-9])$/.test(raw.route))base.route=raw.route;
  if(Number.isFinite(raw.position?.x)&&Number.isFinite(raw.position?.y))base.position=raw.position;
  if(raw.summaries&&typeof raw.summaries==='object')base.summaries=Object.fromEntries(Object.entries(raw.summaries).filter(([k,v])=>/^\d$/.test(k)&&typeof v==='string').map(([k,v])=>[k,v.slice(0,1000)]));
