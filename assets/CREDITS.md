@@ -130,7 +130,7 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 - 원본: https://campaign.naver.com/nanumsquare_neo/download/NaverNanumSquareNeo.zip
 - 라이선스: SIL Open Font License 1.1. 전체 저작권 안내·전문은 `fonts/NanumSquareNeo-OFL.txt`.
 - 기존 영상·삽화에 포함된 글자는 영상 제작 당시 글꼴을 유지한다.
-- 2026-11-21 화면용 부분 글꼴: `fonts/climate-body-400.woff2`·`climate-body-700.woff2`는 위 원본에서 앱 화면 글자(704자)만 남긴 파일이다(`scripts/subset-fonts.py`, fontTools). OFL의 수정본이라 글꼴 안쪽 이름을 예약 글꼴 이름(NanumSquareNeo)이 아닌 「Climate Lab Body」로 바꿨고, 라이선스 전문은 같은 `fonts/NanumSquareNeo-OFL.txt`를 따른다. 원본 두 파일은 그대로 두고, 부분 글꼴에 없는 글자가 나오면 원본을 받아 쓴다. 내려받는 인증서 SVG에는 지금처럼 원본을 넣는다.
+- 2026-11-21 화면용 부분 글꼴: `fonts/climate-body-400.woff2`·`climate-body-700.woff2`는 위 원본에서 앱 화면 글자만 남긴 파일이다(`scripts/subset-fonts.py`, fontTools). OFL의 수정본이라 글꼴 안쪽 이름을 예약 글꼴 이름(NanumSquareNeo)이 아닌 「Climate Lab Body」로 바꿨고, 라이선스 전문은 같은 `fonts/NanumSquareNeo-OFL.txt`를 따른다. 원본 두 파일은 그대로 두고, 부분 글꼴에 없는 글자가 나오면 원본을 받아 쓴다. 인증서 PNG는 화면에서 불러온 같은 글꼴로 캔버스에 그린다.
 
 ## 과학 개념 장면 보강 · 2026-11-12
 
@@ -217,3 +217,8 @@ Codex 내장 `image_gen` 도구로 대상 그림 11장과 장면 그림 14장, �
 - 나머지 장면(인트로 마지막·마무리 3장면): 같은 그림을 ffmpeg로 천천히 확대·이동하고 디졸브로 이은 장면. 제목 로고는 `logo-title.webp`를 ffmpeg로 얹었다(`_scratch/films-16-20261121/render.py`).
 - 영상에는 소리가 없다. 앱이 장면마다 기존 내레이션(`story-1~3`, `ending-1·2`)과 새 내레이션 `el-finale-2.mp3`(ElevenLabs `eleven_v4`, 목소리 Haemi `ZjAPD4f11zlnEnZpKDgo`, 요청 ID `7JR4eQmFAUGOOxmyQlmd`)를 재생하고 자막을 띄운다.
 
+
+## 인증서 테두리 · 2026-11-22
+
+- `certificate-frame-20261122.webp`(1800×1273, 167226바이트): Codex 기본 이미지 도구(GPT 이미지)로 1회 생성했다. 해·구름·온도계·잎·잎새 깃털·풍력 날개·강을 바깥에 두고 가운데를 비웠다. 참고는 이 프로젝트 `home.webp`·`ipsae-parrot.webp`와 05 인증서 테두리다. 글자는 그림에 넣지 않고 코드로 올린다.
+- 원본: `references/certificate/certificate-frame-20261122.png`, 전체 프롬프트: `references/certificate/PROMPT-16.txt`. 생성 계정의 요금제·이용 조건 증빙은 기존 장부의 미확인 항목을 그대로 유지한다.

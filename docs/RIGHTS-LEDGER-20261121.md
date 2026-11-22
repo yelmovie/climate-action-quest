@@ -1,5 +1,7 @@
 # 16 기후 미래 작전실 · 권리 장부 (2026-11-21)
 
+**추가 요약(2026-11-22 인증서 테두리 뒤): 전체 34줄 · 확인됨 12 · 근거 약함 22 · 출처 미확인 0.** IMG-16은 생성 날짜·도구·원본·프롬프트를 남겼으며 기존 그림처럼 계정 요금제·약관 증빙을 기다립니다.
+
 **요약(2026-11-21 영상 추가 뒤): 전체 33줄 · 확인됨 12 · 근거 약함 21 · 출처 미확인 0 · 배포되는 그림 파일 77개 중 출처 미확인 0개.** 아침 장부의 출처 미확인 4줄(IMG-12·IMG-13·VID-03·FNT-02)을 `_shared/CODEX-IMAGE-RECORDS-20261121.md` 방법대로 생성·작업 기록과 이었다. 그림 두 줄은 만든 도구·시각·프롬프트 첫 구절까지 찾았지만 이미지 도구 요금제·약관 기록이 없어 다른 생성 그림처럼 「근거 약함」이다. 새로 FNT-03(화면 부분 글꼴)·VOX-06(다시 생각하기 새 녹음)을 더했다.
 
 (아침 요약: 전체 28줄 · 확인됨 8 · 근거 약함 16 · 출처 미확인 4 · 배포되는 그림 파일 75개 중 출처 미확인 4개(`assets/map-encounters/villain-left.png`, `villain-right.png`, `assets/npc-dialogue/ipsae.webp`, `mulbangul.webp`).)
@@ -15,7 +17,7 @@
   - **출처 미확인**: 이 파일을 누가·무엇으로 만들었는지 적은 기록을 못 찾았다.
 - 이 장부는 출처 기록 정리다. 법률 검토나 상업 이용 허락을 대신하지 않는다.
 
-## 1. 그림 (14줄 · 65파일. 개념 영상 포스터 10장은 2장 영상 줄에 넣었다)
+## 1. 그림 (16줄. 개념 영상 포스터 10장은 2장 영상 줄에 넣었다)
 
 | 파일(묶음) | 만든 곳 | 만든 날·기록 위치 | 이용 조건 | 근거 파일 경로 | 상태 |
 |---|---|---|---|---|---|
@@ -34,6 +36,8 @@
 | **IMG-13** 대화 초상 2장: `assets/npc-dialogue/ipsae.webp`, `mulbangul.webp` | Codex 내장 이미지 도구(GPT 이미지)로 만든 2×2 대화 초상 시트를 잘라 WebP 2장으로 | 2026-11-12 21:52 KST, Codex 세션 `rollout-2026-11-12T21-49-45-01a1cfce…`의 `image_gen` 「Transparent 2-column × 2-row dialogue portrait sprite sheet… Top left: Ipsae…」(`exec-260ce874`), 같은 세션이 `_scratch/npc-14-16-20261112/sheet-16.png`로 복사, `pack.sh` 13·14행이 `ipsae`·`mulbangul` 칸을 잘라 저장(`HANDOFF.md` 9·10행), 커밋 `85961fe`. `_shared/codex-image-records-20261121/` 색인(읽기 전용, 방법 `_shared/CODEX-IMAGE-RECORDS-20261121.md`) | 생성 계정 요금제·약관 기록 없음(IMG-04~11과 같음) | `_scratch/npc-14-16-20261112/sheet-16.png`·`pack.sh`·`HANDOFF.md`, 위 세션 기록 | 근거 약함(2026-11-21 출처 미확인 → 생성 기록 연결) · 빠진 것: 이미지 도구 요금제·약관. `ipsae.webp`(다람쥐 시절 잎새)는 지금 앱이 부르지 않는다 |
 | **IMG-14** 앱 아이콘 `assets/favicon.svg`(307바이트 SVG) | 직접 쓴 SVG로 보이나, CREDITS의 "공통 SVG 아이콘·앱 UI … 프로젝트 코드에서 직접 제작"은 `src/icons.js` 이야기이고 이 파일을 따로 적지 않음 | 2026-10-21(`docs/reviews/ASSET-CLASSROOM-MEDIA-20261021.md` 36행 목록), 커밋 `9eb4c37` | CREDITS 권리 표시의 자체 제작물 조건이 적용된다고 볼 근거는 간접적 | `docs/reviews/ASSET-CLASSROOM-MEDIA-20261021.md`, `assets/CREDITS.md` | 근거 약함 · 빠진 것: 이 파일을 직접 만들었다는 한 줄 기록 |
 | **IMG-15** 영상 장면 그림 6장(배포본에는 영상 첫 장면 `assets/films/intro.webp`·`finale.webp`로만 들어감) | Codex 내장 이미지 도구(GPT 이미지), 기존 그림 7장을 참고로 붙임 | 2026-11-21, `_scratch/films-16-20261121/gen-frames.sh`·`prompts.json`·`frames/`, `assets/CREDITS.md` 「인트로·마무리 영상」 | 생성 계정 요금제·약관 기록 없음(IMG-04~11과 같음) | 위 폴더, `assets/CREDITS.md` | 근거 약함 · 빠진 것: 이미지 도구 요금제·약관 |
+
+| **IMG-16** 인증서 테두리 `assets/certificate-frame-20261122.webp` | Codex 기본 이미지 도구(GPT 이미지), 이 프로젝트 `home.webp`·`ipsae-parrot.webp`와 05 인증서 테두리를 화풍·양식 참고로 새로 생성 | 2026-11-22. 원본 `references/certificate/certificate-frame-20261122.png`, 프롬프트 `references/certificate/PROMPT-16.txt`. 1회 생성, 배포 1800×1273·167226바이트 | 생성 계정 요금제·약관 증빙은 기존 생성 그림과 같은 사용자 확인 대기 | 위 원본·프롬프트, `assets/CREDITS.md` | 근거 약함 · 빠진 것: 생성 계정 요금제·약관 증빙 |
 
 ## 2. 영상 (3줄 · 31파일)
 
