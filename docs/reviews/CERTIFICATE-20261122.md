@@ -9,3 +9,5 @@
 - 움직임 줄이기에서 인증서 실행 중 애니메이션0, 설정의 인증서 받기로 같은 화면 열림.
 - 검증은 격리 브라우저의 완료 기록 시드로 인증서 흐름을 확인한 것이며 전체 학습 완주나 실제 태블릿 터치 검사로 확대하지 않는다.
 - 근거: `.tmp/cert-design-20261122/local-final.json`, `shots/local-final.pdf`, `shots/local-final-saved.png`, `compare.png`. 운영 확인 기록은 배포 뒤 아래에 덧붙인다.
+
+운영 반영: 그림 `4e5a932`·앱 `f28586c`·문서 `c07a43e`, Worker `ece89d90-a6bf-4e96-8700-d8910ea3b98b`. 공식 운영 주소 `https://climate-action-quest.yelsam.workers.dev`에서 같은 세 뷰·설정 입구·PNG 다운로드·인쇄를 확인했고 콘솔 오류/4xx 0. 배포본 index와 코드 파일 40개가 로컬 최신 빌드와 일치한다.
