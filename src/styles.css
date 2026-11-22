@@ -593,7 +593,7 @@ img { max-width: 100%; }
   dialog.certificate-dialog::backdrop { display: none; }
   .certificate-dialog .dialog-body { max-height: none; overflow: visible; padding: 0; }
   .certificate-dialog .certificate { overflow: visible; }
-  .certificate-dialog :is(button, .voice-status) { display: none !important; }
+  .certificate-dialog :is(button, .voice-status, .certificate-actions) { display: none !important; }
 }
 
 /* Persistent, in-flow warning never masks the game controls. */
