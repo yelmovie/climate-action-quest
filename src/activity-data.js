@@ -5,7 +5,7 @@ export const evidenceSites = [
   {id:'summer',name:'더운 날 기록',x:18,y:27,past:[2,3,3,4],now:[5,6,7,8],unit:'여름철 매우 더운 날의 수',climate:true,clue:'같은 지역에서 여러 해를 묶어 비교했어요.',judgment:'여러 해에 걸쳐 매우 더운 날이 늘어나는 경향이 있어요.',why:'하루가 아니라 여러 해의 기록을 같은 기준으로 비교했기 때문이에요.'},
   {id:'rain',name:'비의 기록',x:44,y:22,past:[2,3,2,3],now:[4,5,5,6],unit:'많은 비가 내린 날의 수',climate:true,clue:'같은 관측소의 긴 기간 기록이에요.',judgment:'오랜 기간의 비 내리는 양상이 달라졌어요.',why:'같은 기준의 긴 관측 기록은 변화의 경향을 찾는 자료가 돼요.'},
   {id:'snow',name:'오늘의 눈',x:72,y:24,past:[0,0,0,0],now:[0,0,0,7],unit:'내린 눈의 양',periods:['어제','오늘'],groups:['아침','낮','저녁','밤'],climate:false,clue:'어제와 오늘, 이틀의 날씨만 적혀 있어요.',judgment:'눈이 왔으니 지구의 기후변화가 멈췄어요.',why:'하루의 추위나 눈만으로 긴 기간의 기후변화를 판단할 수 없어요.'},
-  {id:'flower',name:'꽃 피는 때',x:86,y:46,past:[7,7,6,7],now:[5,5,4,4],unit:'꽃 피는 시기 · 막대가 낮을수록 일찍 피어요',climate:true,clue:'같은 종류의 꽃을 같은 장소에서 여러 해 관찰했어요.',judgment:'꽃 피는 시기가 여러 해에 걸쳐 빨라지는 경향이 있어요.',why:'종류와 장소를 같게 두고 여러 해의 기록을 비교했어요. 다른 자료와도 함께 살펴야 해요.'},
+  {id:'flower',chartLabel:'꽃 피는 시기 · 낮을수록 일찍',chartContext:'한 장소 예시',name:'꽃 피는 때',x:86,y:46,past:[7,7,6,7],now:[5,5,4,4],unit:'꽃 피는 시기 · 막대가 낮을수록 일찍 피어요',climate:true,clue:'같은 꽃·같은 장소의 여러 해 가상 기록이에요. 다른 곳은 다를 수 있어요.',judgment:'꽃 피는 시기가 여러 해에 걸쳐 빨라지는 경향이 있어요.',why:'종류와 장소를 같게 두고 여러 해의 기록을 비교했어요. 다른 자료와도 함께 살펴야 해요.'},
   {id:'sea',name:'바닷물 기록',x:69,y:68,past:[2,2,3,2],now:[4,4,5,5],unit:'바닷물 높이의 상대 단계',climate:true,clue:'같은 기준점에서 오랜 기간 살펴본 가상 기록이에요.',judgment:'오랜 기간에 걸쳐 바닷물 높이가 달라졌어요.',why:'같은 기준점의 긴 기록을 비교해야 해요. 한 번의 밀물만 본 것은 아니에요.'},
   {id:'cold',name:'이번 주 추위',x:43,y:68,past:[4,4,4,4],now:[4,2,3,4],unit:'하루 기온 · 높을수록 따뜻해요',periods:['지난주','이번 주'],groups:['월','화','수','목'],climate:false,clue:'지난주와 이번 주, 며칠의 날씨만 적혀 있어요.',judgment:'이번 주 추웠으니 장기적인 온난화는 없어요.',why:'한 주의 날씨는 길게 나타나는 기후의 경향과 달라요.'},
   {id:'warm',name:'긴 기온 기록',x:20,y:60,past:[2,3,2,3],now:[4,5,5,6],unit:'여러 해 평균 기온의 상대 단계',climate:true,clue:'기간을 길게 묶고 같은 관측 기준을 사용했어요.',judgment:'여러 해 평균 기온이 높아지는 경향이 있어요.',why:'여러 해를 묶은 평균을 비교하면 긴 변화의 경향을 찾을 수 있어요.'},
@@ -13,29 +13,48 @@ export const evidenceSites = [
 ];
 
 export const humanSites = [
-  {name:'교실의 빈자리',scene:'아무도 없는 교실에 조명이 켜져 있어요.',resource:'전기',mechanism:'쓰지 않는 전기 사용을 줄일 수 있어요.',answer:0,x:17,y:22},
-  {name:'등굣길 자동차',scene:'가까운 거리를 한 명씩 자동차로 가요.',resource:'연료',mechanism:'연료를 쓰는 이동과 관련이 있어요.',answer:1,x:38,y:20},
-  {name:'집의 냉난방',scene:'창문을 연 채 냉방기를 계속 켜요.',resource:'전기',mechanism:'불필요한 에너지 사용이 늘 수 있어요.',answer:0,x:61,y:20},
-  {name:'물건 만드는 곳',scene:'새 물건을 만들 때 원료와 에너지를 써요.',resource:'자원과 에너지',mechanism:'필요한 만큼 만들고 오래 쓰는 선택과 관련돼요.',answer:2,x:83,y:23},
-  {name:'숲의 변화',scene:'나무가 있던 공간을 넓게 없앴어요.',resource:'숲',mechanism:'이산화 탄소를 흡수하는 숲이 줄어들 수 있어요.',answer:3,x:87,y:50},
-  {name:'학교 급식',scene:'먹을 수 있는 음식이 많이 남았어요.',resource:'자원과 에너지',mechanism:'음식을 만들고 운반한 자원과 에너지도 함께 낭비돼요.',answer:2,x:73,y:74},
-  {name:'공동 버스',scene:'여러 사람이 버스를 함께 타요.',resource:'연료',mechanism:'사람마다 따로 차를 타는 경우와 비교해 볼 수 있어요.',answer:1,x:51,y:72},
-  {name:'고쳐 쓰는 가게',scene:'끈이 풀린 가방을 고쳐서 다시 써요.',resource:'자원과 에너지',mechanism:'새 물건을 만드는 자원과 에너지를 아낄 수 있어요.',answer:2,x:29,y:72},
-  {name:'초록 학교',scene:'학교 안 나무와 작은 숲을 돌봐요.',resource:'숲',mechanism:'숲을 보전하는 활동과 관련이 있어요.',answer:3,x:12,y:51},
-  {name:'집의 대기전력',scene:'쓰지 않는 기기의 전원을 정리해요.',resource:'전기',mechanism:'필요 없는 전기 사용을 줄일 수 있어요.',answer:0,x:49,y:46},
+  {categoryId:'electricity',name:'교실의 빈자리',scene:'아무도 없는 교실에 조명이 켜져 있어요.',resource:'전기',mechanism:'쓰지 않는 전기 사용을 줄일 수 있어요.',answer:0,x:17,y:22},
+  {categoryId:'transport-fuel',name:'등굣길 자동차',scene:'가까운 거리를 한 명씩 자동차로 가요.',resource:'연료',mechanism:'연료를 쓰는 이동과 관련이 있어요.',answer:1,x:38,y:20},
+  {categoryId:'electricity',name:'집의 냉난방',scene:'창문을 연 채 냉방기를 계속 켜요.',resource:'전기',mechanism:'불필요한 에너지 사용이 늘 수 있어요.',answer:0,x:61,y:20},
+  {categoryId:'production',name:'물건 만드는 곳',scene:'새 물건을 만들 때 원료와 에너지를 써요.',resource:'자원과 에너지',mechanism:'필요한 만큼 만들고 오래 쓰는 선택과 관련돼요.',answer:2,x:83,y:23},
+  {categoryId:'forest',name:'숲의 변화',scene:'나무가 있던 공간을 넓게 없앴어요.',resource:'숲',mechanism:'이산화 탄소를 흡수하는 숲이 줄어들 수 있어요.',answer:3,x:87,y:50},
+  {categoryId:'production',name:'학교 급식',scene:'먹을 수 있는 음식이 많이 남았어요.',resource:'자원과 에너지',mechanism:'음식을 만들고 운반한 자원과 에너지도 함께 낭비돼요.',answer:2,x:73,y:74},
+  {categoryId:'transport-fuel',name:'공동 버스',scene:'여러 사람이 버스를 함께 타요.',resource:'연료',mechanism:'사람마다 따로 차를 타는 경우와 비교해 볼 수 있어요.',answer:1,x:51,y:72},
+  {categoryId:'production',name:'고쳐 쓰는 가게',scene:'끈이 풀린 가방을 고쳐서 다시 써요.',resource:'자원과 에너지',mechanism:'새 물건을 만드는 자원과 에너지를 아낄 수 있어요.',answer:2,x:29,y:72},
+  {categoryId:'forest',name:'초록 학교',scene:'학교 안 나무와 작은 숲을 돌봐요.',resource:'숲',mechanism:'숲을 보전하는 활동과 관련이 있어요.',answer:3,x:12,y:51},
+  {categoryId:'electricity',name:'집의 대기전력',scene:'쓰지 않는 기기의 전원을 정리해요.',resource:'전기',mechanism:'필요 없는 전기 사용을 줄일 수 있어요.',answer:0,x:49,y:46},
 ];
-export const resourceNames=['전기','연료','자원과 에너지','숲'];
+// Parallel investigation topics, not a claim that electricity is separate from energy.
+export const resourceCategories=[
+ {id:'electricity',name:'조명·기기의 전기',guide:'전기도 에너지예요. 여기서는 조명·기기의 전기 사용을 조사해요.'},
+ {id:'transport-fuel',name:'이동에 쓰는 연료',guide:'연료도 에너지와 관련돼요. 여기서는 이동할 때 쓰는 연료를 조사해요.'},
+ {id:'production',name:'물건·음식 만들고 쓰기',guide:'여기서는 물건·음식을 만들고 쓰는 데 필요한 재료와 생산·운반 에너지를 함께 조사해요.'},
+ {id:'forest',name:'숲의 보전·변화',guide:'여기서는 나무와 숲이 늘거나 줄어드는 변화, 숲을 돌보는 활동을 조사해요.'}
+];
+export const resourceNames=resourceCategories.map(category=>category.name);
 
+// Stable reason IDs are shared by meaning; each case explicitly lists its choices and accepted links.
+export const relationReasons={
+ 'unused-electricity':'쓰지 않는 전기를 계속 사용해요.',
+ 'travel-fuel':'이동에 연료를 사용해요.',
+ 'cooling-demand':'바깥 공기가 들어와 냉방 에너지가 더 필요해요.',
+ 'production-inputs':'새 물건 생산에 원료와 에너지가 필요해요.',
+ 'forest-loss':'이산화 탄소를 흡수하는 나무가 줄어요.',
+ 'food-resources':'음식 생산과 운반에도 자원이 쓰여요.',
+ 'less-new-production':'새로 만들 물건과 자원 사용을 줄여요.',
+ 'trees-absorb':'나무가 이산화 탄소를 흡수해요.',
+ 'appearance-only':'사진 속 모습만으로 모든 영향을 확정해요.'
+};
 export const relationCases = [
-  {site:0,middle:'쓰지 않는 전기를 계속 사용해요.',end:'전기를 아끼면 연료로 전기를 만들 때 나오는 온실 기체를 줄일 수 있어요.'},
-  {site:1,middle:'이동에 연료를 사용해요.',end:'휘발유 같은 연료를 태우면 이산화 탄소가 나와요. 이동 방법에 따라 줄일 수 있어요.'},
-  {site:2,middle:'바깥 공기가 들어와 냉방 에너지가 더 필요해요.',end:'창문을 닫고 알맞게 냉방하면 에너지와 온실 기체를 줄일 수 있어요.'},
-  {site:3,middle:'새 물건 생산에 원료와 에너지가 필요해요.',end:'물건을 오래 쓰면 만들 때 나오는 온실 기체를 줄일 수 있어요.'},
-  {site:4,middle:'이산화 탄소를 흡수하는 나무가 줄어요.',end:'공기 중 이산화 탄소가 늘 수 있어 숲을 지켜야 해요.'},
-  {site:5,middle:'음식 생산과 운반에도 자원이 쓰여요.',end:'먹을 만큼 준비하면 음식을 만들고 옮길 때 나오는 온실 기체를 줄여요.'},
-  {site:7,middle:'새로 만들 물건과 자원 사용을 줄여요.',end:'새 물건을 만들 때 나오는 온실 기체를 줄이는 대응이에요.'},
-  {site:8,middle:'나무가 이산화 탄소를 흡수해요.',end:'숲을 가꾸고 지키는 것도 기후변화 대응이에요.'},
-];
+ {id:'classroom',site:0,middleId:'unused-electricity',choices:['unused-electricity','production-inputs','appearance-only'],acceptedIds:['unused-electricity'],otherFeedback:'새 물건 생산에 자원과 에너지가 드는 것은 맞아요. 지금은 빈 교실의 조명 사용을 연결해요.',end:'전기를 아끼면 연료로 전기를 만들 때 나오는 온실 기체를 줄일 수 있어요.'},
+ {id:'commute',site:1,middleId:'travel-fuel',choices:['travel-fuel','forest-loss','appearance-only'],acceptedIds:['travel-fuel'],otherFeedback:'나무가 줄면 이산화 탄소 흡수가 줄 수 있어요. 지금은 자동차 이동에 무엇을 쓰는지 연결해요.',end:'휘발유 같은 연료를 태우면 이산화 탄소가 나와요. 이동 방법에 따라 줄일 수 있어요.'},
+ {id:'cooling',site:2,middleId:'cooling-demand',choices:['cooling-demand','food-resources','appearance-only'],acceptedIds:['cooling-demand'],otherFeedback:'음식 생산과 운반에도 자원이 쓰여요. 지금은 열린 창문과 냉방 에너지의 관계를 연결해요.',end:'창문을 닫고 알맞게 냉방하면 에너지와 온실 기체를 줄일 수 있어요.'},
+ {id:'production',site:3,middleId:'production-inputs',choices:['production-inputs','less-new-production','appearance-only'],acceptedIds:['production-inputs','less-new-production'],alternativeFeedback:'맞아요. 물건을 오래 쓰면 새 물건과 자원 사용을 줄여 생산할 때 나오는 온실 기체도 줄일 수 있어요.',end:'물건을 오래 쓰면 만들 때 나오는 온실 기체를 줄일 수 있어요.'},
+ {id:'forest-loss',site:4,middleId:'forest-loss',choices:['forest-loss','trees-absorb','appearance-only'],acceptedIds:['forest-loss','trees-absorb'],alternativeFeedback:'맞아요. 나무가 이산화 탄소를 흡수하므로 나무를 없애면 흡수할 나무가 줄어요. 이 성질도 숲을 지키는 이유와 이어져요.',end:'공기 중 이산화 탄소가 늘 수 있어 숲을 지켜야 해요.'},
+ {id:'meal',site:5,middleId:'food-resources',choices:['food-resources','unused-electricity','appearance-only'],acceptedIds:['food-resources'],otherFeedback:'쓰지 않는 전기를 줄이는 것도 좋아요. 지금은 남은 음식을 만들고 운반할 때 쓰인 자원을 연결해요.',end:'먹을 만큼 준비하면 음식을 만들고 옮길 때 나오는 온실 기체를 줄여요.'},
+ {id:'repair',site:7,middleId:'less-new-production',choices:['less-new-production','travel-fuel','appearance-only'],acceptedIds:['less-new-production'],otherFeedback:'이동에 연료가 쓰이는 것은 맞아요. 지금은 가방을 고치면 새 물건 생산이 어떻게 달라지는지 연결해요.',end:'새 물건을 만들 때 나오는 온실 기체를 줄이는 대응이에요.'},
+ {id:'school-forest',site:8,middleId:'trees-absorb',choices:['trees-absorb','cooling-demand','appearance-only'],acceptedIds:['trees-absorb'],otherFeedback:'열린 창문은 냉방 에너지를 늘릴 수 있어요. 지금은 나무와 이산화 탄소의 관계를 연결해요.',end:'숲을 가꾸고 지키는 것도 기후변화 대응이에요.'}
+].map(item=>({...item,middle:relationReasons[item.middleId]}));
 
 export const coastDistricts=[
   {id:'beach',name:'모래 해변',height:1,kind:'environment'},

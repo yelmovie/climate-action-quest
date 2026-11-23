@@ -13,3 +13,9 @@ test('zero observations remain zero instead of acquiring a decorative positive b
  assert.equal((html.match(/--ov-value:0/g)||[]).length,7);
  assert.ok(html.includes('같은 눈금, 0부터 8까지'));
 });
+
+test('flower captions describe a single fictional place and the earlier/later direction without changing values',()=>{
+ const flower=evidenceSites.find(site=>site.id==='flower'),html=observationChart(flower);
+ assert.match(html,/한 장소 예시/);assert.match(html,/낮을수록 일찍/);assert.match(flower.clue,/다른 곳은 다를 수/);
+ assert.deepEqual(flower.past,[7,7,6,7]);assert.deepEqual(flower.now,[5,5,4,4]);
+});
