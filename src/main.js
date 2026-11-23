@@ -252,7 +252,7 @@ function finaleFilm(after=certificate){import('./story-film.js').then(({openStor
 function certificate(){
  if(state.adminUnlocked){announce('교사 미리보기에서는 인증서를 발급하지 않아요.');return;}
  if(!state.finalized||!certificateEligible(state))return;
- openCertificate({dialog,icon,date:doneDate(),highlights:researchHighlights(),badges:stages.map(s=>s.badge),announce});
+ openCertificate({dialog,icon,date:doneDate(),highlights:researchHighlights(),badges:stages.map(s=>s.badge),announce,onImpact:()=>audio.effect('map-contact')});
 }
 function download(filename,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 // Completion date on the certificate (saves finished before this was stored show the day it is opened).

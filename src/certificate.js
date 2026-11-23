@@ -1,10 +1,12 @@
 // 인증서는 진행 기록을 읽기만 한다. 이름은 출력한 종이에 손으로 쓴다.
 import {saveCertificatePng} from './certificate-png.js';
+import {mountCertificateWax} from './certificate-wax.js';
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const blank=(field,label)=>`<span class="cert-field"><span class="cert-blank" data-cert-blank="${field}" aria-label="${label} 적는 빈칸"></span><span>${label}</span></span>`;
-export function openCertificate({dialog,icon,date,highlights,badges,announce}){
+export function openCertificate({dialog,icon,date,highlights,badges,announce,onImpact}){
  const d=dialog(`<article class="cert-paper" aria-label="기후 미래 탐구 대원 인증서"><img class="cert-frame" src="/assets/certificate-frame-20261122.webp" alt=""><div class="cert-content"><p class="cert-world">기후 미래 작전실</p><h2 class="cert-title">기후 미래 탐구 대원 인증서</h2><div class="cert-recipient"><div class="cert-school-row">${blank('school','학교')}${blank('grade','학년')}${blank('class','반')}${blank('number','번')}</div><div class="cert-name-row"><span>이름</span><span class="cert-blank" data-cert-blank="name" aria-label="이름 적는 빈칸"></span></div></div><p class="cert-award">위 대원은 자료를 근거로 판단하고, 예상과 결과를 비교하며,<br>생활과 도시의 대응을 설계하였으므로<br>이 인증서를 드립니다.</p><div class="cert-achievement"><p class="cert-badges">${badges.map(escape).join(' · ')}</p><p class="cert-practice">나의 실천: ${escape(highlights[0])}</p></div><div class="cert-bottom"><p class="cert-date"><small>탐구 완료</small>${escape(date)}</p><div class="cert-stamp" aria-label="기후 미래 탐구 인증 도장">${icon('leaf')}<b>기후 미래<br>탐구 인증</b></div><p class="cert-giver"><small>주는 이</small>기후 미래 작전실<br>잎새와 물방울</p></div><p class="cert-credit">기획·제작: 옐샘 & ⓒ 아이스크림미디어</p></div></article><p class="cert-note">인쇄한 뒤 학교·반·번호·이름을 직접 적어요.</p><div class="cert-actions"><button class="button secondary" id="print-certificate">인증서 인쇄 / PDF 저장</button><button class="button primary" id="download-certificate">PNG 저장 ${icon('download')}</button></div>`,'certificate-dialog');
  d.setAttribute('aria-label','기후 미래 탐구 대원 인증서');
+ mountCertificateWax(d.querySelector('.cert-paper'),{label:'기후 미래\n탐구 인증',onImpact});
  const close=d.querySelector(':scope > .dialog-close');close.className='button secondary';close.textContent='닫기';close.setAttribute('data-certificate-close','');d.querySelector('.cert-actions').append(close);
  d.querySelector('#print-certificate').onclick=()=>window.print();
  d.querySelector('#download-certificate').onclick=async e=>{const button=e.currentTarget;button.disabled=true;try{await saveCertificatePng(d.querySelector('.cert-paper'),'기후미래_탐구대원_인증서.png');announce('인증서 PNG를 저장했어요.');}catch{announce('인증서 그림을 불러오지 못했어요. 연결을 확인하고 다시 눌러 주세요.');}finally{button.disabled=false;}};
