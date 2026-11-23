@@ -6,7 +6,7 @@ export function activityAction(index,r){
  switch(index){
   case 0:return r.collected?.length===8?'관측 마무리를 눌러요.':r.collected?.includes(evidenceSites[r.open||0]?.id)?'다음 관측 지점을 눌러요.':'시간 손잡이를 오른쪽 끝까지 밀어요.';
   case 1:return r.checked?'근거를 읽고 다음 버튼을 눌러요.':'자료를 보고 알맞은 판단을 눌러요.';
-  case 2:return r.collected?.length===10?'조사 마무리를 눌러요.':r.collected?.includes(r.open||0)?'다음 조사 지점을 눌러요.':'장면과 관련된 자원 버튼을 눌러요.';
+  case 2:return r.collected?.length===10?'조사 마무리를 눌러요.':r.collected?.includes(r.open||0)?'다음 조사 지점을 눌러요.':'장면에서 직접 조사할 주제를 눌러요.';
   case 3:return r.checked?'연결을 읽고 다음 버튼을 눌러요.':'가운데 칸에 맞는 이유 카드를 눌러요.';
   case 4:return r.ran?'예상과 결과를 보고 다음 버튼을 눌러요.':r.prediction?.length?'실험 시작을 눌러요.':'물이 닿을 것 같은 구역을 모두 눌러요.';
   case 5:return r.checked?'연결을 읽고 다음 버튼을 눌러요.':r.order?.length===3?'놓인 카드를 눌러 빼고 순서를 바꿔요.':`현장 설명과 카드의 앞뒤 관계를 보고 ${3-(r.order?.length||0)}장을 더 눌러요.`;

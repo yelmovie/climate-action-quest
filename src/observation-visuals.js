@@ -1,4 +1,4 @@
-import {evidenceSites,humanSites} from './activity-data.js';
+import {evidenceSites,humanSites,resourceCategories} from './activity-data.js';
 
 const chartMaximum=Math.max(1,...evidenceSites.flatMap(site=>[...site.past,...site.now]));
 const at=(items,value)=>items[Math.max(0,Math.min(items.length-1,Math.floor(Number(value)||0)))];
@@ -14,7 +14,7 @@ const resourceIcon=n=>`<svg class="icon ov-resource-icon" aria-hidden="true" foc
 const periodsOf=site=>site.periods||['이전 여러 해','나중 여러 해'];
 export function observationChart(site){
   const [before,after]=periodsOf(site);
-  return `<div class="ov-legend"><span>줄무늬 · ${before}</span><span>단색 · ${after}</span><small>가상 자료 · ${site.unit}<span class="ov-scale"> · 가상 상대 단계 0~${chartMaximum}</span></small></div><div class="ov-chart" style="--ov-maximum:${chartMaximum}" role="img" aria-label="${site.unit}. 같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. ${before} ${site.past.join(', ')}. ${after} ${site.now.join(', ')}.">${site.past.map((value,i)=>`<div class="ov-pair"><div class="ov-bars"><div class="ov-column ov-past" style="--ov-value:${value}"><span>${value}</span><i></i></div><div class="ov-column ov-now" style="--ov-value:${site.now[i]}"><span>${site.now[i]}</span><i></i></div></div><span class="ov-group-label">${site.groups?.[i]||`${i+1}묶음`}</span></div>`).join('')}</div>`;
+  return `<div class="ov-legend"><span aria-label="줄무늬 · ${before}"><span class="ov-pattern">줄무늬 · </span>${before}</span><span aria-label="단색 · ${after}"><span class="ov-pattern">단색 · </span>${after}</span><small class="ov-data-note"><span class="ov-quantity">${site.chartLabel||site.unit}</span><span class="ov-context">${site.chartContext||'가상 자료'}<span class="ov-scale"> · 가상 상대 단계 0~${chartMaximum}</span></span></small></div><div class="ov-chart" style="--ov-maximum:${chartMaximum}" role="img" aria-label="${site.unit}. 같은 눈금, 0부터 ${chartMaximum}까지의 가상 상대 단계. ${before} ${site.past.join(', ')}. ${after} ${site.now.join(', ')}.">${site.past.map((value,i)=>`<div class="ov-pair"><div class="ov-bars"><div class="ov-column ov-past" style="--ov-value:${value}"><span>${value}</span><i></i></div><div class="ov-column ov-now" style="--ov-value:${site.now[i]}"><span>${site.now[i]}</span><i></i></div></div><span class="ov-group-label">${site.groups?.[i]||`${i+1}묶음`}</span></div>`).join('')}</div>`;
 }
 
 /** Presentation only: source values and the activity's saved answers remain unchanged. */
@@ -58,8 +58,8 @@ export function enhanceObservation({host,index,rec,icon=()=>''}){
     const question=grid.previousElementSibling;
     if(question?.tagName==='P'){
       question.classList.add('ov-resource-question');
-      if(found){grid.setAttribute('aria-label',`이 장면과 연결된 자원: ${site.resource}`);question.remove();}
-      else question.innerHTML=`${icon('scan')}<span>연결된 자원은?</span>`;
+      if(found){grid.setAttribute('aria-label',`이 장면의 조사 주제: ${resourceCategories.find(category=>category.id===site.categoryId).name}`);question.remove();}
+      else question.innerHTML=`${icon('scan')}<span>장면에서 직접 조사할 주제는?</span>`;
     }
   }
   if(index===3){

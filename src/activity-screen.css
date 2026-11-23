@@ -212,9 +212,9 @@
 @media (max-height:600px) and (min-width:601px) {
   .activity-page { padding: 4px 8px 8px; gap: 6px; }
   .activity-heading { min-height: 44px; }
-  /* 18px labels on phone-landscape: the legend stays compact; the scale note stays in the chart label and the hint. */
+  /* Keep the quantity, direction and fictional scale beside the chart on short landscape. */
   .activity-0 .ov-legend { gap: 0 10px; line-height: 1.2; }
-  .activity-0 .ov-legend > small { display: none; }
+  .activity-0 .ov-legend > small { display: block; }
   .activity-0 .scan-layout > .evidence-card > .water-control { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: 8px; }
   .activity-0 .evidence-data.ov-data { flex-shrink: 0; }
   .activity-screen .screen-hud { --edge: 8px; }
@@ -352,3 +352,30 @@
 /* Grid workspaces keep the full width: the flex "justify-content: center" above would otherwise shrink
    their single column to its content and leave wide empty bands on wide screens (2026-11-18 balance). */
 .activity-page:is(.activity-3,.activity-5,.activity-7) .activity-workspace { grid-template-columns: minmax(0,1fr); }
+
+/* Observation meaning stays visible; compact periods still retain their pattern and accessible labels. */
+.activity-0 .ov-data-note > span,.activity-1 .ov-data-note > span { display: block; }
+@media (max-height:600px) and (min-width:601px) and (orientation:landscape) {
+ #app .activity-0 .observation-heading { display: none; }
+ #app .activity-0 .ov-pattern { display: none; }
+ #app .activity-0 .ov-legend { gap: 2px 10px; }
+ #app .activity-0 .ov-data-note { flex-basis:100%; margin:0; }
+ #app .activity-0 .scan-layout > .evidence-card { gap:4px; padding:6px; }
+ #app .activity-0 .evidence-data.ov-data { padding:4px; }
+ #app .activity-0 .ov-chart { --ov-unit:4px; padding-top:18px; }
+}
+
+/* During city editing, totals and all three pass conditions update without changing the chosen plan. */
+.activity-page .compact-city-tools { display:none; }
+.activity-page .stress-criteria { flex:none; display:grid; gap:4px; padding:8px; border:1px solid var(--line); border-radius:12px; background:var(--mint-light); }
+.activity-page .stress-criteria p { margin:0; font-size:18px; line-height:1.2; }
+.activity-page .stress-criteria .criteria-limits { display:flex; flex-wrap:wrap; gap:4px 14px; }
+.activity-page .stress-criteria strong { font-weight:800; }
+.activity-page .stress-criteria .criteria-gap { font-weight:700; color:var(--forest-dark); }
+@media (max-height:600px) and (min-width:601px) and (orientation:landscape) {
+ .activity-9 .city-design-layout .facility-palette,.activity-9 .city-risk-legend { display:none; }
+ .activity-9 .compact-city-tools { display:grid; grid-template-columns:auto minmax(0,1fr); gap:6px; align-items:center; font-size:18px; }
+ .activity-9 .compact-city-tools select { min-width:0; width:100%; min-height:48px; font:inherit; color:var(--ink); border:2px solid var(--line); border-radius:10px; background:var(--paper); }
+ .activity-9 .city-design-layout > .evidence-card { overflow:hidden; }
+ .activity-page .stress-criteria { gap:2px; padding:4px; }
+}
