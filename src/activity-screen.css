@@ -2,7 +2,7 @@
 .activity-screen { --edge: 12px; --hud-size: 48px; --hud-gap: 8px; }
 .activity-screen .screen-hud { --edge: 12px; }
 .activity-page {
-  --activity-read: clamp(18px,min(1.55vw,2.6dvh),30px);
+  --activity-read: var(--type-read,clamp(20px,1.55vw,28px));
   --learning-text: var(--activity-read);
   --learning-gap: 8px;
   --learning-width: 100%;
@@ -45,8 +45,8 @@
 .activity-page .scene-brief:has(h2) p { grid-column: 1 / -1; grid-row: 2; }
 
 /* Observation targets and their data remain visible together. */
-#app .activity-page .scan-layout .scan-scene { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); grid-auto-rows: minmax(44px,64px); align-content: center; height: 100%; min-height: 0; padding: 12px; gap: 8px; }
-#app .activity-page .scan-hotspot { position: relative; inset: auto !important; transform: none; width: 100%; min-width: 0; max-width: none; min-height: 44px; height: 100%; padding: 6px 8px; font-size: var(--activity-read); line-height: 1.2; }
+#app .activity-page .scan-layout .scan-scene { display: block; position: relative; height: 100%; min-height: 0; padding: 0; border: 0; border-radius: var(--radius-control,14px); box-shadow: none; overflow: hidden; }
+#app .activity-page .scan-hotspot { position: absolute; left: var(--pin-x) !important; top: var(--pin-y) !important; right: auto !important; bottom: auto !important; transform: translate(-50%,-50%); display: grid; place-items: center; width: 48px; height: 48px; min-width: 48px; min-height: 48px; max-width: none; padding: 0; border: 2px solid var(--forest); border-radius: 50%; font-size: var(--type-note,18px); line-height: 1; color: var(--forest-dark); background: var(--surface-control,var(--paper)); box-shadow: var(--shadow); overflow: visible; }
 #app .activity-page .scan-hotspot .icon { display: block; width: 20px; height: 20px; }
 .activity-page.activity-0 .activity-workspace > .scan-layout,
 .activity-page.activity-2 .activity-workspace > .scan-layout { flex: 1; height: 100%; min-height: 0; max-height: none; }
@@ -378,4 +378,258 @@
  .activity-9 .compact-city-tools select { min-width:0; width:100%; min-height:48px; font:inherit; color:var(--ink); border:2px solid var(--line); border-radius:10px; background:var(--paper); }
  .activity-9 .city-design-layout > .evidence-card { overflow:hidden; }
  .activity-page .stress-criteria { gap:2px; padding:4px; }
+}
+
+
+/* Scenery-led activity surfaces. Keep the diagram, not its container, as the main object. */
+#app .activity-page { --activity-scene-radius: var(--radius-control,14px); }
+#app .activity-page .activity-heading { background: var(--surface-read,var(--paper)); box-shadow: none; }
+#app .activity-page .activity-heading h1 { font-size: var(--type-title,24px); }
+#app .activity-page .round-progress { font-size: var(--type-note,18px); background: var(--mint); }
+#app .activity-page :is(.evidence-card,.comparison-card) {
+  background-color: var(--surface-read,var(--paper)) !important;
+  border-color: var(--line); border-radius: var(--activity-scene-radius); box-shadow: none;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+#app .activity-page :is(.evidence-card,.comparison-card,.chain-slot) p { font-size: var(--activity-read); line-height: 1.4; }
+#app .activity-page .activity-footer { border: 0; background: transparent; box-shadow: none; padding: 0; }
+#app .activity-page .guide-message { min-width: 0; padding: 10px 12px; border-radius: var(--activity-scene-radius); background: var(--surface-read,var(--paper)); }
+#app .activity-page .activity-feedback { font-size: var(--activity-read); line-height: 1.35; }
+#app .activity-page .learning-action { display: none; }
+#app .activity-page .guide-avatar { border-radius: var(--activity-scene-radius); }
+#app .activity-page .playback-tools { gap: 6px; }
+#app .activity-page .playback-toggle { font-size: var(--type-note,18px); box-shadow: none; }
+#app .activity-page .playback-speed { font-size: var(--type-note,18px); }
+#app .activity-page .playback-speed > span { display: none; }
+#app .activity-page .playback-speed select { min-width: 60px; font-size: var(--type-note,18px); }
+#app .activity-page .next-action { outline: 0; box-shadow: var(--shadow); }
+#app .activity-page .action-ready { border-color: var(--forest); }
+#app .activity-page :is(.choice-grid,.facility-palette).action-zone { position: relative; }
+#app .activity-page .button:focus-visible { outline: 3px solid var(--forest-dark); outline-offset: 3px; }
+
+/* A numbered pin marks a place; only the selected place needs a text label. */
+#app .activity-page .scan-hotspot.selected { color: var(--paper); background: var(--forest); border-color: var(--paper); z-index: 3; }
+#app .activity-page .scan-hotspot.correct:not(.selected) { border-color: var(--forest); background: var(--mint); color: var(--forest-dark); }
+#app .activity-page .scan-marker { display: grid; place-items: center; width: 100%; height: 100%; font-weight: 800; font-variant-numeric: tabular-nums; }
+#app .activity-page:is(.activity-0,.activity-2) .scan-layout { grid-template-columns: minmax(0,1.6fr) minmax(320px,1fr); gap: 16px; }
+#app .activity-page:is(.activity-0,.activity-2) .scan-layout > .evidence-card { padding: 16px; gap: 12px; }
+#app .activity-page.activity-0 .evidence-data.ov-data,
+#app .activity-page.activity-1 .comparison-data.ov-data { border: 0; padding: 8px 0; background: transparent; }
+#app .activity-page.activity-0 .observation-heading { display: block; }
+#app .activity-page.activity-0 .observation-heading .observation-art { display: none; }
+#app .activity-page.activity-0 .ov-chart { --ov-unit: clamp(8px,2.3dvh,22px); }
+#app .activity-page.activity-0 .water-control { display: block; padding-top: 8px; border-top: 1px solid var(--line); }
+#app .activity-page .compare-slider { appearance: none; -webkit-appearance: none; background: transparent; padding: 0 1px; min-height: 54px; outline: 0; cursor: ew-resize; }
+#app .activity-page .compare-slider::-webkit-slider-runnable-track { height: 10px; border-radius: 999px; background: var(--mint); border: 1px solid var(--forest); }
+#app .activity-page .compare-slider::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 44px; height: 44px; margin-top: -18px; border: 3px solid var(--paper); border-radius: 50%; background: var(--forest) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10 7 5 5-5 5'/%3E%3C/svg%3E") center/26px 26px no-repeat; box-shadow: var(--shadow); }
+#app .activity-page .compare-slider::-moz-range-track { height: 10px; border-radius: 999px; background: var(--mint); border: 1px solid var(--forest); }
+#app .activity-page .compare-slider::-moz-range-thumb { width: 38px; height: 38px; border: 3px solid var(--paper); border-radius: 50%; background: var(--forest); box-shadow: var(--shadow); }
+#app .activity-page .compare-slider:focus-visible { outline: 3px solid var(--forest); outline-offset: 3px; }
+#app .activity-page.activity-1 .comparison-grid { grid-template-columns: minmax(0,1.35fr) minmax(0,1fr); gap: 24px; align-items: center; }
+#app .activity-page.activity-1 .comparison-grid > .evidence-card { align-self: center; }
+#app .activity-page.activity-1 .comparison-grid > .choice-grid { height: auto; align-self: center; gap: 16px; grid-auto-rows: auto; }
+#app .activity-page.activity-1 .choice-card { min-height: 104px; height: auto; font-size: var(--activity-read); }
+#app .activity-page.activity-1 .ov-evidence-clue { border: 0; border-radius: 0; background: transparent; padding: 0; }
+#app .activity-page.activity-2 .scene-brief { gap: 10px; }
+#app .activity-page.activity-2 .scene-brief > .resource-art { height: clamp(120px,24dvh,260px); width: 100%; object-fit: cover; }
+#app .activity-page.activity-2 .ov-resource-question { display: none; }
+#app .activity-page.activity-2 .ov-resource-choice { min-height: 64px; font-size: var(--activity-read); }
+
+/* A cause chain is a connection to complete, not three full-height panels. */
+#app .activity-page.activity-3 .ov-cause-chain { align-self: center; align-items: center; height: auto; gap: 12px; }
+#app .activity-page.activity-3 .chain-slot { height: auto; min-height: 180px; padding: 16px; border-radius: var(--activity-scene-radius); background: var(--surface-control,var(--paper)); box-shadow: none; }
+#app .activity-page.activity-3 .chain-source { min-height: 0; }
+#app .activity-page.activity-3 .chain-source .scene-brief { gap: 10px; }
+#app .activity-page.activity-3 .chain-source .relation-art { height: clamp(100px,22dvh,210px); object-fit: cover; }
+#app .activity-page.activity-3 .ov-chain-step > .eyebrow { font-size: var(--type-note,18px); letter-spacing: 0; }
+#app .activity-page.activity-3 .chain-slot:not(.filled) { min-height: 140px; border-style: dashed; background: var(--surface-quiet,var(--mint)); }
+#app .activity-page.activity-3 .chain-slot:not(.filled) > p { color: var(--ink-soft); }
+#app .activity-page .chain-options { align-content: center; }
+#app .activity-page .chain-options .choice-card { min-height: 88px; font-size: var(--activity-read); }
+#app .activity-page.activity-5 .effect-context { align-self: start; width: fit-content; max-width: 100%; padding: 8px 12px; }
+#app .activity-page.activity-5 .effect-context .eyebrow { font-size: var(--type-note,18px); letter-spacing: 0; }
+#app .activity-page.activity-5 .link-chain { align-items: center; align-self: center; }
+#app .activity-page.activity-5 .chain-slot { height: auto; min-height: 176px; padding: 16px; border-radius: var(--activity-scene-radius); background: var(--surface-control,var(--paper)); box-shadow: none; }
+#app .activity-page.activity-5 .chain-slot:not(.filled) { border: 2px dashed var(--forest); background-color: var(--surface-quiet,var(--mint)) !important; }
+#app .activity-page.activity-5 .effect-step > .eyebrow { letter-spacing: 0; font-size: var(--type-note,18px); }
+#app .activity-page.activity-5 .chain-slot p.empty-cause { display: grid; place-items: center; width: 48px; height: 48px; margin: auto; border-radius: 50%; color: var(--forest); background: var(--mint); }
+
+#app .activity-page.activity-4 .experiment-layout { grid-template-columns: minmax(0,1.8fr) minmax(260px,1fr); gap: 16px; }
+#app .activity-page.activity-4 .experiment-board { border: 0; border-radius: var(--activity-scene-radius); box-shadow: none; }
+#app .activity-page.activity-4 .flood-district { background-color: var(--surface-control,var(--paper)); border-radius: var(--activity-scene-radius); }
+#app .activity-page.activity-4 .coast-profile { background: transparent; border: 0; padding: 0; }
+#app .activity-page.activity-4 .coast-profile-land { height: clamp(110px,28dvh,240px); }
+#app .activity-page.activity-4 .flood-copy strong { font-size: var(--activity-read); }
+#app .activity-page.activity-4 .flood-copy > span,
+#app .activity-page.activity-4 .flood-copy small { font-size: var(--type-note,18px); }
+
+#app .activity-page.activity-6 .daily-layout { grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); gap: 20px; }
+#app .activity-page.activity-6 .daily-scene { border: 0; border-radius: var(--activity-scene-radius); box-shadow: none; padding: 12px; }
+#app .activity-page.activity-6 .daily-layout > div:last-child { justify-content: center; gap: 12px; }
+#app .activity-page.activity-6 .daily-layout > div:last-child > .choice-grid { flex: none; height: auto; grid-auto-rows: auto; gap: 12px; }
+#app .activity-page.activity-6 .choice-card { min-height: 88px; height: auto; max-height: none; font-size: var(--activity-read); }
+#app .activity-page.activity-6 .daily-scene > .evidence-card { padding: 10px 12px; }
+#app .activity-page.activity-6 .daily-scene h2 { display: none; }
+#app .activity-page.activity-6 .daily-scene p { margin: 0; }
+#app .activity-page.activity-7 .comparison-context { width: fit-content; max-width: 100%; align-self: center; }
+#app .activity-page.activity-7 .comparison-context .comparison-art { width: clamp(100px,14vw,180px); height: clamp(64px,12dvh,108px); flex-basis: clamp(100px,14vw,180px); }
+#app .activity-page.activity-7 .comparison-grid { align-items: center; gap: 24px; }
+#app .activity-page.activity-7 .comparison-card[role=button] { height: auto; min-height: 280px; padding: 18px; gap: 12px; }
+#app .activity-page.activity-7 .comparison-card > p { font-size: var(--activity-read); }
+#app .activity-page.activity-7 .comparison-card > h2 { display: none; }
+#app .activity-page.activity-7 .comparison-card .metric-row { margin-top: 4px; }
+#app .activity-page.activity-7 .comparison-choice-mark { width: 36px; height: 36px; font-size: var(--activity-read); }
+#app .activity-page :is(.metric,.relative-metric) { padding: 8px; background: transparent; border: 0; border-radius: 0; }
+#app .activity-page .relative-metric > span:first-child { font-size: var(--type-note,18px); }
+#app .activity-page .metric strong { font-size: var(--activity-read); }
+
+/* The tool tray has no enclosing panel. The selected tool leads to all city plots equally. */
+#app .activity-page:is(.activity-8,.activity-9) .city-design-layout { grid-template-columns: minmax(0,1.7fr) minmax(290px,1fr); gap: 16px; }
+#app .activity-page:is(.activity-8,.activity-9) .city-design-layout > .evidence-card { align-self: center; height: auto; padding: 0; border: 0; background-color: transparent !important; backdrop-filter: none; -webkit-backdrop-filter: none; }
+#app .activity-page:is(.activity-8,.activity-9) .city-design-layout > .evidence-card > h2 { width: fit-content; max-width: 100%; padding: 8px 12px; border-radius: var(--activity-scene-radius); background: var(--surface-read,var(--paper)); font-size: var(--activity-read); }
+#app .activity-page:is(.activity-8,.activity-9) .city-board { padding: 12px; gap: 12px; border: 0; border-radius: var(--activity-scene-radius); box-shadow: none; }
+#app .activity-page:is(.activity-8,.activity-9) .city-board .district-tile { min-height: 0; height: clamp(150px,25dvh,230px); max-height: 100%; align-self: center; border-radius: var(--activity-scene-radius); padding: 10px; gap: 6px; background-color: var(--surface-control,var(--paper)); grid-template-rows: auto minmax(36px,1fr) auto auto; }
+#app .activity-page .district-name { grid-column: 1; grid-row: 1; font-size: var(--type-note,18px); font-weight: 800; line-height: 1.25; }
+#app .activity-page .district-tile > .district-art { grid-row: 2; }
+#app .activity-page .district-tile > strong { grid-row: 3; font-size: var(--activity-read); }
+#app .activity-page .district-tile > .district-risks { grid-row: 4; }
+#app .activity-page .district-tile > .district-risks > span { grid-template-columns: auto auto minmax(0,1fr); gap: 5px; }
+#app .activity-page .district-risks .risk-track { grid-column: 3; height: 6px; }
+#app .activity-page:is(.activity-8,.activity-9) .city-design-layout .facility-palette { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: repeat(3,minmax(0,1fr)); gap: 8px; }
+#app .activity-page:is(.activity-8,.activity-9) .city-design-layout .facility-button { min-height: 72px; padding: 8px; gap: 4px; border-radius: var(--activity-scene-radius); }
+#app .activity-page:is(.activity-8,.activity-9) .city-design-layout .illustrated-tool { grid-template-columns: 44px minmax(0,1fr); grid-template-rows: auto auto; }
+#app .activity-page .city-design-layout .tool-art { width: 44px; height: 44px; }
+#app .activity-page .illustrated-tool > strong { font-size: var(--activity-read); }
+#app .activity-page .facility-button > .city-tool-stats { font-size: var(--type-note,18px); gap: 2px 6px; }
+#app .activity-page .stress-result-layout { grid-template-columns: minmax(0,1.5fr) minmax(300px,1fr); gap: 16px; }
+#app .activity-page .stress-results .comparison-card { height: auto; }
+#app .activity-page .activity-help p { font-size: var(--activity-read); }
+
+@media (min-width:601px) and (max-height:640px) {
+  #app .activity-page:is(.activity-0,.activity-2) .scan-layout { grid-template-columns: minmax(0,1.5fr) minmax(330px,1fr); gap: 12px; }
+  #app .activity-page:is(.activity-0,.activity-2) .scan-layout > .evidence-card { padding: 10px; gap: 6px; }
+  #app .activity-page.activity-0 .ov-chart,
+  #app .activity-page.activity-1 .ov-chart { --ov-unit: 7px; }
+  #app .activity-page.activity-0 .ov-legend { gap: 4px 10px; }
+  #app .activity-page.activity-0 .observation-heading { display: none; }
+  #app .activity-page.activity-2 .scene-brief > .resource-art { height: 115px; }
+  #app .activity-page.activity-2 .ov-resource-choice { min-height: 60px; }
+  #app .activity-page.activity-3 .chain-slot { min-height: 130px; padding: 12px; }
+  #app .activity-page.activity-3 .chain-source .relation-art { height: 100px; }
+  #app .activity-page .chain-options .choice-card { min-height: 68px; }
+  #app .activity-page.activity-4 .coast-profile-land { height: 100px; }
+  #app .activity-page.activity-5 .effect-context .effect-art { height: 70px; }
+  #app .activity-page.activity-5 .chain-slot { min-height: 130px; padding: 12px; }
+  #app .activity-page.activity-6 .choice-card { min-height: 64px; padding: 8px; }
+  #app .activity-page.activity-7 .comparison-card[role=button] { min-height: 240px; gap: 8px; padding: 12px; }
+  #app .activity-page.activity-7 .comparison-context .comparison-art { width: 90px; height: 54px; flex-basis: 90px; display: block; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-board { padding: 8px; gap: 8px; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-board .district-tile { padding: 6px; gap: 4px; }
+  #app .activity-page .city-design-layout .facility-button { min-height: 64px; }
+}
+@media (max-width:600px) {
+  #app .activity-page { height: 100%; }
+  #app .activity-page .activity-heading h1 { font-size: 22px; }
+  #app .activity-page .activity-heading { flex-wrap: wrap; gap: 6px; }
+  #app .activity-page :is(.scan-layout,.experiment-layout,.daily-layout,.city-design-layout,.stress-result-layout),
+  #app .activity-page.activity-1 .comparison-grid { grid-template-columns: minmax(0,1fr); gap: 10px; }
+  #app .activity-page:is(.activity-0,.activity-2) .scan-layout { grid-template-rows: minmax(150px,.7fr) minmax(0,1.3fr); }
+  #app .activity-page:is(.activity-0,.activity-2) .scan-layout > .evidence-card { padding: 10px; gap: 6px; }
+  #app .activity-page .scan-hotspot { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+  #app .activity-page .guide-message { padding: 8px; }
+  #app .activity-page .activity-footer .activity-next { max-width: none; }
+  #app .activity-page.activity-1 .comparison-grid { grid-template-rows: minmax(0,1fr) auto; }
+  #app .activity-page.activity-1 .comparison-grid > .choice-grid { grid-template-columns: 1fr; gap: 8px; }
+  #app .activity-page.activity-1 .choice-card { min-height: 64px; }
+  #app .activity-page.activity-0 .observation-heading { display: none; }
+  #app .activity-page.activity-0 .ov-chart,
+  #app .activity-page.activity-1 .ov-chart { --ov-unit: 5px; }
+  #app .activity-page.activity-2 .scene-brief { grid-template-columns: 80px minmax(0,1fr); }
+  #app .activity-page.activity-2 .scene-brief > .resource-art { width: 80px; height: 64px; }
+  #app .activity-page.activity-2 .scene-brief > div { grid-column: 2; grid-row: 1; }
+  #app .activity-page.activity-2 .ov-resource-choice { min-height: 64px; font-size: var(--type-note,18px); }
+  #app .activity-page.activity-3 .ov-cause-chain { grid-template-columns: 1fr; gap: 8px; }
+  #app .activity-page.activity-3 .chain-slot { min-height: 72px; padding: 8px; }
+  #app .activity-page.activity-3 .chain-source .scene-brief { grid-template-columns: 80px minmax(0,1fr); }
+  #app .activity-page.activity-3 .chain-source .relation-art { grid-row: 1 / 3; width: 80px; height: 80px; }
+  #app .activity-page.activity-3 .chain-source .scene-brief > div { grid-column: 2; grid-row: 1; }
+  #app .activity-page.activity-3 .chain-source .scene-brief p { text-align: left; }
+  #app .activity-page .chain-options .choice-card { min-height: 54px; font-size: var(--type-note,18px); }
+  #app .activity-page.activity-4 .experiment-layout { grid-template-rows: minmax(0,1fr) auto; }
+  #app .activity-page.activity-4 .coast-profile { display: none; }
+  #app .activity-page.activity-4 .experiment-layout > .evidence-card { padding: 8px; }
+  #app .activity-page.activity-4 .flood-district { padding: 6px; }
+  #app .activity-page.activity-5 .chain-slot { min-height: 76px; padding: 8px; }
+  #app .activity-page.activity-5 .effect-context { padding: 8px; }
+  #app .activity-page.activity-5 .effect-context .effect-art { width: 72px; height: 48px; flex-basis: 72px; }
+  #app .activity-page.activity-6 .daily-layout { grid-template-rows: minmax(150px,.8fr) minmax(0,1.2fr); }
+  #app .activity-page.activity-6 .choice-card { min-height: 64px; }
+  #app .activity-page.activity-7 .comparison-context { padding: 8px; }
+  #app .activity-page.activity-7 .comparison-context .comparison-art { width: 80px; height: 54px; flex-basis: 80px; display: block; }
+  #app .activity-page.activity-7 .comparison-grid { gap: 8px; }
+  #app .activity-page.activity-7 .comparison-card[role=button] { min-height: 0; padding: 10px; gap: 6px; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout { grid-template-rows: minmax(0,1fr) auto; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-board { gap: 6px; padding: 6px; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-board .district-tile { height: 100%; padding: 6px; gap: 4px; grid-template-rows: auto minmax(24px,1fr) auto auto; }
+  #app .activity-page .city-design-layout .facility-palette { grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); gap: 6px; }
+  #app .activity-page .city-design-layout .illustrated-tool { grid-template-columns: 30px minmax(0,1fr); }
+  #app .activity-page .city-design-layout .tool-art { width: 30px; height: 30px; }
+  #app .activity-page .city-design-layout .facility-button { min-height: 60px; padding: 6px; }
+  #app .activity-page .illustrated-tool > strong { font-size: var(--type-note,18px); }
+  #app .activity-page .facility-button > .city-tool-stats { display: flex; justify-content: center; gap: 2px 6px; font-size: var(--type-note,18px); }
+  #app .activity-page .city-design-layout .facility-palette { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  #app .activity-page .district-tile > .district-risks > span { grid-template-columns: auto auto minmax(0,1fr); gap: 3px; }
+  #app .activity-page .district-risks .risk-track { grid-column: 3; }
+  #app .activity-page .district-tile > strong { font-size: var(--type-note,18px); }
+}
+
+#app .activity-page .empty-cause .icon { width: 30px; height: 30px; margin: auto; }
+#app .activity-page.activity-3 .empty-cause { display: grid; place-items: center; width: 52px; height: 52px; margin: auto; color: var(--forest); background: var(--mint); border-radius: var(--radius-control,14px); }
+#app .activity-page .empty-plot .icon { width: 30px; height: 30px; margin: auto; }
+
+#app .activity-page .scan-place-label { position: absolute; z-index: 4; left: var(--pin-x); top: var(--label-top); transform: translate(var(--label-shift,-50%),var(--label-rise,0)); width: max-content; max-width: 160px; padding: 6px 10px; border-radius: 8px; background: var(--surface-read,var(--paper)); color: var(--ink); font-size: var(--type-note,18px); font-weight: 800; line-height: 1.3; text-align: center; pointer-events: none; }
+#app .activity-page.activity-4 .flood-district { align-self: center; height: clamp(140px,26dvh,220px); max-height: 100%; }
+@media (min-width:601px) and (max-height:640px) {
+  #app .activity-page.activity-4 .flood-district { grid-template-columns: 54px minmax(0,1fr); padding: 8px; gap: 6px; }
+  #app .activity-page.activity-4 .flood-district .coast-art { width: 54px; height: 64px; }
+}
+@media (max-width:600px) {
+  #app .activity-page:is(.activity-0,.activity-2) .scan-layout,
+  #app .activity-page.activity-4 .experiment-layout,
+  #app .activity-page.activity-6 .daily-layout,
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout,
+  #app .activity-page.activity-9 .stress-result-layout { grid-template-columns: minmax(0,1fr); }
+  #app .activity-page:is(.activity-0,.activity-2) .scan-layout { grid-template-rows: minmax(220px,.8fr) minmax(0,1.2fr); }
+  #app .activity-page.activity-4 .flood-grid { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: repeat(3,minmax(0,1fr)); }
+  #app .activity-page.activity-4 .flood-district { height: 100%; min-height: 80px; grid-template-columns: 40px minmax(0,1fr); padding: 6px; gap: 6px; }
+  #app .activity-page.activity-4 .flood-district .coast-art { width: 40px; height: 44px; }
+  #app .activity-page .scan-place-label { max-width: 140px; padding: 4px 6px; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout { grid-template-rows: minmax(0,1fr) auto; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout .facility-palette { grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); }
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout .illustrated-tool { grid-template-columns: 30px minmax(0,1fr); }
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout .tool-art { width: 30px; height: 30px; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout .facility-button { min-height: 72px; padding: 6px; }
+}
+
+@media (max-width:600px) {
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout .facility-palette { display: none; }
+  #app .activity-page:is(.activity-8,.activity-9) .compact-city-tools { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: 8px; font-size: var(--activity-read); }
+  #app .activity-page:is(.activity-8,.activity-9) .compact-city-tools select { min-width: 0; width: 100%; min-height: 48px; padding: 6px 8px; border: 2px solid var(--forest); border-radius: var(--radius-control,14px); color: var(--ink); background: var(--surface-read,var(--paper)); font: inherit; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout > .evidence-card { width: 100%; gap: 8px; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-budget { display: none; }
+}
+
+#app .activity-page .scan-place-label { position: static; z-index: auto; display: block; align-self: start; width: auto; max-width: 100%; margin: 0; padding: 0; transform: none; background: transparent; color: var(--forest-dark); font-size: var(--activity-read); font-weight: 800; line-height: 1.3; text-align: left; }
+
+/* Short landscape keeps the full chart legend and the slider above the action row. */
+@media (max-height:460px) and (min-width:601px) {
+  #app .activity-page.activity-0 .scan-layout > .evidence-card { padding: 6px; gap: 4px; }
+  #app .activity-page.activity-0 .scan-place-label { display: none; }
+  #app .activity-page.activity-0 .evidence-data.ov-data { padding: 0; gap: 2px; }
+  #app .activity-page.activity-0 .evidence-data.ov-data > .ov-chart-wrap { gap: 2px; }
+  #app .activity-page.activity-0 .ov-chart { --ov-unit: 4px; padding-top: 18px; gap: 6px; }
+  #app .activity-page.activity-0 .ov-legend { gap: 2px 8px; line-height: 1.15; }
+  #app .activity-page.activity-0 .ov-data-note { flex-basis: 100%; }
+  #app .activity-page.activity-0 .water-control { display: grid; grid-template-columns: 88px minmax(0,1fr); align-items: center; gap: 6px; padding-top: 2px; }
+  #app .activity-page.activity-0 .compare-slider { min-height: 48px; }
 }
