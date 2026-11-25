@@ -37,7 +37,7 @@ async function audit(page,label){
  assert.deepEqual(result.issues,[],label);
  assert.equal(result.overflowX,false,label);
  assert.equal(result.dialogOverflow,false,label);
- assert.ok(result.minFont>=(page.viewportSize().width>=1600?18:14),label+' font minimum');
+ assert.ok(result.minFont>=18,label+' font minimum');
 }
 
 try{
@@ -45,6 +45,9 @@ try{
   const context=await browser.newContext({viewport:{width,height},hasTouch:true,reducedMotion:'reduce',serviceWorkers:'block'});
   const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
   await page.goto(base);await openMission(page,'tap');
+  assert.equal(await page.locator('.pm-tool[aria-pressed="true"]').count(),0,'a new mission must not choose a facility for the learner');
+  await page.locator('[data-cell="0"]').tap();
+  assert.equal(await page.locator('.pm-cell.occupied').count(),0,'a plot stays empty until the learner chooses a facility');
   await audit(page,'initial');
   await page.locator('[data-test]').tap();
   assert.match(await page.locator('.pm-feedback').innerText(),/폭염 부담/);
@@ -87,7 +90,7 @@ try{
  }
  const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage();
  await page.goto(base);await page.evaluate(key=>localStorage.setItem(key,'{broken'),MISSION_SAVE_KEY);
- await openMission(page);await page.locator('[data-cell="0"]').click();
+ await openMission(page);await page.locator('[data-tool="park"]').click();await page.locator('[data-cell="0"]').click();
  assert.equal(await page.evaluate(key=>localStorage.getItem(key),MISSION_SAVE_KEY),'{broken');
  await page.locator('.pm-error').waitFor();await page.locator('[data-close]').click();
  await page.evaluate(key=>localStorage.removeItem(key),MISSION_SAVE_KEY);
@@ -95,7 +98,7 @@ try{
  const other=await context.newPage();await other.goto(base);await openMission(other);
  await other.locator('[data-tool="bus"]').click();await other.locator('[data-cell="0"]').click();
  const latest=await other.evaluate(key=>localStorage.getItem(key),MISSION_SAVE_KEY);
- await page.locator('[data-cell="1"]').click();
+ await page.locator('[data-tool="park"]').click();await page.locator('[data-cell="1"]').click();
  assert.equal(await page.evaluate(key=>localStorage.getItem(key),MISSION_SAVE_KEY),latest);
  assert.match(await page.locator('.pm-error').innerText(),/다른 탭/);
  checks.push('corrupt source and concurrent-tab revision preserved');

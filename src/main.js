@@ -46,6 +46,7 @@ function hud(home=false){return `<div class="screen-hud"><div class="hud-left">$
 function wireHud(){app.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>go(b.dataset.nav));app.querySelector('[data-back]')?.addEventListener('click',back);app.querySelector('[data-settings]')?.addEventListener('click',settings);app.querySelector('[data-sound]')?.addEventListener('click',e=>{audio.toggle();if(!audio.settings.voice)stopNarration();e.currentTarget.innerHTML=icon(audio.anyOn()?'sound':'mute');e.currentTarget.setAttribute('aria-label',audio.anyOn()?'전체 소리 끄기':'전체 소리 켜기');announce(audio.anyOn()?'소리를 켰어요.':'전체 소리를 껐어요.');});}
 function back(){if(document.querySelector('dialog[open]')){document.querySelector('dialog[open]').close();return;}if(activeRoute.startsWith('activity/'))go('facility/'+Math.floor(Number(activeRoute.split('/')[1])/2));else if(activeRoute.startsWith('facility/')||activeRoute==='ending')go('map');else go('home');}
 function go(route){
+ clearTimeout(toastTimer);toast.hidden=true;
  stopNarration();
  if(!/^(home|map|ending|facility\/[0-4]|activity\/[0-9])$/.test(route))route='home';
  if(route.startsWith('facility/')&&!stageOpen(state,Number(route.split('/')[1]))){announce('먼저 앞 연구를 마쳐 주세요.');route='map';}

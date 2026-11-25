@@ -633,3 +633,48 @@
   #app .activity-page.activity-0 .water-control { display: grid; grid-template-columns: 88px minmax(0,1fr); align-items: center; gap: 6px; padding-top: 2px; }
   #app .activity-page.activity-0 .compare-slider { min-height: 48px; }
 }
+
+/* Low landscape screens use the same controls with compact arrangements, never smaller reading text. */
+@media (max-height:460px) and (min-width:601px) {
+  #app .activity-page.activity-1 .comparison-grid > .evidence-card { padding: 8px; }
+  #app .activity-page.activity-1 .comparison-data.ov-data { padding: 2px 0; gap: 2px; }
+  #app .activity-page.activity-1 .ov-chart { --ov-unit: 4px; padding-top: 18px; }
+  #app .activity-page.activity-1 .ov-legend { gap: 2px 8px; line-height: 1.15; }
+  #app .activity-page.activity-1 .ov-evidence-clue { line-height: 1.3; }
+
+  #app .activity-page.activity-2 .scan-layout > .evidence-card { padding: 8px; gap: 6px; }
+  #app .activity-page.activity-2 .scene-brief { grid-template-columns: 88px minmax(0,1fr); gap: 8px; }
+  #app .activity-page.activity-2 .scene-brief > .resource-art { grid-column: 1; grid-row: 1; width: 88px; height: 64px; }
+  #app .activity-page.activity-2 .scene-brief > div { display: block; grid-column: 2; grid-row: 1; }
+  #app .activity-page.activity-2 .scene-brief p { margin: 0; text-align: left; }
+  #app .activity-page.activity-2 .ov-resource-choice { min-height: 52px; padding: 6px 8px; }
+
+  #app .activity-page.activity-6 .daily-layout > div:last-child { gap: 6px; }
+  #app .activity-page.activity-6 .daily-layout > div:last-child > .choice-grid { gap: 6px; }
+  #app .activity-page.activity-6 .choice-card { min-height: 48px; padding: 6px 8px; gap: 8px; }
+  #app .activity-page.activity-6 .relative-metric { padding: 4px; }
+  #app .activity-page.activity-6 .relative-meter { margin: 3px 0; }
+
+  #app .activity-page.activity-7 .comparison-context { padding: 6px 10px; }
+  #app .activity-page.activity-7 .comparison-card[role=button] { min-height: 0; padding: 8px; gap: 4px; }
+  #app .activity-page.activity-7 .comparison-card .metric-row { margin: 0; gap: 4px; }
+  #app .activity-page.activity-7 .relative-metric { padding: 4px; }
+  #app .activity-page.activity-7 .relative-meter { margin: 3px 0; }
+  #app .activity-page.activity-7 .comparison-choice-mark { width: 28px; height: 28px; }
+
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout .facility-palette { display: none; }
+  #app .activity-page:is(.activity-8,.activity-9) .compact-city-tools { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: 6px; font-size: var(--type-note,18px); }
+  #app .activity-page:is(.activity-8,.activity-9) .compact-city-tools select { min-width: 0; width: 100%; min-height: 48px; padding: 6px 8px; border: 2px solid var(--forest); border-radius: var(--radius-control,14px); color: var(--ink); background: var(--surface-read,var(--paper)); font: inherit; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-design-layout > .evidence-card { gap: 6px; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-budget { display: none; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-board { min-height: 0; padding: 6px; gap: 6px; }
+  #app .activity-page:is(.activity-8,.activity-9) .city-board .district-tile { display: grid; grid-template-columns: 28px minmax(0,1fr); grid-template-rows: auto minmax(28px,1fr) auto; min-height: 0; height: 100%; padding: 3px; gap: 2px; }
+  #app .activity-page:is(.activity-8,.activity-9) .district-name { grid-column: 1 / -1; grid-row: 1; }
+  #app .activity-page:is(.activity-8,.activity-9) .district-tile > .district-art { grid-column: 1; grid-row: 2; width: 28px; height: 28px; max-height: 28px; align-self: center; }
+  #app .activity-page:is(.activity-8,.activity-9) .district-tile > .empty-plot { grid-column: 1 / -1; justify-self: center; width: 44px; }
+  #app .activity-page:is(.activity-8,.activity-9) .district-tile > strong { grid-column: 2; grid-row: 2; align-self: center; padding: 0; font-size: var(--type-note,18px); }
+  #app .activity-page:is(.activity-8,.activity-9) .district-tile > .district-risks { grid-column: 1 / -1; grid-row: 3; gap: 2px; }
+  #app .activity-page.activity-9 .test-city { min-height: 0; }
+  #app .activity-page.activity-9 .test-city .district-tile > span:not(.district-name):not(.risk-track) { grid-column: 1 / -1; grid-row: 3; }
+  #app .activity-page.activity-9 .test-city .district-tile > .risk-track { grid-column: 1 / -1; grid-row: 4; }
+}

@@ -30,7 +30,7 @@ async function inspect(){return page.evaluate(single=>{
   const root=document.querySelector('dialog[open]')||document.querySelector('.screen'),workspace=root.querySelector('.activity-workspace'),issues=[];
   const name=e=>(e.getAttribute('aria-label')||e.textContent).trim().replace(/\s+/g,' ').slice(0,70);
   const box=e=>e.getBoundingClientRect();
-  const visible=e=>{const r=box(e),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.visibility!=='hidden'&&s.display!=='none'&&!e.closest('[hidden]');};
+  const visible=e=>{const r=box(e),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.visibility!=='hidden'&&s.display!=='none'&&!e.closest('[hidden],.sr-only');};
   const overlap=(a,b)=>Math.min(a.right,b.right)-Math.max(a.left,b.left)>2&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>2;
   const reachable=e=>{let r=box(e);for(let p=e.parentElement;p;p=p.parentElement){const s=getComputedStyle(p),b=box(p);if(/auto|scroll/.test(s.overflowY)&&p.scrollHeight>p.clientHeight+2)return true;if(/hidden|clip/.test(s.overflowY)&&(r.bottom>b.bottom+2||r.top<b.top-2))return false;if(p===root)break;}return r.left>=-2&&r.right<=innerWidth+2&&r.top>=-2&&r.bottom<=innerHeight+2;};
   for(const e of root.querySelectorAll('button,input[type=range],select,[role=button],summary')){
